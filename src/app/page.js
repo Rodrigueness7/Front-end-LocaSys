@@ -1,6 +1,7 @@
 'use client'
 import { useState } from "react";
 import InputForm from "../../components/InputForm";
+import { getCookie, setCookie } from "cookies-next";
 
 
 export default function Home() {
@@ -16,24 +17,24 @@ export default function Home() {
     setPassword(e.target.value)
   }
   
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault()
 
-    const values = {
+    let fetchData = {
       username: username,
       password: password
     }
-    
-    fetch('http://localhost:3001/login', {
-      method:'POST',
-      body: JSON.stringify(values),
-      headers: {
-        'Content-Type' : 'application/json'
-      }
-    }).then(res => res.json())
-    .then(data => {
-      localStorage.setItem('token', data.token)
-    })
+
+   let data = await fetch('http://localhost:3001/login', {
+    method: 'POST',
+    body: JSON.stringify(fetchData),
+    headers: {
+      'content-type': 'application/json'
+    }
+   })
+
+   let values = await data.json()
+   setCookie('token', values.token)
   }
   
 
