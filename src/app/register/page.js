@@ -1,28 +1,39 @@
-const { cookies } = require("next/headers")
-const { default: Register } = require("./Register")
 
-const fetchData = async () => {
-    const cookieStore = await cookies()
+import { cookies } from "next/headers"
+import Register from './Register'
+
+const cookieStore = await cookies()
+
+const fetchDataSector = async () => {
     const token = cookieStore.get('token').value
-    console.log(token)
-    const data = await fetch('http://localhost:3001/findAllSector', {
+    const dataSector = await fetch('http://localhost:3001/findAllSector', {
         headers: {
             'content-type': 'application/json',
             'Authorization': token
         }
     })
-    return await data.json()
-    
+    return await dataSector.json()
+}
+
+  const fetchDataFilial = async () => {
+    const token = cookieStore.get('token').value
+    const dataFilial = await fetch('http://localhost:3001/findAllFilial', {
+        headers: {
+            'content-type': 'application/json',
+            'Authorization': token
+        }
+    })
+    return await dataFilial.json()
 }
 
 export default async function PageRegister() {
     
-    const values = await fetchData()
+    const dataSector = await fetchDataSector()
+    const dataFilial = await fetchDataFilial()
     
     return (
        <div>
-            <Register data={values}></Register>
-            
+            <Register dataSector={dataSector} dataFilial={dataFilial}></Register>  
        </div>
     )
 }
