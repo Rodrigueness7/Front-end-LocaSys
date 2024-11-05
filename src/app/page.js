@@ -35,6 +35,7 @@ export default function Home() {
 
    let values = await data.json()
    setCookie('token', values.token)
+   console.log(getCookie('token'))
   }
   
 
