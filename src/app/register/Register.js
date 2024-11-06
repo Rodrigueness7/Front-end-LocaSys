@@ -4,6 +4,17 @@ import InputForm from "../../../components/InputForm";
 import InputSelect from "../../../components/InputSelect";
 
 export default function Register({ dataSector, dataFilial }) {
+
+    const valueSector = []
+    const valueFilial = []
+    dataSector.map( item => {
+        return valueSector.push(item.sector)
+    })
+
+    dataFilial.map(item => {
+        return valueFilial.push(item.filial)
+    })
+
     
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
@@ -13,8 +24,8 @@ export default function Register({ dataSector, dataFilial }) {
     const [confirmationPassword, setConfirmationPassword] = useState('')
     const [email, setEmail] = useState('')
     const [confirmationEmail, setConfirmationEmail] = useState('')
-    const [sector, setSector] = useState('')
-    const [filial, setFilial] = useState('')
+    const [sector, setSector] = useState(valueSector[0])
+    const [filial, setFilial] = useState(valueFilial[0])
     
     const changeFirstName = (e) => { 
         setFirstName(e.target.value)
@@ -56,19 +67,36 @@ export default function Register({ dataSector, dataFilial }) {
         setFilial(e.target.value)
     }
 
-    const valueSector = []
-    const valueFilial = []
-    dataSector.map(item => {
-        return valueSector.push(item.sector)
-    })
 
-    dataFilial.map(item => {
-        return valueFilial.push(item.filial)
-    })
+    const addUser = () => {
+        let idFilial = []
+        let idSector = []
 
-    const addUser = (e) => {
-        e.preventDefault()
-    
+        dataFilial.map(item => {
+            if(item.filial == filial) {
+                idFilial.push(item.idFilial)
+            }
+        })
+
+        dataSector.map(item => {
+            if(item.sector == sector) {
+                idSector.push(item.idSector)
+            }
+        })
+
+        const data = {
+            firstName: firstName,
+            lastName: lastName, 
+            cpf: cpf,
+            username: username,
+            password: password,
+            confirmationPassword: confirmationPassword,
+            email: email,
+            confirmationEmail: confirmationEmail,
+            sector: idSector[0],
+            filial: idFilial[0]
+        }
+
     }
     
 
