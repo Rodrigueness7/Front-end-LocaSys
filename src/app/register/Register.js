@@ -1,7 +1,9 @@
 'use client'
-import { useState } from "react";
+import {useState } from "react";
 import InputForm from "../../../components/InputForm";
 import InputSelect from "../../../components/InputSelect";
+import { deleteCookie} from "cookies-next";
+
 
 export default function Register({ dataSector, dataFilial }) {
 
@@ -14,7 +16,6 @@ export default function Register({ dataSector, dataFilial }) {
     dataFilial.map(item => {
         return valueFilial.push(item.filial)
     })
-
     
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
@@ -69,6 +70,7 @@ export default function Register({ dataSector, dataFilial }) {
 
 
     const addUser = () => {
+
         let idFilial = []
         let idSector = []
 
@@ -96,7 +98,8 @@ export default function Register({ dataSector, dataFilial }) {
             sector: idSector[0],
             filial: idFilial[0]
         }
-
+       
+        console.log(deleteCookie('token').token)
     }
     
 

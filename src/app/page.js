@@ -1,7 +1,7 @@
 'use client'
 import { useState } from "react";
 import InputForm from "../../components/InputForm";
-import { getCookie, setCookie } from "cookies-next";
+import { setCookie } from "cookies-next";
 
 
 export default function Home() {
@@ -35,7 +35,7 @@ export default function Home() {
 
    let values = await data.json()
    setCookie('token', values.token)
-   console.log(getCookie('token'))
+   
   }
   
 

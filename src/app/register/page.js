@@ -1,11 +1,10 @@
 
 import { cookies } from "next/headers"
 import Register from './Register'
+import { redirect } from 'next/navigation'
 
-const cookieStore = await cookies()
 
-const fetchDataSector = async () => {
-    const token = cookieStore.get('token').value
+const fetchDataSector = async (token) => {
     const dataSector = await fetch('http://localhost:3001/findAllSector', {
         headers: {
             'content-type': 'application/json',
@@ -15,8 +14,7 @@ const fetchDataSector = async () => {
     return await dataSector.json()
 }
 
-  const fetchDataFilial = async () => {
-    const token = cookieStore.get('token').value
+  const fetchDataFilial = async (token) => {
     const dataFilial = await fetch('http://localhost:3001/findAllFilial', {
         headers: {
             'content-type': 'application/json',
@@ -27,13 +25,22 @@ const fetchDataSector = async () => {
 }
 
 export default async function PageRegister() {
-    
-    const dataSector = await fetchDataSector()
-    const dataFilial = await fetchDataFilial()
-    
+  
+    const cookieStore = cookies()
+    const token = (await cookieStore).get('token')?.value
+
+    if(!token) {
+        redirect('./')
+        
+    }
+
+    const dataSector = await fetchDataSector(token)
+    const dataFilial = await fetchDataFilial(token)
+
+   
     return (
-       <div>
-            <Register dataSector={dataSector} dataFilial={dataFilial}></Register>  
+       <div> 
+           <Register dataSector={dataSector} dataFilial={dataFilial} ></Register>
        </div>
     )
 }
