@@ -6,7 +6,7 @@ export default function Home() {
        <div>
          <div className="p-8 bg-slate-800 w-48 h-screen ">
             <div>
-                <Link href={'./register'} className="text-white">Usuários</Link>
+                <Link href={'./users/register'} className="text-white">Usuários</Link>
             </div>
             <div>
                 <Link href={'#'} className="text-white">Equipamentos</Link>

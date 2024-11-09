@@ -1,7 +1,7 @@
 'use client'
 import {useState } from "react";
-import InputForm from "../../../components/InputForm";
-import InputSelect from "../../../components/InputSelect";
+import InputForm from "../../../../components/InputForm";
+import InputSelect from "../../../../components/InputSelect";
 
 
 export default function Register({ dataSector, dataProfile }) {

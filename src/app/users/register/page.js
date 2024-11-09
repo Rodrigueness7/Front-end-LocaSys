@@ -30,7 +30,7 @@ export default async function PageRegister() {
     const token = (await cookieStore).get('token')?.value
 
     if(!token) {
-        redirect('/login')
+        redirect('../login')
         
     }
 
