@@ -14,14 +14,14 @@ const fetchDataSector = async (token) => {
     return await dataSector.json()
 }
 
-  const fetchDataFilial = async (token) => {
-    const dataFilial = await fetch('http://localhost:3001/findAllFilial', {
+  const fetchDataProfile = async (token) => {
+    const dataProfile = await fetch('http://localhost:3001/findAllProfile', {
         headers: {
             'content-type': 'application/json',
             'Authorization': token
         }
     })
-    return await dataFilial.json()
+    return await dataProfile.json()
 }
 
 export default async function PageRegister() {
@@ -30,17 +30,17 @@ export default async function PageRegister() {
     const token = (await cookieStore).get('token')?.value
 
     if(!token) {
-        redirect('./')
+        redirect('/login')
         
     }
 
     const dataSector = await fetchDataSector(token)
-    const dataFilial = await fetchDataFilial(token)
+    const dataProfile = await fetchDataProfile(token)
 
    
     return (
        <div> 
-           <Register dataSector={dataSector} dataFilial={dataFilial} ></Register>
+           <Register dataSector={dataSector} dataProfile={dataProfile} ></Register>
        </div>
     )
 }

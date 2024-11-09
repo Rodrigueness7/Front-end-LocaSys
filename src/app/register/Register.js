@@ -2,19 +2,18 @@
 import {useState } from "react";
 import InputForm from "../../../components/InputForm";
 import InputSelect from "../../../components/InputSelect";
-import { deleteCookie} from "cookies-next";
 
 
-export default function Register({ dataSector, dataFilial }) {
+export default function Register({ dataSector, dataProfile }) {
 
     const valueSector = []
-    const valueFilial = []
+    const valueProfile = []
     dataSector.map( item => {
         return valueSector.push(item.sector)
     })
 
-    dataFilial.map(item => {
-        return valueFilial.push(item.filial)
+    dataProfile.map(item => {
+        return valueProfile.push(item.profile)
     })
     
     const [firstName, setFirstName] = useState('')
@@ -26,10 +25,12 @@ export default function Register({ dataSector, dataFilial }) {
     const [email, setEmail] = useState('')
     const [confirmationEmail, setConfirmationEmail] = useState('')
     const [sector, setSector] = useState(valueSector[0])
-    const [filial, setFilial] = useState(valueFilial[0])
-    
+    const [profile, setProfile] = useState(valueProfile[0])
+    const [result, setResult] = useState('')
+
     const changeFirstName = (e) => { 
         setFirstName(e.target.value)
+        console.log(e.target.value)
     }
 
     const changeLastName = (e) => { 
@@ -62,21 +63,22 @@ export default function Register({ dataSector, dataFilial }) {
 
     const changeSector = (e) => { 
         setSector(e.target.value)
+        
     }
     
-    const changeFilial = (e) => { 
-        setFilial(e.target.value)
+    const changeProfile = (e) => { 
+        setProfile(e.target.value)
     }
 
 
-    const addUser = () => {
+    const addUser = async () => {
 
-        let idFilial = []
+        let idProfile = []
         let idSector = []
 
-        dataFilial.map(item => {
-            if(item.filial == filial) {
-                idFilial.push(item.idFilial)
+        dataProfile.map(item => {
+            if(item.profile == profile) {
+                idProfile.push(item.idProfile)
             }
         })
 
@@ -95,11 +97,23 @@ export default function Register({ dataSector, dataFilial }) {
             confirmationPassword: confirmationPassword,
             email: email,
             confirmationEmail: confirmationEmail,
-            sector: idSector[0],
-            filial: idFilial[0]
+            idSector: idSector[0],
+            idProfile: idProfile[0]
         }
-       
-        console.log(deleteCookie('token').token)
+        
+        console.log(JSON.stringify(data))
+
+       await fetch('http://localhost:3001/addUser', {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'content-type': 'application/json'
+            }
+        }).then(
+            result => result.json()
+        ).then(
+            res => setResult(res.message)
+        )
     }
     
 
@@ -119,11 +133,12 @@ export default function Register({ dataSector, dataFilial }) {
                     <InputForm classNameLabe={"block"} classNameInput={"w-full font-sans pt-2 border-solid border-2 border-current rounded"} label={"Email"} name={"email"} type={'email'} value={email} onchange={changeEmail}></InputForm>
                     <InputForm classNameLabe={"block"} classNameInput={"w-full font-sans pt-2 border-solid border-2 border-current rounded"} label={"Confirmation Email"} name={"email"} type={'email'} value={confirmationEmail} onchange={changeConfirmationEmail}></InputForm>
                     <InputSelect classNameInput={"w-full font-sans pt-2 border-solid border-2 border-current rounded"} classNameLabel={"block"} label={'Setor'} name={'sector'} datas={valueSector} value={sector} onchange={changeSector}></InputSelect>
-                    <InputSelect classNameInput={"w-full font-sans pt-2 border-solid border-2 border-current rounded"} classNameLabel={"block"} label={'Filial'} name={'filial'} datas={valueFilial} value={filial} onchange={changeFilial}></InputSelect> 
+                    <InputSelect classNameInput={"w-full font-sans pt-2 border-solid border-2 border-current rounded"} classNameLabel={"block"} label={'Profile'} name={'profile'} datas={valueProfile} value={profile} onchange={changeProfile}></InputSelect> 
                 </form>
                 <div>
                     <button onClick={addUser} className="w-64 mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ">Cadastrar</button>
                 </div>
+                <div>{result}</div>
             </div>
         </section>
     )
