@@ -14,16 +14,28 @@ const fetchDataUsers = async (token) => {
 export default async function Users() {
     const cookieStore = cookies()
     const token = (await cookieStore).get('token')?.value
+
+    const users = await fetchDataUsers(token)
     
-    const dataUser = await fetchDataUsers(token).then(
-        item => {
-            console.log(item)
-        }
-    )
     return(
-       <div>
-         <div>
-         <h1>Pagina</h1>
+       <div className="flex flex-container flex-col">
+        <div>
+            <h1>Usuários</h1>
+        </div>
+         <div className="flex flex-col max-w-screen-md">
+            {users.map(values => {
+                return(
+                    <div className="flex justify-around border border-stone-950">
+                        <span key={values.idUser}>{values.username}</span>
+                        <span>{values.firstName}</span>
+                        <span>{values.lastName}</span>
+                        <span>{values.cpf}</span>
+                        <span>{values.email}</span>
+                        <span>{values['Sector'].sector}</span>
+                        <span>{values['Profile'].profile}</span>
+                    </div>
+                )   
+            })}
          </div>
        </div>
     )
