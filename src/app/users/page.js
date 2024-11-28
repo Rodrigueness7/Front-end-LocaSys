@@ -19,10 +19,10 @@ export default async function Users() {
     
     return(
        <div className="flex flex-container flex-col">
-        <div>
+        <div className="mb-8 px-8">
             <h1>Usuários</h1>
         </div>
-         <div className="flex flex-col max-w-screen-md">
+         <div className="flex flex-col max-w-screen-md px-8">
             {users.map(values => {
                 return(
                     <div className="flex justify-around border border-stone-950">
