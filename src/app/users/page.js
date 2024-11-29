@@ -25,39 +25,38 @@ export default async function Users() {
     const users = await fetchDataUsers(token)
 
     return (
-        <div>
-            <div className="flex justify-between mb-8 px-8">
-                <h1>Usuários</h1>
+        <div className='bg-gray-100 py-8 overflow-x-auto h-screen' >
+            <div className="flex mb-8 px-8">
                 <button className=' p-2 bg-indigo-500 rounded-lg text-white'><Link href={'../users/register'}>Novo Usuário</Link></button>
             </div>
-         
-            <div className="flex flex-col max-w-screen-md px-8">
-            <div>
-                <div className='flex justify-between text-sm border border-stone-950 '>
-                    <span>Name</span>
-                    <span>Sobrenome</span>
-                    <span>Username</span>
-                    <span>CPF</span>
-                    <span>Email</span>
-                    <span>Setor</span>
-                    <span>Perfil</span>
-                </div>
-
-            </div>
-                {users.map(values =>
-                    <div>
-                        <div className="flex justify-around border border-stone-950 text-sm ">
-                            <span className='me-8' key={values.idUser}>{values.firstName}</span>
-                            <span className='me-8'>{values.lastName}</span>
-                            <span>{values.username}</span>
-                            <span>{values.cpf}</span>
-                            <span>{values.email}</span>
-                            <span>{values['Sector'].sector}</span>
-                            <span>{values['Profile'].profile}</span>
-                        </div>
-                    </div>
-                )}
-            </div>
+            <div className='container mx-auto px-4'>
+             <table className='min-w-full table-auto bg-white shadow-md rounded-lg overflow-hidden'>
+                <thead>
+                    <tr className='bg-gray-800 text-white'>
+                        <th className='py-2 px-4 text-left'>Nome</th>
+                        <th className='py-2 px-4 text-left'>Sobrenome</th>
+                        <th className='py-2 px-4 text-left'>Usuário</th>
+                        <th className='py-2 px-4 text-left'>CPF</th>
+                        <th className='py-2 px-4 text-left'>Email</th>
+                        <th className='py-2 px-4 text-left'>Setor</th>
+                        <th className='py-2 px-4 text-left'>Perfil</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {users.map(item => 
+                          <tr className='border-b'>
+                             <td className='py-2 px-4' key={item.idUser}>{item.firstName}</td>
+                             <td className='py-2 px-4'>{item.lastName}</td>
+                             <td className='py-2 px-4'>{item.username}</td>
+                             <td className='py-2 px-4'>{item.cpf}</td>
+                             <td className='py-2 px-4'>{item.email}</td>
+                             <td className='py-2 px-4'>{item['Sector'].sector}</td>
+                             <td className='py-2 px-4'>{item['Profile'].profile}</td>
+                          </tr>
+                        )}
+                </tbody>
+            </table>
+            </div>           
         </div>
     )
 }
