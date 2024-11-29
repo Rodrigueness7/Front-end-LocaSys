@@ -15,6 +15,8 @@ export default function Register({ dataSector, dataProfile }) {
     dataProfile.map(item => {
         return valueProfile.push(item.profile)
     })
+
+    
     
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')

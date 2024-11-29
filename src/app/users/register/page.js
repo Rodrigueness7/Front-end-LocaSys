@@ -33,7 +33,7 @@ export default async function PageRegister() {
         redirect('../login')
         
     }
-
+        
     const dataSector = await fetchDataSector(token)
     const dataProfile = await fetchDataProfile(token)
 
