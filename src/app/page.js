@@ -19,12 +19,12 @@ export default function Home() {
 
     return(
        <div>
-         <div className="p-8 bg-slate-800 w-48 h-screen ">
+         <div className="p-8 bg-slate-800 w-48 h-screen">
             <div>
                 <Link href={'./users'} className="text-white">Usuários</Link>
             </div>
             <div>
-                <Link href={'#'} className="text-white">Equipamentos</Link>
+                <Link href={'./equipment'} className="text-white">Equipamentos</Link>
             </div>
             <div>
                 <Link href={'#'} className="text-white">Filials</Link>

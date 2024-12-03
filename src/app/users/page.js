@@ -1,6 +1,8 @@
 import { redirect } from 'next/navigation'
 import { cookies } from "next/headers"
 import Link from 'next/link'
+import Table from '../../../components/table'
+import ChangeProperty from '../../../components/changeProperty'
 
 const fetchDataUsers = async (token) => {
 
@@ -24,38 +26,23 @@ export default async function Users() {
 
     const users = await fetchDataUsers(token)
 
+    let data = []
+
+    users.map(itens => {
+        ChangeProperty(itens, 'Sector', 'sector', 'sector')
+        ChangeProperty(itens, 'Profile', 'profile', 'profile')
+
+        data.push(itens)
+
+    })
+
     return (
         <div className='bg-gray-100 py-8 overflow-x-auto h-screen' >
-            <div className="flex mb-8 px-8">
+            <div className="flex mb-8 lg:px-12 sm:px-8">
                 <button className=' p-2 bg-indigo-500 rounded-lg text-white'><Link href={'../users/register'}>Novo Usuário</Link></button>
             </div>
             <div className='container mx-auto px-4'>
-             <table className='min-w-full table-auto bg-white shadow-md rounded-lg overflow-hidden'>
-                <thead>
-                    <tr className='bg-gray-800 text-white'>
-                        <th className='py-2 px-4 text-left'>Nome</th>
-                        <th className='py-2 px-4 text-left'>Sobrenome</th>
-                        <th className='py-2 px-4 text-left'>Usuário</th>
-                        <th className='py-2 px-4 text-left'>CPF</th>
-                        <th className='py-2 px-4 text-left'>Email</th>
-                        <th className='py-2 px-4 text-left'>Setor</th>
-                        <th className='py-2 px-4 text-left'>Perfil</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {users.map(item => 
-                          <tr className='border-b'>
-                             <td className='py-2 px-4' key={item.idUser}>{item.firstName}</td>
-                             <td className='py-2 px-4'>{item.lastName}</td>
-                             <td className='py-2 px-4'>{item.username}</td>
-                             <td className='py-2 px-4'>{item.cpf}</td>
-                             <td className='py-2 px-4'>{item.email}</td>
-                             <td className='py-2 px-4'>{item['Sector'].sector}</td>
-                             <td className='py-2 px-4'>{item['Profile'].profile}</td>
-                          </tr>
-                        )}
-                </tbody>
-            </table>
+                <Table Table={'min-w-full table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={['Nome', 'Sobrenome', 'Usuário', 'CPF', 'Email', 'Setor', 'Perfil']} data={data} attributos={['firstName', 'lastName', 'username', 'cpf', 'email', 'sector', 'profile']}></Table>
             </div>           
         </div>
     )
