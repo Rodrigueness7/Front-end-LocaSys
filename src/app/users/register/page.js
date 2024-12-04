@@ -39,8 +39,7 @@ export default async function PageRegister() {
 
    
     return (
-       <div> 
-           <Register dataSector={dataSector} dataProfile={dataProfile} ></Register>
-       </div>
+            <Register dataSector={dataSector} dataProfile={dataProfile} ></Register>
+       
     )
 }
