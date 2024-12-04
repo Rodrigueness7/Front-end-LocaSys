@@ -1,5 +1,4 @@
 
-
 export default function InputForm({classNameLabe, classNameInput,label, div, name, type, value, onchange}) {
     return (
         <div className={div}>
