@@ -4,7 +4,7 @@ import InputForm from "../../../../components/InputForm";
 import InputSelect from "../../../../components/InputSelect";
 
 
-export default function Register({ dataSector, dataProfile }) {
+export default function RegisterUser({ dataSector, dataProfile }) {
 
     const valueSector = []
     const valueProfile = []
@@ -16,7 +16,6 @@ export default function Register({ dataSector, dataProfile }) {
         return valueProfile.push(item.profile)
     })
 
-    
     
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')

@@ -1,7 +1,7 @@
 
 import { cookies } from "next/headers"
-import Register from './Register'
 import { redirect } from 'next/navigation'
+import RegisterUser from "./RegisterUser"
 
 
 const fetchDataSector = async (token) => {
@@ -24,7 +24,7 @@ const fetchDataSector = async (token) => {
     return await dataProfile.json()
 }
 
-export default async function PageRegister() {
+export default async function PageRegisterUser() {
   
     const cookieStore = cookies()
     const token = (await cookieStore).get('token')?.value
@@ -39,6 +39,6 @@ export default async function PageRegister() {
 
    
     return (
-            <Register dataSector={dataSector} dataProfile={dataProfile} ></Register>
+            <RegisterUser dataSector={dataSector} dataProfile={dataProfile} ></RegisterUser>
     )
 }
