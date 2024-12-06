@@ -8,6 +8,7 @@ export default function RegisterUser({ dataSector, dataProfile }) {
 
     const valueSector = []
     const valueProfile = []
+
     dataSector.map( item => {
         return valueSector.push(item.sector)
     })
@@ -31,7 +32,7 @@ export default function RegisterUser({ dataSector, dataProfile }) {
 
     const changeFirstName = (e) => { 
         setFirstName(e.target.value)
-        console.log(e.target.value)
+        
     }
 
     const changeLastName = (e) => { 
