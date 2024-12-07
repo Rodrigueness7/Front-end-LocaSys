@@ -103,7 +103,6 @@ export default function RegisterUser({ dataSector, dataProfile }) {
             idProfile: idProfile[0]
         }
         
-        console.log(JSON.stringify(data))
 
        await fetch('http://localhost:3001/addUser', {
             method: 'POST',

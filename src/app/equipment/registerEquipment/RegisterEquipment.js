@@ -3,22 +3,37 @@ import { useState } from "react"
 import InputForm from "../../../../components/InputForm"
 import InputSelect from "../../../../components/InputSelect"
 
-export default function PageRegisterEquipment({dataUser, dataFilial, dataSector, dataSupplier}) {
-    const valueUsers = []
+export default function PageRegisterEquipment({dataUsername, dataFilial, dataSector, dataSupplier}) {
+    
     const valueFilial = []
+    const valueUsername = []
     const valueSector = []
     const valueSupplier = []
 
-    dataFilial.map(values => {
-        valueFilial.push(values)
+    dataFilial.map(value => {
+        return valueFilial.push(value.filial)
+    })
+    
+    dataUsername.map(value => {
+        return valueUsername.push(value.username)
     })
 
+    dataSector.map(value => {
+        return valueSector.push(value.sector)
+    })
+
+    dataSupplier.map(value => {
+        return valueSupplier.push(value.supplier)
+    })
 
     const [codProd, setCodProd] = useState('')
     const [equipment, setEquipment] = useState('')
     const [type, setType] = useState('')
     const [value, setValue] = useState('')
-    
+    const [filial, setFilial] = useState(valueFilial[0])
+    const [username, setUsername] = useState(valueUsername[0])
+    const [sector, setSector] = useState(valueSector[0])
+    const [supplier, setSupplier] = useState(valueSupplier[0])
 
     const changeCodProd = (e) => {
         const newValue = e.target.value
@@ -45,7 +60,67 @@ export default function PageRegisterEquipment({dataUser, dataFilial, dataSector,
         }
     }
 
+    const changeFilial = (e) => {
+        setFilial(e.target.value)
+    }
+
+    const changeUsername = (e) => {
+        setUsername(e.target.value)
+    }
   
+    const changeSector = (e) => {
+        setSector(e.target.value)
+
+    }
+
+    const changeSupplier = (e) => {
+        setSupplier(e.target.value)
+    }
+
+    const addEquipment = () => {
+       const idUsername = []
+       const idSector = []
+       const idFilial = []
+       const idSupplier = []
+
+       dataUsername.map(value => {
+        if(value.username == username) {
+            return idUsername.push(value.idUser)
+        }
+       })
+
+       dataSector.map(value => {
+        if(value.sector == sector) {
+            return idSector.push(value.idSector)
+        }
+       })
+
+       dataFilial.map(value => {
+        if(value.filial == filial) {
+           return idFilial.push(value.idFilial)
+        }
+       })
+
+       dataSupplier.map(value => {
+        if(value.sector == sector) {
+            return idSupplier.push(value.idSupplier)
+        }
+       })
+    
+       const data = {
+        codProd: codProd,
+        equipment: equipment,
+        type: type,
+        value: value,
+        filial: idFilial[0],
+        username: idUsername[0],
+        sector: idSector[0],
+        supplier: idSupplier[0]
+       }
+
+
+    }
+
     return (
        <section className="bg-gray-100 py-3">
             <div className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
@@ -54,10 +129,15 @@ export default function PageRegisterEquipment({dataUser, dataFilial, dataSector,
                 <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'}  label={'Código'} type={'number'} name={'codProd'} value={codProd} onchange={changeCodProd} maxLength={'10'}></InputForm>
                 <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'}  label={'Equipamento'} type={'text'} name={'equipment'} value={equipment} onchange={changeEquipment}></InputForm>
                 <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'}  label={'Tipo'} type={'text'} name={'type'} value={type} onchange={changeType}></InputForm>
-                <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'}  label={'Value'} type={'decimal'} name={'value'} value={value} onchange={changeValue} maxLength={'10'}></InputForm>
-               
-            
+                <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'}  label={'Valor'} type={'decimal'} name={'value'} value={value} onchange={changeValue} maxLength={'10'}></InputForm>
+                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'}  label={'Filial'} name={'filial'} datas={valueFilial} value={filial} onchange={changeFilial}></InputSelect>
+                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'}  label={'Usuário'} name={'username'} datas={valueUsername} value={username} onchange={changeUsername}></InputSelect>
+                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'}  label={'Setor'} name={'sector'} datas={valueSector} value={sector} onchange={changeSector}></InputSelect>
+                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'}  label={'Fonercedor'} name={'supplier'} datas={valueSupplier} value={supplier} onchange={changeSupplier}></InputSelect>
             </form>
+            <div className="mb-6">
+                <button onClick={addEquipment} className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ">Adicionar</button>
+            </div>
             </div>
        </section>
     )

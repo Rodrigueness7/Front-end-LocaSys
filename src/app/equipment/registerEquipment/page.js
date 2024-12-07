@@ -58,13 +58,13 @@ export default async function RegisterEquipment() {
         redirect('../login')
     }
 
-    let user = await fetchDataUser(token)
+    let username = await fetchDataUser(token)
     let filial = await fetchDataFilial(token)
     let sector = await fetchDataSector(token)
     let supplier = await fetchDataSupplier(token)
 
     return (
-        <PageRegisterEquipment dataUser={user} dataFilial={filial} dataSector={sector} dataSupplier={supplier}></PageRegisterEquipment>
+        <PageRegisterEquipment dataUsername={username} dataFilial={filial} dataSector={sector} dataSupplier={supplier}></PageRegisterEquipment>
         
     )
 }
