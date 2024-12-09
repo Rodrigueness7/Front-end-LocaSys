@@ -2,6 +2,7 @@
 import { useState } from "react"
 import InputForm from "../../../../components/InputForm"
 import InputSelect from "../../../../components/InputSelect"
+import { getCookie } from "cookies-next"
 
 export default function PageRegisterEquipment({dataUsername, dataFilial, dataSector, dataSupplier}) {
     
@@ -34,6 +35,7 @@ export default function PageRegisterEquipment({dataUsername, dataFilial, dataSec
     const [username, setUsername] = useState(valueUsername[0])
     const [sector, setSector] = useState(valueSector[0])
     const [supplier, setSupplier] = useState(valueSupplier[0])
+    const [result, setResult] = useState('')
 
     const changeCodProd = (e) => {
         const newValue = e.target.value
@@ -77,7 +79,9 @@ export default function PageRegisterEquipment({dataUsername, dataFilial, dataSec
         setSupplier(e.target.value)
     }
 
-    const addEquipment = () => {
+    const addEquipment = async () => {
+        const token = getCookie('token')
+        
        const idUsername = []
        const idSector = []
        const idFilial = []
@@ -102,23 +106,36 @@ export default function PageRegisterEquipment({dataUsername, dataFilial, dataSec
        })
 
        dataSupplier.map(value => {
-        if(value.sector == sector) {
+        if(value.supplier == supplier) {
             return idSupplier.push(value.idSupplier)
         }
        })
     
        const data = {
+        idEquipment: 0,
         codProd: codProd,
         equipment: equipment,
         type: type,
         value: value,
-        filial: idFilial[0],
-        username: idUsername[0],
-        sector: idSector[0],
-        supplier: idSupplier[0]
+        idFilial: idFilial[0],
+        idUser: idUsername[0],
+        idSector: idSector[0],
+        idSupplier: idSupplier[0],
+        entryDate: new Date().toLocaleString('pt-BR').slice(0, 10)
        }
 
-
+       await fetch('http://localhost:3001/addEquipment', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+            'content-type': 'application/json',
+            'Authorization': token
+        }
+       }).then(
+            result => result.json()
+       ).then(
+            res => setResult(res.message)
+       )
     }
 
     return (
@@ -138,6 +155,7 @@ export default function PageRegisterEquipment({dataUsername, dataFilial, dataSec
             <div className="mb-6">
                 <button onClick={addEquipment} className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ">Adicionar</button>
             </div>
+            <div>{result}</div>
             </div>
        </section>
     )

@@ -12,8 +12,8 @@ export default function Table ({Table, TrThead, Th, TrTbody, Td, headers, data, 
                </tr>
             </thead>
             <tbody>
-                {data.map((row) => (
-                 <tr className={TrTbody} key={row.idEquipment}>
+                {data.map((row, index) => (
+                 <tr className={TrTbody} key={index}>
                         {attributos.map(item =>(
                             <td className={Td}>{row[item]}</td> 
                         ))}

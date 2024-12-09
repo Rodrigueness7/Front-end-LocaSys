@@ -30,37 +30,64 @@ export default function RegisterUser({ dataSector, dataProfile }) {
     const [profile, setProfile] = useState(valueProfile[0])
     const [result, setResult] = useState('')
 
-    const changeFirstName = (e) => { 
-        setFirstName(e.target.value)
-        
+    const changeFirstName = (e) => {
+        let newFirstName = e.target.value
+        if(newFirstName === '' || newFirstName.length <= 20) {
+            setFirstName(newFirstName)
+        } 
     }
 
     const changeLastName = (e) => { 
-        setLastName(e.target.value)
+        let newLastName = e.target.value
+        if(newLastName === '' || newLastName.length <= 20) {
+            setLastName(newLastName)
+        }  
     }
 
     const changeCpf = (e) => { 
-        setCpf(e.target.value)
+        let newCpf = e.target.value
+        if(newCpf === '' || newCpf.length <= 11) {
+            setCpf(newCpf)
+        }       
     }
    
     const changeUsername = (e) => { 
-        setUsername(e.target.value)
+        let newUsername = e.target.value
+        if(newUsername === '' || newUsername.length <= 20) {
+            setUsername(newUsername)
+        }
+        
     }
     
     const changePassword = (e) => { 
-        setPassword(e.target.value)
+       let newPassword = e.target.value
+       if(newPassword === '' || newPassword.length <= 22) {
+            setPassword(e.target.value)
+       }
+       
+        
     }
 
     const changeConfirmationPassword = (e) => { 
-        setConfirmationPassword(e.target.value)
+       let newConfirmationPassword = e.target.value
+       if(newConfirmationPassword === '' || newConfirmationPassword.length <= 22) {
+            setConfirmationPassword(newConfirmationPassword)
+       }
     }
 
     const changeEmail = (e) => { 
-        setEmail(e.target.value)
+        let newEmail = e.target.value
+        if(newEmail === '' || newEmail.length <= 50) {
+            setEmail(e.target.value)
+        }
+        
     }
 
     const changeConfirmationEmail = (e) => { 
-        setConfirmationEmail(e.target.value)
+        let newConfirmationEmail = e.target.value
+        if(newConfirmationEmail === '' || newConfirmationEmail.length <= 50) {
+            setConfirmationEmail(e.target.value)
+        }
     }
 
     const changeSector = (e) => { 
