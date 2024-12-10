@@ -27,7 +27,7 @@ export default async function Supplier() {
     return (
         <div className="bg-gray-100 py-8 overflow-x-auto h-screen">
             <div>
-                <Table Table={'min-w-full table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={['Fornecedor', 'Email', 'Contato', 'CNPJ', 'Endereço', 'Cep', 'Estado', 'Cidade' ]} data={supplier} attributos={['supplier', 'email', 'contact', 'CNPJ', 'address', 'zipCode', 'state', 'city']}></Table>
+                <Table Table={'min-w-full table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={['Fornecedor', 'Email', 'Contato', 'CNPJ', 'Endereço', 'Cep', 'Estado', 'Cidade' ]} data={supplier} attributos={['supplier', 'email', 'contact', 'CNPJ', 'address', 'zipCode', 'state', 'city']} id={'idSupplier'}></Table>
             </div>
         </div>
     )

@@ -1,5 +1,5 @@
 
-export default function Table ({Table, TrThead, Th, TrTbody, Td, headers, data, attributos}){
+export default function Table ({Table, TrThead, Th, TrTbody, Td, headers, data, attributos, id}){
     return(
         <table className={Table}>
             <thead>
@@ -12,8 +12,8 @@ export default function Table ({Table, TrThead, Th, TrTbody, Td, headers, data, 
                </tr>
             </thead>
             <tbody>
-                {data.map((row, index) => (
-                 <tr className={TrTbody} key={index}>
+                {data.map((row) => (
+                 <tr className={TrTbody} key={row[id]}>
                         {attributos.map(item =>(
                             <td className={Td}>{row[item]}</td> 
                         ))}

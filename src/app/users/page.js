@@ -38,11 +38,11 @@ export default async function Users() {
 
     return (
         <div className='bg-gray-100 py-8 overflow-x-auto h-screen' >
-            <div className="flex mb-8 lg:px-12 sm:px-12 2xl:justify-start 2xl:px-12">
-            <Link href={'../users/registerUser'}><button className='p-2 bg-indigo-500 rounded-lg text-white w-full sm:w-auto'>Novo Usuário</button></Link>
+            <div className="flex mb-8 lg:px-12 sm:px-10 2xl:justify-start 2xl:px-12 lg: px:10">
+            <Link href={'../users/registerUser'}><button className='p-2 bg-indigo-500 rounded-lg text-white w-full '>Novo Usuário</button></Link>
             </div>
             <div className='container mx-auto px-4'>
-                <Table Table={'min-w-full table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={['Nome', 'Sobrenome', 'Usuário', 'CPF', 'Email', 'Setor', 'Perfil']} data={data} attributos={['firstName', 'lastName', 'username', 'cpf', 'email', 'sector', 'profile']}></Table>
+                <Table Table={'min-w-full table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={['Nome', 'Sobrenome', 'Usuário', 'CPF', 'Email', 'Setor', 'Perfil']} data={data} attributos={['firstName', 'lastName', 'username', 'cpf', 'email', 'sector', 'profile']} id={'idUser'}></Table>
             </div>           
         </div>
     )

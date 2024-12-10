@@ -39,13 +39,13 @@ export default async function Equipments() {
 
     return (
         <div className='bg-gray-100 py-8 overflow-x-auto h-screen'>
-            <div className="flex mb-8 lg:px-12 sm:px-8">
+            <div className="flex mb-8 lg:px-12 sm:px-12">
                 <Link href={'../equipment/registerEquipment'}>
                     <button className='p-2 bg-indigo-500 rounded-lg text-white'>Novo Equipamento</button>
                 </Link>
             </div>
             <div className='container mx-auto px-4'>
-                <Table Table={'min-w-full table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={['Código', 'Equipamento', 'Tipo', 'valor', 'Entrada', 'Usuário', 'Setor', 'Fornecedor']} data={data} attributos={['codProd', 'equipment', 'type', 'value', 'entryDate', 'username', 'sector', 'supplier']} ></Table>
+                <Table Table={'min-w-full table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={['Código', 'Equipamento', 'Tipo', 'valor', 'Entrada', 'Usuário', 'Setor', 'Fornecedor']} data={data} attributos={['codProd', 'equipment', 'type', 'value', 'entryDate', 'username', 'sector', 'supplier']} id={'idEquipment'} ></Table>
             </div>
         </div>
     )
