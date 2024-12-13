@@ -13,7 +13,7 @@ export default function Table ({Table, TrThead, Th, TrTbody, Td, headers, data, 
             </thead>
             <tbody>
                 {data.map((row) => (
-                 <tr key={row[id]} className={TrTbody}>
+                <tr key={row[id]} className={TrTbody}>
                         {attributos.map(item =>(
                             <td className={Td}>{row[item]}</td> 
                         ))}
