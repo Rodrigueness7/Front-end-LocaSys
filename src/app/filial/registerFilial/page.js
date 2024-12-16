@@ -70,7 +70,6 @@ export default function RegisterFilial() {
         ).then(
             res => setResult(res.message)
         )
-    
     }
 
     return (

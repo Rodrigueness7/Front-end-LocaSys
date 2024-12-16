@@ -30,7 +30,7 @@ export default function Home() {
                 <Link href={'./filial'} className="hover:text-blue-500 transition duration-300">Filial</Link>
             </div>
             <div>
-                <Link href={'#'} className="hover:text-blue-500 transition duration-300">Setor</Link>
+                <Link href={'./sector'} className="hover:text-blue-500 transition duration-300">Setor</Link>
             </div>
             <div>
                 <Link href={'./supplier'} className="hover:text-blue-500 transition duration-300">Fornecedor</Link>
