@@ -1,4 +1,6 @@
 import { cookies } from "next/headers"
+import { redirect } from "next/navigation"
+import PageRegisterSector from "./registerSector"
 
 
 const fetchDataFilial = async (token) => {
@@ -15,4 +17,15 @@ const fetchDataFilial = async (token) => {
 export default async function RegisterSector() {
     const cookieStore = cookies()
     const token = (await cookieStore).get('token')?.value
+
+    if(!token) {
+        redirect('../login')
+    }
+
+    const filial = await fetchDataFilial(token)
+
+    return(
+        <PageRegisterSector dataFilial={filial}></PageRegisterSector>
+    )
+
 }
