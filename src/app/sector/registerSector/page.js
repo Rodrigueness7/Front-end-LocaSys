@@ -18,13 +18,13 @@ export default async function RegisterSector() {
     const cookieStore = cookies()
     const token = (await cookieStore).get('token')?.value
 
-    if(!token) {
+    if (!token) {
         redirect('../login')
     }
 
     const filial = await fetchDataFilial(token)
 
-    return(
+    return (
         <PageRegisterSector dataFilial={filial}></PageRegisterSector>
     )
 

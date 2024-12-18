@@ -65,6 +65,6 @@ export default async function RegisterEquipment() {
 
     return (
         <PageRegisterEquipment dataUsername={username} dataFilial={filial} dataSector={sector} dataSupplier={supplier}></PageRegisterEquipment>
-        
+
     )
 }
