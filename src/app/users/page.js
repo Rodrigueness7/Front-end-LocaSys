@@ -42,7 +42,7 @@ export default async function Users() {
                 <Link href={'../users/registerUser'}><button className='p-2 bg-indigo-500 rounded-lg text-white w-full '>Novo Usuário</button></Link>
             </div>
             <div className='ml-8 flex-1'>
-                <Table Table={'table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={['Nome', 'Sobrenome', 'Usuário', 'CPF', 'Email', 'Setor', 'Perfil']} data={data} attributos={['firstName', 'lastName', 'username', 'cpf', 'email', 'sector', 'profile']} id={'idUser'}></Table>
+                <Table Table={'table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={['Nome', 'Sobrenome', 'Usuário', 'CPF', 'Email', 'Setor', 'Perfil']} data={data} attributos={['firstName', 'lastName', 'username', 'cpf', 'email', 'sector', 'profile']} id={'idUser'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'#'} bt={'...'}></Table>
             </div>
         </div>
     )

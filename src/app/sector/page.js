@@ -41,7 +41,7 @@ export default async function Sector() {
                 </Link>
             </div>
             <div className='flex-1 ml-8'>
-                <Table Table={' table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={['Código Filial', 'Filial', 'Setor']} data={data} attributos={['uniqueIdentifier', 'filial', 'sector']}></Table>
+                <Table Table={' table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={['Código Filial', 'Filial', 'Setor']} data={data} attributos={['uniqueIdentifier', 'filial', 'sector']} id={'idSector'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'#'} bt={'...'}></Table>
             </div>
         </div>
     )
