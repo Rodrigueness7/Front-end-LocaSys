@@ -18,7 +18,7 @@ export default function Table ({Table, TrThead, Th, TrTbody, Td, headers, data, 
                         {attributos.map(item =>(
                             <td key={item} className={Td}>{row[item]}</td>   
                         ))}
-                        <td><button className={classButton}><Link href={href}></Link>{bt}</button></td>
+                        <td><Link href={href + `/${row[id]}`}><button className={classButton}>{bt}</button></Link></td>
                 </tr>
                 ))}
             </tbody>
