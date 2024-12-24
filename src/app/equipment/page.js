@@ -45,7 +45,7 @@ export default async function Equipments() {
                 </Link>
             </div>
             <div className='ml-8 flex-1'>
-                <Table Table={' table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={['Código', 'Equipamento', 'Tipo', 'valor', 'Entrada', 'Usuário', 'Setor','Filial','Fornecedor']} data={data} attributos={['codProd', 'equipment', 'type', 'value', 'entryDate', 'username', 'sector','filial','supplier']} id={'idEquipment'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'#'} bt={'...'}></Table>
+                <Table Table={' table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={['Código', 'Equipamento', 'Tipo', 'valor', 'Entrada', 'Usuário', 'Setor','Filial','Fornecedor']} data={data} attributos={['codProd', 'equipment', 'type', 'value', 'entryDate', 'username', 'sector','filial','supplier']} id={'idEquipment'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./equipment/updateEquipment'} bt={'...'}></Table>
             </div>
         </div>
     )
