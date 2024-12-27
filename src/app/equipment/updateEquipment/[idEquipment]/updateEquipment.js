@@ -36,7 +36,7 @@ export default function UpdateEquipment({ dataEquipment, dataUsername, dataFilia
     const [username, setUsername] = useState(dataEquipment['User'].username)
     const [sector, setSector] = useState(dataEquipment['Sector'].sector)
     const [supplier, setSupplier] = useState(dataEquipment['Supplier'].supplier)
-    const[entryDate, setEntryDate] = useState(dataEquipment.entryDate)
+    const[entryDate, setEntryDate] = useState(new Date(dataEquipment.entryDate).toLocaleDateString('pt-br').split('/').reverse().join('-'))
     const [result, setResult] = useState('')
 
     const changeCodProd = (e) => {
@@ -142,14 +142,31 @@ export default function UpdateEquipment({ dataEquipment, dataUsername, dataFilia
         )
     }
 
-    const deleteEquiment = () => {
-        console.log(new Date(equipment.entryDate).toLocaleString('pt-BR', {timeZone: 'UTC'}).slice(0, 10))
+    const inactivateEquipment = async () => {
+        let deletionDate = prompt('Data de retorno?')
+
+        let data = {
+            deletionDate: deletionDate
+        }
+        
+        await fetch(`http://localhost:3001/inactivateEquipment/${idEquipment}`, {
+            method: 'PUT',
+            body: JSON.stringify(data),
+            headers: {
+                'content-type': 'application/json',
+                'Authorization': token
+            }   
+        }).then(
+            res => res.json()
+        ).then(
+            res => setResult(res.message)
+        )
     }
 
     return (
         <section className="bg-gray-100 py-3">
              <div className="flex items-start mb-8 lg:px-2 sm:px-0">
-                <button onClick={deleteEquiment} className="p-2 bg-indigo-500 rounded-lg text-white">Deletar</button>
+                <button onClick={inactivateEquipment} className="p-2 bg-indigo-500 rounded-lg text-white">Deletar</button>
             </div>
             <div className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
                 <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">Atualizar Equipamento</h1>

@@ -3,7 +3,7 @@ import { useState } from "react";
 import InputForm from "../../../../components/InputForm";
 
 
-export default function RegisterSupplier() {
+export default function RegisterSupplier({token}) {
 
     const [supplier, setSupplier] = useState('')
     const [email, setEmail] = useState('')
@@ -72,7 +72,6 @@ export default function RegisterSupplier() {
     }
 
     const addSupplier = async () => {
-        const token = getCookie('token')
         const data = {
             supplier: supplier,
             email: email,

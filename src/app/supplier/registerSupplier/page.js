@@ -13,6 +13,6 @@ export default async function PageRegisterSupplier() {
     }
 
     return (
-        <RegisterSupplier></RegisterSupplier>
+        <RegisterSupplier token={token}></RegisterSupplier>
     )
 }
