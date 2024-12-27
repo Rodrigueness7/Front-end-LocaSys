@@ -38,7 +38,7 @@ export default function UpdateEquipment({ dataEquipment, dataUsername, dataFilia
     const [sector, setSector] = useState(dataEquipment['Sector'].sector)
     const [supplier, setSupplier] = useState(dataEquipment['Supplier'].supplier)
     const [entryDate, setEntryDate] = useState(new Date(dataEquipment.entryDate).toLocaleDateString('pt-br').split('/').reverse().join('-'))
-    const [deletionDate, setDeletionDate] = useState('')
+    const [returnDate, setReturnDate] = useState('')
     const [result, setResult] = useState('')
 
     const changeCodProd = (e) => {
@@ -86,8 +86,8 @@ export default function UpdateEquipment({ dataEquipment, dataUsername, dataFilia
         setEntryDate(e.target.value)
     }
 
-    const changeDeletionDate = (e) => {
-        setDeletionDate(e.target.value)
+    const changeReturnDate = (e) => {
+        setReturnDate(e.target.value)
     }
 
     const updateEquipment = async () => {
@@ -148,12 +148,12 @@ export default function UpdateEquipment({ dataEquipment, dataUsername, dataFilia
         )
     }
 
-    const inactivateEquipment = async () => {
+    const returnEquipment = async () => {
         let data = {
-            deletionDate: deletionDate
+            returnDate: returnDate
         }
         
-        await fetch(`http://localhost:3001/inactivateEquipment/${idEquipment}`, {
+        await fetch(`http://localhost:3001/returnEquipment/${idEquipment}`, {
             method: 'PUT',
             body: JSON.stringify(data),
             headers: {
@@ -169,10 +169,10 @@ export default function UpdateEquipment({ dataEquipment, dataUsername, dataFilia
 
     return (
         <section className="bg-gray-100 py-3">
-            <Modal classFirstDivButton={'flex items-start mb-8 lg:px-2 sm:px-0'} classFirstButton={"p-2 bg-indigo-500 rounded-lg text-white"} FirstButton={'Deletar'} classCloseModal={'fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'} classDivChildren={'bg-white rounded-lg shadow-lg w-96 p-6'} classDivButton={'flex justify-end mt-6'} classSecondButton={'px-4 py-2 text-gray-600 bg-gray-200 rounded hover:bg-gray-300'} secondButton={'Fechar'} Children={
+            <Modal classFirstDivButton={'flex items-start mb-8 lg:px-2 sm:px-0'} classFirstButton={"p-2 bg-indigo-500 rounded-lg text-white"} FirstButton={'Devolver'} classCloseModal={'fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'} classDivChildren={'bg-white rounded-lg shadow-lg w-96 p-6'} classDivButton={'flex justify-end mt-6'} classSecondButton={'px-4 py-2 text-gray-600 bg-gray-200 rounded hover:bg-gray-300'} secondButton={'Fechar'} Children={
                 <div>
-                    <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Data Devolução'} type={'date'} name={'deletionDate'} value={deletionDate} onchange={changeDeletionDate} maxLength={'10'}></InputForm>
-                    <button onClick={inactivateEquipment} className="p-2 bg-indigo-500 rounded-lg text-white">Devolver</button>
+                    <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Data Devolução'} type={'date'} name={'returnDate'} value={returnDate} onchange={changeReturnDate}></InputForm>
+                    <button onClick={returnEquipment} className="p-2 bg-indigo-500 rounded-lg text-white">Devolver</button>
                 </div>
             }></Modal>
             <div className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
