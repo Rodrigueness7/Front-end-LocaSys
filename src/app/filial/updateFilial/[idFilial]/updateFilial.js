@@ -1,6 +1,7 @@
 'use client'
 import { useState } from "react"
 import InputForm from "../../../../../components/InputForm"
+import Modal from "../../../../../components/modal"
 
 
 export default function UpdateFilial({dataFilial, idFilial, token}) {
@@ -58,9 +59,16 @@ export default function UpdateFilial({dataFilial, idFilial, token}) {
     }
 
     const deleteFilial = async () => {
-        await fetch(`http://localhost:3001/deleteFilial/${idFilial}`, {
-            method: 'DELETE',
+        
+        let data = {
+            deletionDate: new Date().toLocaleDateString('pt-BR')
+        }
+    
+        await fetch(`http://localhost:3001/inactivateFilial/${idFilial}`, {
+            method: 'PUT',
+            body: JSON.stringify(data),
             headers:{
+                'content-type': 'application/json',
                 'Authorization': token
             }
         }).then(

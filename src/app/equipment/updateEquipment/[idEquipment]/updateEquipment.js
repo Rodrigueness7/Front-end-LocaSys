@@ -2,6 +2,7 @@
 import { useState } from "react"
 import InputForm from "../../../../../components/InputForm"
 import InputSelect from "../../../../../components/InputSelect"
+import Modal from "../../../../../components/modal"
 
 
 export default function UpdateEquipment({ dataEquipment, dataUsername, dataFilial, dataSector, dataSupplier, token, idEquipment }) {
@@ -36,7 +37,8 @@ export default function UpdateEquipment({ dataEquipment, dataUsername, dataFilia
     const [username, setUsername] = useState(dataEquipment['User'].username)
     const [sector, setSector] = useState(dataEquipment['Sector'].sector)
     const [supplier, setSupplier] = useState(dataEquipment['Supplier'].supplier)
-    const[entryDate, setEntryDate] = useState(new Date(dataEquipment.entryDate).toLocaleDateString('pt-br').split('/').reverse().join('-'))
+    const [entryDate, setEntryDate] = useState(new Date(dataEquipment.entryDate).toLocaleDateString('pt-br').split('/').reverse().join('-'))
+    const [deletionDate, setDeletionDate] = useState('')
     const [result, setResult] = useState('')
 
     const changeCodProd = (e) => {
@@ -82,6 +84,10 @@ export default function UpdateEquipment({ dataEquipment, dataUsername, dataFilia
 
     const changeEntryDate = (e) => {
         setEntryDate(e.target.value)
+    }
+
+    const changeDeletionDate = (e) => {
+        setDeletionDate(e.target.value)
     }
 
     const updateEquipment = async () => {
@@ -143,8 +149,6 @@ export default function UpdateEquipment({ dataEquipment, dataUsername, dataFilia
     }
 
     const inactivateEquipment = async () => {
-        let deletionDate = prompt('Data de retorno?')
-
         let data = {
             deletionDate: deletionDate
         }
@@ -165,9 +169,12 @@ export default function UpdateEquipment({ dataEquipment, dataUsername, dataFilia
 
     return (
         <section className="bg-gray-100 py-3">
-             <div className="flex items-start mb-8 lg:px-2 sm:px-0">
-                <button onClick={inactivateEquipment} className="p-2 bg-indigo-500 rounded-lg text-white">Deletar</button>
-            </div>
+            <Modal classFirstDivButton={'flex items-start mb-8 lg:px-2 sm:px-0'} classFirstButton={"p-2 bg-indigo-500 rounded-lg text-white"} FirstButton={'Deletar'} classCloseModal={'fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'} classDivChildren={'bg-white rounded-lg shadow-lg w-96 p-6'} classDivButton={'flex justify-end mt-6'} classSecondButton={'px-4 py-2 text-gray-600 bg-gray-200 rounded hover:bg-gray-300'} secondButton={'Fechar'} Children={
+                <div>
+                    <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Data Devolução'} type={'date'} name={'deletionDate'} value={deletionDate} onchange={changeDeletionDate} maxLength={'10'}></InputForm>
+                    <button onClick={inactivateEquipment} className="p-2 bg-indigo-500 rounded-lg text-white">Devolver</button>
+                </div>
+            }></Modal>
             <div className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
                 <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">Atualizar Equipamento</h1>
                 <form className="grid grid-cols-1 gap-x-8 gap-y-4">
