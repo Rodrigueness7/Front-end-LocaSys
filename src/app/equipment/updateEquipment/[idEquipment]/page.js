@@ -1,5 +1,6 @@
 import { cookies } from "next/headers"
 import UpdateEquipment from "./updateEquipment"
+import { redirect } from "next/navigation"
 
 
 const fetchDataUser = async (token) => {
@@ -60,15 +61,14 @@ const fetchDataEquipment = async (idFilial,token) => {
 
 export default async function PageUpdateEquipment({params}) {
 
+    const idEquipment = (await params).idEquipment
     const cookieStore = cookies()
         const token = (await cookieStore).get('token')?.value
     
         if (!token) {
-            redirect('../login')
+           redirect('../../login')
         }
-    
-    const idEquipment = (await params).idEquipment
-
+        
     let username = await fetchDataUser(token)
     let filial = await fetchDataFilial(token)
     let sector = await fetchDataSector(token)

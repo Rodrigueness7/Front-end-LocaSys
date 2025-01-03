@@ -1,5 +1,5 @@
 'use client'
-import { Children, useState } from "react";
+import { useState } from "react";
 
 
 export default function Modal({ classFirstDivButton ,classFirstButton, FirstButton, classCloseModal, classDivChildren, Children, classDivButton, classSecondButton, secondButton }) {

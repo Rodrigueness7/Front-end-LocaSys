@@ -152,14 +152,14 @@ export default function UpdateEquipment({ dataEquipment, dataUsername, dataFilia
         let data = {
             returnDate: returnDate
         }
-        
+
         await fetch(`http://localhost:3001/returnEquipment/${idEquipment}`, {
             method: 'PUT',
             body: JSON.stringify(data),
             headers: {
                 'content-type': 'application/json',
                 'Authorization': token
-            }   
+            }
         }).then(
             res => res.json()
         ).then(
