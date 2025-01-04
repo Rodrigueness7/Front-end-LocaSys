@@ -1,10 +1,10 @@
 'use client'
 import { useState } from "react"
 import InputForm from "../../../../../components/InputForm"
-import Modal from "../../../../../components/modal"
 
 
-export default function UpdateFilial({dataFilial, idFilial, token}) {
+
+export default function UpdateFilial({ dataFilial, idFilial, token }) {
 
     const [filial, setFiial] = useState(dataFilial.filial)
     const [CNPJ, setCNPJ] = useState(dataFilial.CNPJ)
@@ -21,7 +21,7 @@ export default function UpdateFilial({dataFilial, idFilial, token}) {
 
     const changeCNPJ = (e) => {
         setCNPJ(dataFilial.CNPJ)
-        
+
     }
 
     const changeCoporateName = (e) => {
@@ -32,8 +32,8 @@ export default function UpdateFilial({dataFilial, idFilial, token}) {
     }
 
     const changeUniqueIdentifier = (e) => {
-       setUniqueIdentifier(dataFilial.uniqueIdentifier)
-       
+        setUniqueIdentifier(dataFilial.uniqueIdentifier)
+
     }
 
     const updateFilial = async () => {
@@ -44,7 +44,7 @@ export default function UpdateFilial({dataFilial, idFilial, token}) {
             uniqueIdentifier: uniqueIdentifier
         }
 
-        await fetch(`http://localhost:3001/updateFilial/${idFilial}`,{
+        await fetch(`http://localhost:3001/updateFilial/${idFilial}`, {
             method: 'PUT',
             body: JSON.stringify(data),
             headers: {
@@ -59,15 +59,15 @@ export default function UpdateFilial({dataFilial, idFilial, token}) {
     }
 
     const deleteFilial = async () => {
-        
+
         let data = {
             deletionDate: new Date().toLocaleDateString('pt-BR')
         }
-    
+
         await fetch(`http://localhost:3001/inactivateFilial/${idFilial}`, {
             method: 'PUT',
             body: JSON.stringify(data),
-            headers:{
+            headers: {
                 'content-type': 'application/json',
                 'Authorization': token
             }

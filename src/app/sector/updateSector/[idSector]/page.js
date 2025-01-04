@@ -1,4 +1,4 @@
-import UpdateSector from "@/app/supplier/updateSupplier/[idSupplier]/updateSector"
+import UpdateSector from "@/app/sector/updateSector/[idSector]/updateSector"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
