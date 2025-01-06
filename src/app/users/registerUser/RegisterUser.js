@@ -4,7 +4,7 @@ import InputForm from "../../../../components/InputForm";
 import InputSelect from "../../../../components/InputSelect";
 
 
-export default function RegisterUser({ dataSector, dataProfile }) {
+export default function RegisterUser({ dataSector, dataProfile, dataUser, token }) {
 
     const valueSector = []
     const valueProfile = []
@@ -142,6 +142,28 @@ export default function RegisterUser({ dataSector, dataProfile }) {
         ).then(
             res => setResult(res.message)
         )
+
+        let user = []
+        dataUser.map(itens => {
+           if(itens.username === localStorage.getItem('username')) {
+             user.push(itens.idUser)
+           }
+        })
+
+        const dataLog = {
+            idLog: 0,
+            action: `Cadastro do usuário ${username}`,
+            idUser: user[0]
+        }
+
+        await fetch('http://localhost:3001/registerLog', {
+            method:'POST',
+            body: JSON.stringify(dataLog),
+            headers: {
+                'content-type': 'application/json',
+                'Authorization': token
+            }
+        })
     }
 
 

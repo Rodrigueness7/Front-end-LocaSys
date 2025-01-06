@@ -6,7 +6,7 @@ import ChangeProperty from '../../../components/changeProperty'
 
 const fetchDataUsers = async (token) => {
 
-    const res = await fetch('http://localhost:3001/findUser', {
+    const res = await fetch('http://localhost:3001/findAllUser', {
         headers: {
             'content-type': 'application/json',
             'Authorization': token

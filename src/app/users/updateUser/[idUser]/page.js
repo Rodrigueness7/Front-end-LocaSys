@@ -22,7 +22,7 @@ const fetchDataProfile = async (token) => {
     return await dataProfile.json()
 }
 
-const fetchDataUser = async (idUser, token) => {
+const fetchDataUserId = async (idUser, token) => {
     const res = await fetch(`http://localhost:3001/findIdUser/${idUser}`, {
         headers: {
             'content-type': 'application/json',
@@ -32,6 +32,15 @@ const fetchDataUser = async (idUser, token) => {
     return await res.json()
 }
 
+const fetchDataUser = async (token) => {
+    const res = await fetch('http://localhost:3001/findAllUser', {
+        headers: {
+            'content-type': 'application/json',
+            'Authorization': token
+        }
+    })
+    return await res.json()
+}
 
 export default async function PageUpdateUser({ params }) {
     const idUser = (await params).idUser
@@ -45,10 +54,11 @@ export default async function PageUpdateUser({ params }) {
 
     const sector = await fetchDataSector(token)
     const profile = await fetchDataProfile(token)
-    const user = await fetchDataUser(idUser, token)
+    const userId = await fetchDataUserId(idUser, token)
+    const user = await fetchDataUser(token)
 
     return (
-        <UpdateUser dataUser={user} dataSector={sector} dataProfile={profile} idUser={idUser} token={token}></UpdateUser>
+        <UpdateUser dataUser={userId} dataSector={sector} dataProfile={profile} idUser={idUser} token={token}></UpdateUser>
 
     )
 

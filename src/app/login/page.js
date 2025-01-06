@@ -40,6 +40,12 @@ export default function Login() {
 
     if (values.message === 'Logged in user') {
       route.push('./')
+      localStorage.setItem('username', username)
+
+      setTimeout(() => {
+        localStorage.clear()
+      }, 8600000)
+
     }
     return setResult(values.message)
 

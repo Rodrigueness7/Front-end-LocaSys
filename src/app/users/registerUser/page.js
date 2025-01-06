@@ -24,6 +24,16 @@ const fetchDataProfile = async (token) => {
     return await dataProfile.json()
 }
 
+const fetchDataUser = async (token) => {
+    const res = await fetch('http://localhost:3001/findAllUser', {
+        headers: {
+            'content-type': 'application/json',
+            'Authorization': token
+        }
+    })
+    return await res.json()
+}
+
 export default async function PageRegisterUser() {
 
     const cookieStore = cookies()
@@ -36,9 +46,10 @@ export default async function PageRegisterUser() {
 
     const dataSector = await fetchDataSector(token)
     const dataProfile = await fetchDataProfile(token)
+    const dataUser = await fetchDataUser(token)
 
 
     return (
-        <RegisterUser dataSector={dataSector} dataProfile={dataProfile} ></RegisterUser>
+        <RegisterUser dataSector={dataSector} dataProfile={dataProfile} dataUser={dataUser} token={token}></RegisterUser>
     )
 }

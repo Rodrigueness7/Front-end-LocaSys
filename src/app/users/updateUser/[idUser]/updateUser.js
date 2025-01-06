@@ -4,7 +4,7 @@ import { useState } from "react"
 import InputForm from "../../../../../components/InputForm"
 import InputSelect from "../../../../../components/InputSelect"
 
-export default function UpdateUser({ dataUser, dataSector, dataProfile, idUser, token }) {
+export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser, token, dataUser }) {
 
     const valueSector = []
     const valueProfile = []
@@ -19,16 +19,16 @@ export default function UpdateUser({ dataUser, dataSector, dataProfile, idUser, 
 
 
 
-    const [firstName, setFirstName] = useState(dataUser.firstName)
-    const [lastName, setLastName] = useState(dataUser.lastName)
-    const [cpf, setCpf] = useState(dataUser.cpf)
-    const [username, setUsername] = useState(dataUser.username)
-    const [password, setPassword] = useState(dataUser.password)
-    const [confirmationPassword, setConfirmationPassword] = useState(dataUser.password)
-    const [email, setEmail] = useState(dataUser.email)
-    const [confirmationEmail, setConfirmationEmail] = useState(dataUser.email)
-    const [sector, setSector] = useState(dataUser['Sector'].sector)
-    const [profile, setProfile] = useState(dataUser['Profile'].profile)
+    const [firstName, setFirstName] = useState(dataUserId.firstName)
+    const [lastName, setLastName] = useState(dataUserId.lastName)
+    const [cpf, setCpf] = useState(dataUserId.cpf)
+    const [username, setUsername] = useState(dataUserId.username)
+    const [password, setPassword] = useState(dataUserId.password)
+    const [confirmationPassword, setConfirmationPassword] = useState(dataUserId.password)
+    const [email, setEmail] = useState(dataUserId.email)
+    const [confirmationEmail, setConfirmationEmail] = useState(dataUserId.email)
+    const [sector, setSector] = useState(dataUserId['Sector'].sector)
+    const [profile, setProfile] = useState(dataUserId['Profile'].profile)
     const [result, setResult] = useState('')
 
     const changeFirstName = (e) => {

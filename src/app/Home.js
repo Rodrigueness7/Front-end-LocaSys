@@ -26,6 +26,9 @@ export default function PageHome() {
                 <div>
                     <Link href={'./profile'} className="hover:text-blue-500 transition duration-300">Perfil</Link>
                 </div>
+                <div>
+                    <Link href={'./logs'} className="hover:text-blue-500 transition duration-300">Logs</Link>
+                </div>
             </div>
         </div>
     )
