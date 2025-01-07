@@ -3,6 +3,7 @@ import { useState } from "react"
 import InputForm from "../../../../components/InputForm"
 import InputSelect from "../../../../components/InputSelect"
 import { getCookie } from "cookies-next"
+import FetchLog from "../../../../components/fetchAddLog"
 
 export default function PageRegisterEquipment({ dataUsername, dataFilial, dataSector, dataSupplier }) {
 
@@ -136,6 +137,7 @@ export default function PageRegisterEquipment({ dataUsername, dataFilial, dataSe
         ).then(
             res => setResult(res.message)
         )
+
     }
 
     return (

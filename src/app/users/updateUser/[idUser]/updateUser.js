@@ -3,6 +3,7 @@
 import { useState } from "react"
 import InputForm from "../../../../../components/InputForm"
 import InputSelect from "../../../../../components/InputSelect"
+import FetchAddLog from "../../../../../components/fetchAddLog"
 
 export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser, token, dataUser }) {
 
@@ -17,7 +18,7 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
         return valueProfile.push(item.profile)
     })
 
-
+    console.log(dataUserId)
 
     const [firstName, setFirstName] = useState(dataUserId.firstName)
     const [lastName, setLastName] = useState(dataUserId.lastName)
@@ -141,6 +142,8 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
         ).then(
             res => setResult(res.message)
         )
+
+        FetchAddLog(dataUser, 'Atualizado', 'Atualizado cadastro', username, token)
     }
 
     const deleteUser = async () => {
@@ -160,6 +163,8 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
         ).then(
             res => setResult(res.message)
         )
+
+        FetchAddLog(dataUser, 'Deletado', 'Deletado cadastro', username, token)
     }
 
 

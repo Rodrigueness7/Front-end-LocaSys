@@ -1,46 +1,10 @@
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import UpdateUser from "./updateUser"
+import FetchUser from "../../../../../components/fetchUser"
+import FetchProfile from "../../../../../components/fetchProfile"
+import FetchSector from "../../../../../components/fetchSector"
 
-const fetchDataSector = async (token) => {
-    const dataSector = await fetch('http://localhost:3001/findAllSector', {
-        headers: {
-            'content-type': 'application/json',
-            'Authorization': token
-        }
-    })
-    return await dataSector.json()
-}
-
-const fetchDataProfile = async (token) => {
-    const dataProfile = await fetch('http://localhost:3001/findAllProfile', {
-        headers: {
-            'content-type': 'application/json',
-            'Authorization': token
-        }
-    })
-    return await dataProfile.json()
-}
-
-const fetchDataUserId = async (idUser, token) => {
-    const res = await fetch(`http://localhost:3001/findIdUser/${idUser}`, {
-        headers: {
-            'content-type': 'application/json',
-            'Authorization': token
-        }
-    })
-    return await res.json()
-}
-
-const fetchDataUser = async (token) => {
-    const res = await fetch('http://localhost:3001/findAllUser', {
-        headers: {
-            'content-type': 'application/json',
-            'Authorization': token
-        }
-    })
-    return await res.json()
-}
 
 export default async function PageUpdateUser({ params }) {
     const idUser = (await params).idUser
@@ -52,13 +16,13 @@ export default async function PageUpdateUser({ params }) {
         redirect('../../login')
     }
 
-    const sector = await fetchDataSector(token)
-    const profile = await fetchDataProfile(token)
-    const userId = await fetchDataUserId(idUser, token)
-    const user = await fetchDataUser(token)
+    const sector = await FetchSector('http://localhost:3001/findAllSector', token)
+    const profile = await FetchProfile('http://localhost:3001/findAllProfile', token)
+    const dataUserId = await FetchUser(`http://localhost:3001/findIdUser/${idUser}`, token)
+    const user = await FetchUser('http://localhost:3001/findAllUser', token)
 
     return (
-        <UpdateUser dataUser={userId} dataSector={sector} dataProfile={profile} idUser={idUser} token={token}></UpdateUser>
+        <UpdateUser dataUserId={dataUserId} dataSector={sector} dataProfile={profile} idUser={idUser} token={token} dataUser={user}></UpdateUser>
 
     )
 

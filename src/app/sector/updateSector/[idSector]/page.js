@@ -1,6 +1,7 @@
 import UpdateSector from "@/app/sector/updateSector/[idSector]/updateSector"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
+import FetchSector from "../../../../../components/fetchSector"
 
 const fetchDataFilial = async (token) => {
     const res = await fetch('http://localhost:3001/findAllFilial', {
@@ -9,17 +10,6 @@ const fetchDataFilial = async (token) => {
             'Authorization': token
         }
     })
-    return await res.json()
-}
-
-const fetchDataSector = async (idSector, token) => {
-    const res = await fetch(`http://localhost:3001/findSector/${idSector}` , {
-        headers: {
-            'content-type': 'application/json',
-            'Authorization': token
-        }
-    })
-
     return await res.json()
 }
 
@@ -33,7 +23,7 @@ export default async function PageUpdateSector({params}) {
         redirect('../../login')
     }
 
-    const sector = await fetchDataSector(idSector, token)
+    const sector = await FetchSector(`http://localhost:3001/findSector/${idSector}`, token)
     const filial = await fetchDataFilial(token)
 
     return(

@@ -1,17 +1,8 @@
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import UpdateProfile from "./updateProfile"
+import FetchProfile from "../../../../../components/fetchProfile"
 
-
-const fetchDataProfile = async (idProfile, token) => {
-    const res = await fetch(`http://localhost:3001/findProfile/${idProfile}`, {
-        headers: {
-            'content-type': 'application/json',
-            'Authorization': token
-        }
-    })
-    return await res.json()
-}
 
 export default async function PageUpdateProfile({params}) {
     const idProfile = (await params).idProfile
@@ -23,7 +14,7 @@ export default async function PageUpdateProfile({params}) {
         redirect('../../login')
     }
 
-    const profile = await fetchDataProfile(idProfile, token)
+    const profile = await FetchProfile(`http://localhost:3001/findProfile/${idProfile}`, token)
 
     return(
         <UpdateProfile data={profile} idProfile={idProfile} token={token}></UpdateProfile>

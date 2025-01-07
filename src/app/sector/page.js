@@ -3,17 +3,8 @@ import { redirect } from "next/navigation"
 import ChangeProperty from "../../../components/changeProperty"
 import Link from "next/link"
 import Table from "../../../components/table"
+import FetchSector from "../../../components/fetchSector"
 
-
-const fetchDataSector = async (token) => {
-    const res = await fetch('http://localhost:3001/findAllSector', {
-        headers: {
-            'content-type': 'application/json',
-            'Authorization': token
-        }
-    })
-    return await res.json()
-}
 
 export default async function Sector() {
     const cookieStore = cookies()
@@ -23,7 +14,7 @@ export default async function Sector() {
         redirect('../login')
     }
 
-    let sector = await fetchDataSector(token)
+    let sector = await FetchSector('http://localhost:3001/findAllSector', token)
     let data = []
 
     sector.map((itens) => {

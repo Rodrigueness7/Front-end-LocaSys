@@ -2,17 +2,9 @@ import { cookies } from "next/headers"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import Table from "../../../components/table"
+import FetchProfile from "../../../components/fetchProfile"
 
-const fetchDataProfile = async (token) => {
-    const res = await fetch('http://localhost:3001/findAllProfile', {
-        headers: {
-            'content-type': 'application/json',
-            'Authorization': token
-        }
-    })
 
-    return await res.json()
-}
 export default async function Profile() {
 
     const cookieStore = cookies()
@@ -22,7 +14,7 @@ export default async function Profile() {
         redirect('../login')
     }
 
-    const profile = await fetchDataProfile(token)
+    const profile = await FetchProfile('http://localhost:3001/findAllProfile', token)
 
     return(
         <div className="bg-gray-100 py-8 overflow-x-auto h-screen px-12">
