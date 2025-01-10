@@ -1,9 +1,10 @@
 'use client'
 import { useState } from "react";
 import InputForm from "../../../../components/InputForm";
+import addData from "../../../../utils/addData";
 
 
-export default function RegisterSupplier({token}) {
+export default function RegisterSupplier({ token }) {
 
     const [supplier, setSupplier] = useState('')
     const [email, setEmail] = useState('')
@@ -83,18 +84,8 @@ export default function RegisterSupplier({token}) {
             city: city
         }
 
-        await fetch('http://localhost:3001/addSupplier', {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-                'content-type': 'application/json',
-                'Authorization': token
-            }
-        }).then(
-            result => result.json()
-        ).then(
-            res => setResult(res.message)
-        )
+        await addData('http://localhost:3001/addSupplier', data, token, setResult)
+
     }
 
     return (

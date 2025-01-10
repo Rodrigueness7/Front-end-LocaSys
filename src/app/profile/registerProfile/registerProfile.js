@@ -1,9 +1,10 @@
 'use client'
 import { useState } from "react";
 import InputForm from "../../../../components/InputForm";
+import addData from "../../../../utils/addData";
 
 
-export default function RegisterProfile() {
+export default function RegisterProfile({ token }) {
 
     const [profile, setProfile] = useState('')
     const [result, setResult] = useState('')
@@ -15,17 +16,7 @@ export default function RegisterProfile() {
     const addProfile = async () => {
         const data = { profile: profile }
 
-        await fetch('http://localhost:3001/addProfile', {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-                'content-type': 'application/json'
-            }
-        }).then(
-            result => result.json()
-        ).then(
-            res => setResult(res.message)
-        )
+        await addData('http://localhost:3001/addProfile', data, token, setResult)
     }
 
     return (

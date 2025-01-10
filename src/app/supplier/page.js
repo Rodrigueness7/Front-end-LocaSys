@@ -2,17 +2,7 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import Table from "../../../components/table"
 import Link from "next/link"
-
-
-const fetchDataSupplier = async (token) => {
-    const res = await fetch('http://localhost:3001/findAllSupplier', {
-        headers: {
-            'content-type': 'application/json',
-            'Authorization': token
-        }
-    })
-    return await res.json()
-}
+import fetchData from "../../../utils/fetchData"
 
 
 export default async function Supplier() {
@@ -23,7 +13,7 @@ export default async function Supplier() {
         redirect('../login')
     }
 
-    const supplier = await fetchDataSupplier(token)
+    const supplier = await fetchData('http://localhost:3001/findAllSupplier', token)
 
     return (
         <div className="bg-gray-100 py-8 overflow-x-auto h-screen px-8">

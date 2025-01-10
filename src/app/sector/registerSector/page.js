@@ -1,17 +1,7 @@
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import PageRegisterSector from "./registerSector"
-
-
-const fetchDataFilial = async (token) => {
-    const res = await fetch('http://localhost:3001/findAllFilial', {
-        headers: {
-            'content-type': 'application/json',
-            'Authorization': token
-        }
-    })
-    return await res.json()
-}
+import fetchData from "../../../../utils/fetchData"
 
 
 export default async function RegisterSector() {
@@ -22,10 +12,10 @@ export default async function RegisterSector() {
         redirect('../login')
     }
 
-    const filial = await fetchDataFilial(token)
+    const filial = await fetchData('http://localhost:3001/findAllFilial', token)
 
     return (
-        <PageRegisterSector dataFilial={filial}></PageRegisterSector>
+        <PageRegisterSector dataFilial={filial} token={token}></PageRegisterSector>
     )
 
 }

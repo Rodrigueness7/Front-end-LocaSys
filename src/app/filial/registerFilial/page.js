@@ -14,6 +14,6 @@ export default async function RegisterFilial() {
     }
 
     return (
-        <PageRegisterFilial></PageRegisterFilial>
+        <PageRegisterFilial token={token}></PageRegisterFilial>
     )
 }

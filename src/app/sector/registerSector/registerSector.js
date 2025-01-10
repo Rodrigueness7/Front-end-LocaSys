@@ -3,11 +3,13 @@
 import { useState } from "react"
 import InputForm from "../../../../components/InputForm"
 import InputSelect from "../../../../components/InputSelect"
+import addData from "../../../../utils/addData"
 
-export default function PageRegisterSector({ dataFilial }) {
-    const newFilial = dataFilial
+export default function PageRegisterSector({ dataFilial, token }) {
+
     let data = []
-    newFilial.map(itens => {
+
+    dataFilial.map(itens => {
         data.push(itens.filial)
     })
 
@@ -36,19 +38,8 @@ export default function PageRegisterSector({ dataFilial }) {
             sector: sector
         }
 
-        console.log(JSON.stringify(data))
+        await addData('http://localhost:3001/addSector', data, token, setResult)
 
-        await fetch('http://localhost:3001/addSector', {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-                'content-type': 'application/json'
-            }
-        }).then(
-            result => result.json()
-        ).then(
-            res => setResult(res.message)
-        )
     }
 
     return (

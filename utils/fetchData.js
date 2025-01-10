@@ -1,4 +1,4 @@
-export default async function FetchSector(url, token) {
+export default async function fetchData(url, token) {
     const res = await fetch(url, {
         headers: {
             'content-type': 'application/json',

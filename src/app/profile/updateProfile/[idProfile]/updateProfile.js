@@ -1,6 +1,8 @@
 'use client'
 import { useState } from "react"
 import InputForm from "../../../../../components/InputForm"
+import updateData from "../../../../../utils/updateData"
+import deleteData from "../../../../../utils/deleteData"
 
 
 export default function UpdateProfile({ data, idProfile, token }) {
@@ -17,32 +19,13 @@ export default function UpdateProfile({ data, idProfile, token }) {
             profile: profile
         }
 
-        await fetch(`http://localhost:3001/updateProfile/${idProfile}`, {
-            method: 'PUT',
-            body: JSON.stringify(data),
-            headers: {
-                'content-type': 'application/json',
-                'Authorization': token
-            }
-        }).then(
-            result => result.json()
-        ).then(
-            res => setResult(res.message)
-        )
+        await updateData(`http://localhost:3001/updateProfile/${idProfile}`, data, token, setResult)
+
     }
 
     const deleteProfile = async () => {
-        await fetch(`http://localhost:3001/deleteProfile/${idProfile}`, {
-            method: 'DELETE',
-            headers: {
-                'content-type': 'application/json',
-                'Authorization': token
-            }
-        }).then(
-            result => result.json()
-        ).then(
-            res => setResult(res.message)
-        )
+        await deleteData(`http://localhost:3001/deleteProfile/${idProfile}`, token, setResult)
+
     }
 
 

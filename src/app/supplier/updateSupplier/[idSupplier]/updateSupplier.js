@@ -2,6 +2,8 @@
 
 import { useState } from "react"
 import InputForm from "../../../../../components/InputForm"
+import updateData from "../../../../../utils/updateData"
+import inactivateData from "../../../../../utils/inactivateData"
 
 export default function UpdateSupplier({ idSupplier, data, token }) {
 
@@ -80,39 +82,19 @@ export default function UpdateSupplier({ idSupplier, data, token }) {
             address: address,
             zipCode: zipCode,
             state: state,
-            city: city,    
+            city: city,
         }
 
-        await fetch(`http://localhost:3001/updateSupplier/${idSupplier}`, {
-            method: 'PUT',
-            body: JSON.stringify(data),
-            headers: {
-                'content-type': 'application/json',
-                'Authorization': token
-            }
-        }).then(
-            result => result.json()
-        ).then(
-            res => setResult(res.message)
-        )
+        await updateData(`http://localhost:3001/updateSupplier/${idSupplier}`, data, token, setResult)
     }
 
     const deleteSupplier = async () => {
         const data = {
             deletionDate: new Date().toLocaleDateString('pt-BR')
         }
-        await fetch(`http://localhost:3001/inactivateSupplier/${idSupplier}`, {
-            method: 'PUT',
-            body: JSON.stringify(data),
-            headers: {
-                'content-type': 'application/json',
-                'Authorization': token
-            }
-        }).then(
-            result => result.json()
-        ).then(
-            res => setResult(res.message)
-        )
+
+        await inactivateData(`http://localhost:3001/inactivateSupplier/${idSupplier}`, data, token, setResult)
+
     }
 
     return (

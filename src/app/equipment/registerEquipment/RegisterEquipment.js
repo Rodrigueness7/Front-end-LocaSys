@@ -2,10 +2,10 @@
 import { useState } from "react"
 import InputForm from "../../../../components/InputForm"
 import InputSelect from "../../../../components/InputSelect"
-import { getCookie } from "cookies-next"
-import FetchLog from "../../../../components/fetchAddLog"
+import addData from "../../../../utils/addData"
 
-export default function PageRegisterEquipment({ dataUsername, dataFilial, dataSector, dataSupplier }) {
+
+export default function PageRegisterEquipment({ dataUser, dataFilial, dataSector, dataSupplier, token }) {
 
     const valueFilial = []
     const valueUsername = []
@@ -16,7 +16,7 @@ export default function PageRegisterEquipment({ dataUsername, dataFilial, dataSe
         return valueFilial.push(value.filial)
     })
 
-    dataUsername.map(value => {
+    dataUser.map(value => {
         return valueUsername.push(value.username)
     })
 
@@ -81,14 +81,13 @@ export default function PageRegisterEquipment({ dataUsername, dataFilial, dataSe
     }
 
     const addEquipment = async () => {
-        const token = getCookie('token')
 
         const idUsername = []
         const idSector = []
         const idFilial = []
         const idSupplier = []
 
-        dataUsername.map(value => {
+        dataUser.map(value => {
             if (value.username == username) {
                 return idUsername.push(value.idUser)
             }
@@ -124,19 +123,7 @@ export default function PageRegisterEquipment({ dataUsername, dataFilial, dataSe
             idSupplier: idSupplier[0],
             entryDate: new Date().toLocaleString('pt-BR').slice(0, 10)
         }
-
-        await fetch('http://localhost:3001/addEquipment', {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-                'content-type': 'application/json',
-                'Authorization': token
-            }
-        }).then(
-            result => result.json()
-        ).then(
-            res => setResult(res.message)
-        )
+        await addData('http://localhost:3001/addEquipment', data, token, setResult)
 
     }
 

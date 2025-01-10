@@ -2,17 +2,8 @@ import { redirect } from 'next/navigation'
 import { cookies } from "next/headers"
 import Table from '../../../components/table'
 import Link from 'next/link'
-import ChangeProperty from '../../../components/changeProperty'
-
-const fetchDataEquipment = async (token) => {
-    let res = await fetch('http://localhost:3001/findAllEquipment', {
-        headers: {
-            'content-type': 'application/json',
-            'Authorization': token
-        }
-    })
-    return await res.json()
-}
+import changeProperty from '../../../utils/changeProperty'
+import fetchData from '../../../utils/fetchData'
 
 
 export default async function Equipments() {
@@ -24,14 +15,14 @@ export default async function Equipments() {
         redirect('./login')
     }
 
-    const equipments = await fetchDataEquipment(token)
+    const equipments = await fetchData('http://localhost:3001/findAllEquipment', token)
 
     let data = []
     equipments.map((itens) => {
-        ChangeProperty(itens, 'User', 'username', 'username')
-        ChangeProperty(itens, 'Filial', 'filial', 'filial')
-        ChangeProperty(itens, 'Sector', 'sector', 'sector')
-        ChangeProperty(itens, 'Supplier', 'supplier', 'supplier')
+        changeProperty(itens, 'User', 'username', 'username')
+        changeProperty(itens, 'Filial', 'filial', 'filial')
+        changeProperty(itens, 'Sector', 'sector', 'sector')
+        changeProperty(itens, 'Supplier', 'supplier', 'supplier')
 
         itens.entryDate = new Date(itens.entryDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' })
         data.push(itens)
@@ -45,7 +36,7 @@ export default async function Equipments() {
                 </Link>
             </div>
             <div className='ml-8 flex-1'>
-                <Table Table={' table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={['Código', 'Equipamento', 'Tipo', 'valor', 'Entrada', 'Usuário', 'Setor','Filial','Fornecedor']} data={data} attributos={['codProd', 'equipment', 'type', 'value', 'entryDate', 'username', 'sector','filial','supplier']} id={'idEquipment'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./equipment/updateEquipment'} bt={'...'}></Table>
+                <Table Table={' table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={['Código', 'Equipamento', 'Tipo', 'valor', 'Entrada', 'Usuário', 'Setor', 'Filial', 'Fornecedor']} data={data} attributos={['codProd', 'equipment', 'type', 'value', 'entryDate', 'username', 'sector', 'filial', 'supplier']} id={'idEquipment'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./equipment/updateEquipment'} bt={'...'}></Table>
             </div>
         </div>
     )

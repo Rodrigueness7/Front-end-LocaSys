@@ -2,19 +2,9 @@ import { redirect } from 'next/navigation'
 import { cookies } from "next/headers"
 import Link from 'next/link'
 import Table from '../../../components/table'
-import ChangeProperty from '../../../components/changeProperty'
+import changeProperty from '../../../utils/changeProperty'
+import fetchData from '../../../utils/fetchData'
 
-const fetchDataUsers = async (token) => {
-
-    const res = await fetch('http://localhost:3001/findAllUser', {
-        headers: {
-            'content-type': 'application/json',
-            'Authorization': token
-        }
-    })
-
-    return await res.json()
-}
 
 export default async function Users() {
     const cookieStore = cookies()
@@ -24,13 +14,13 @@ export default async function Users() {
         redirect('../login')
     }
 
-    const users = await fetchDataUsers(token)
+    const users = await fetchData('http://localhost:3001/findAllUser', token)
 
     let data = []
 
     users.map(itens => {
-        ChangeProperty(itens, 'Sector', 'sector', 'sector')
-        ChangeProperty(itens, 'Profile', 'profile', 'profile')
+        changeProperty(itens, 'Sector', 'sector', 'sector')
+        changeProperty(itens, 'Profile', 'profile', 'profile')
 
         data.push(itens)
 

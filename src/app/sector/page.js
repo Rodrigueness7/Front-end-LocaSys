@@ -1,9 +1,9 @@
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
-import ChangeProperty from "../../../components/changeProperty"
+import changeProperty from "../../../utils/changeProperty"
 import Link from "next/link"
 import Table from "../../../components/table"
-import FetchSector from "../../../components/fetchSector"
+import fetchData from "../../../utils/fetchData"
 
 
 export default async function Sector() {
@@ -14,13 +14,13 @@ export default async function Sector() {
         redirect('../login')
     }
 
-    let sector = await FetchSector('http://localhost:3001/findAllSector', token)
+    let sector = await fetchData('http://localhost:3001/findAllSector', token)
     let data = []
 
     sector.map((itens) => {
-        ChangeProperty(itens, 'Filial', 'filial', 'filial')
-        ChangeProperty(itens, 'Filial', 'uniqueIdentifier', 'uniqueIdentifier')
-        ChangeProperty(itens, 'Filial', 'idFilial', 'idFilial')
+        changeProperty(itens, 'Filial', 'filial', 'filial')
+        changeProperty(itens, 'Filial', 'uniqueIdentifier', 'uniqueIdentifier')
+        changeProperty(itens, 'Filial', 'idFilial', 'idFilial')
         data.push(itens)
     })
 

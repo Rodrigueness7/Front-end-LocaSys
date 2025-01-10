@@ -3,6 +3,8 @@
 import { useState } from "react"
 import InputSelect from "../../../../../components/InputSelect"
 import InputForm from "../../../../../components/InputForm"
+import updateData from "../../../../../utils/updateData"
+import inactivateData from "../../../../../utils/inactivateData"
 
 export default function UpdateSector({ idSector, dataSector, dataFilial, token }) {
 
@@ -28,7 +30,7 @@ export default function UpdateSector({ idSector, dataSector, dataFilial, token }
     const updateSector = async () => {
         let idFilial = []
         dataFilial.map(values => {
-            if(values.filial == filial) {
+            if (values.filial == filial) {
                 idFilial.push(values.idFilial)
             }
         })
@@ -38,42 +40,21 @@ export default function UpdateSector({ idSector, dataSector, dataFilial, token }
             idFilial: idFilial[0]
         }
 
-        await fetch(`http://localhost:3001/updateSector/${idSector}`, {
-            method: 'PUT',
-            body: JSON.stringify(data),
-            headers: {
-                'content-type': 'application/json',
-                'Authorization': token
-            }
-        }).then(
-            result => result.json()
-        ).then(
-            res => setResult(res.message)
-        )
+        await updateData(`http://localhost:3001/updateSector/${idSector}`, data, token, setResult)
     }
 
-    const deleteSector = async() => {
+    const deleteSector = async () => {
         let data = {
             deletionDate: new Date().toLocaleDateString('pt-BR')
         }
-        
-        await fetch(`http://localhost:3001/inactivateSector/${idSector}`, {
-            method: 'PUT',
-            body: JSON.stringify(data),
-            headers: {
-                'content-type': 'application/json',
-                'Authorization': token
-            } 
-        }).then(
-            result => result.json()
-        ).then(
-            res => setResult(res.message)
-        )
+
+        await inactivateData(`http://localhost:3001/inactivateSector/${idSector}`, data, token, setResult)
+
     }
 
     return (
         <section className="bg-gray-100 py-3 h-screen">
-             <div className="flex items-start mb-8 lg:px-2 sm:px-0">
+            <div className="flex items-start mb-8 lg:px-2 sm:px-0">
                 <button onClick={deleteSector} className="p-2 bg-indigo-500 rounded-lg text-white">Deletar</button>
             </div>
             <div className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">

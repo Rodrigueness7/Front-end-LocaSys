@@ -2,18 +2,8 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import Table from "../../../components/table";
+import fetchData from "../../../utils/fetchData";
 
-
-const fetchDataFilial = async (token) => {
-    const res = await fetch('http://localhost:3001/findAllFilial', {
-        headers: {
-            'content-type': 'application/json',
-            'Authorization': token
-        }
-    })
-
-    return await res.json()
-}
 
 export default async function Filial() {
     const cookieStore = cookies()
@@ -23,7 +13,7 @@ export default async function Filial() {
         redirect('../login')
     }
 
-    const filial = await fetchDataFilial(token)
+    const filial = await fetchData('http://localhost:3001/findAllFilial', token)
 
     return (
         <div className="bg-gray-100 py-8 overflow-x-auto h-screen px-12">

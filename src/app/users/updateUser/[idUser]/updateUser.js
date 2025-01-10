@@ -3,9 +3,10 @@
 import { useState } from "react"
 import InputForm from "../../../../../components/InputForm"
 import InputSelect from "../../../../../components/InputSelect"
-import FetchAddLog from "../../../../../components/fetchAddLog"
+import updateData from "../../../../../utils/updateData"
+import inactivateData from "../../../../../utils/inactivateData"
 
-export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser, token, dataUser }) {
+export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser, token }) {
 
     const valueSector = []
     const valueProfile = []
@@ -18,7 +19,6 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
         return valueProfile.push(item.profile)
     })
 
-    console.log(dataUserId)
 
     const [firstName, setFirstName] = useState(dataUserId.firstName)
     const [lastName, setLastName] = useState(dataUserId.lastName)
@@ -130,20 +130,8 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
             idProfile: idProfile[0]
         }
 
-        await fetch(`http://localhost:3001/updateUser/${idUser}`, {
-            method: 'PUT',
-            body: JSON.stringify(data),
-            headers: {
-                'content-type': 'application/json',
-                'Authorization': token
-            }
-        }).then(
-            result => result.json()
-        ).then(
-            res => setResult(res.message)
-        )
+        await updateData(`http://localhost:3001/updateUser/${idUser}`, data, token, setResult)
 
-        FetchAddLog(dataUser, 'Atualizado', 'Atualizado cadastro', username, token)
     }
 
     const deleteUser = async () => {
@@ -151,20 +139,8 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
             deletionDate: new Date().toLocaleDateString('pt-BR')
         }
 
-        await fetch(`http://localhost:3001/inactivateUser/${idUser}`, {
-            method: 'PUT',
-            body: JSON.stringify(data),
-            headers: {
-                'content-type': 'application/json',
-                'Authorization': token
-            }
-        }).then(
-            result => result.json()
-        ).then(
-            res => setResult(res.message)
-        )
+        await inactivateData(`http://localhost:3001/inactivateUser/${idUser}`, data, token, setResult)
 
-        FetchAddLog(dataUser, 'Deletado', 'Deletado cadastro', username, token)
     }
 
 

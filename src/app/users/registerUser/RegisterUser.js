@@ -2,9 +2,10 @@
 import { useState } from "react";
 import InputForm from "../../../../components/InputForm";
 import InputSelect from "../../../../components/InputSelect";
+import addData from "../../../../utils/addData";
 
 
-export default function RegisterUser({ dataSector, dataProfile, dataUser, token }) {
+export default function RegisterUser({ dataSector, dataProfile, token }) {
 
     const valueSector = []
     const valueProfile = []
@@ -130,42 +131,9 @@ export default function RegisterUser({ dataSector, dataProfile, dataUser, token 
             idProfile: idProfile[0]
         }
 
+        await addData('http://localhost:3001/addUser', data, token, setResult)
 
-        await fetch('http://localhost:3001/addUser', {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-                'content-type': 'application/json'
-            }
-        }).then(
-            result => result.json()
-        ).then(
-            res => setResult(res.message)
-        )
-
-        let user = []
-        dataUser.map(itens => {
-           if(itens.username === localStorage.getItem('username')) {
-             user.push(itens.idUser)
-           }
-        })
-
-        const dataLog = {
-            idLog: 0,
-            action: `Cadastro do usuário ${username}`,
-            idUser: user[0]
-        }
-
-        await fetch('http://localhost:3001/registerLog', {
-            method:'POST',
-            body: JSON.stringify(dataLog),
-            headers: {
-                'content-type': 'application/json',
-                'Authorization': token
-            }
-        })
     }
-
 
     return (
         <section className="bg-gray-100 py-3 ">

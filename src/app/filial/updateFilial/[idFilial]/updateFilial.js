@@ -1,6 +1,8 @@
 'use client'
 import { useState } from "react"
 import InputForm from "../../../../../components/InputForm"
+import updateData from "../../../../../utils/updateData"
+import inactivateData from "../../../../../utils/inactivateData"
 
 
 
@@ -44,18 +46,8 @@ export default function UpdateFilial({ dataFilial, idFilial, token }) {
             uniqueIdentifier: uniqueIdentifier
         }
 
-        await fetch(`http://localhost:3001/updateFilial/${idFilial}`, {
-            method: 'PUT',
-            body: JSON.stringify(data),
-            headers: {
-                'content-type': 'application/json',
-                'Authorization': token
-            }
-        }).then(
-            result => result.json()
-        ).then(
-            res => setResult(res.message)
-        )
+        await updateData(`http://localhost:3001/updateFilial/${idFilial}`, data, token, setResult)
+
     }
 
     const deleteFilial = async () => {
@@ -64,18 +56,7 @@ export default function UpdateFilial({ dataFilial, idFilial, token }) {
             deletionDate: new Date().toLocaleDateString('pt-BR')
         }
 
-        await fetch(`http://localhost:3001/inactivateFilial/${idFilial}`, {
-            method: 'PUT',
-            body: JSON.stringify(data),
-            headers: {
-                'content-type': 'application/json',
-                'Authorization': token
-            }
-        }).then(
-            result => result.json()
-        ).then(
-            res => setResult(res.message)
-        )
+        await inactivateData(`http://localhost:3001/inactivateFilial/${idFilial}`, data, token, setResult)
     }
 
     return (

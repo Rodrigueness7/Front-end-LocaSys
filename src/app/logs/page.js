@@ -1,6 +1,6 @@
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
-import ChangeProperty from "../../../components/changeProperty"
+import ChangeProperty from "../../../utils/changeProperty"
 import Table from "../../../components/table"
 
 const fetchDataLog = async (token) => {

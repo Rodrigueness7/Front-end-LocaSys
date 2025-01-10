@@ -1,9 +1,10 @@
 'use client'
 import { useState } from "react";
 import InputForm from "../../../../components/InputForm";
+import addData from "../../../../utils/addData";
 
 
-export default function PageRegisterFilial() {
+export default function PageRegisterFilial({ token }) {
 
     const [filial, setFiial] = useState('')
     const [CNPJ, setCNPJ] = useState('')
@@ -49,17 +50,8 @@ export default function PageRegisterFilial() {
             uniqueIdentifier: uniqueIdentifier
         }
 
-        await fetch('http://localhost:3001/addFilial', {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-                'content-type': 'application/json'
-            }
-        }).then(
-            result => result.json()
-        ).then(
-            res => setResult(res.message)
-        )
+        await addData('http://localhost:3001/addFilial', data, token, setResult)
+
     }
 
     return (

@@ -7,11 +7,11 @@ export default async function PageRegisterProfile() {
     const cookieStore = cookies()
     const token = (await cookieStore).get('token')?.value
 
-    if(!token) { 
+    if (!token) {
         redirect('../login')
     }
 
-    return(
-        <RegisterProfile></RegisterProfile>
+    return (
+        <RegisterProfile token={token}></RegisterProfile>
     )
 }

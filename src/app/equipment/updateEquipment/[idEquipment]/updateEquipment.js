@@ -3,9 +3,11 @@ import { useState } from "react"
 import InputForm from "../../../../../components/InputForm"
 import InputSelect from "../../../../../components/InputSelect"
 import Modal from "../../../../../components/modal"
+import updateData from "../../../../../utils/updateData"
+import inactivateData from "../../../../../utils/inactivateData"
 
 
-export default function UpdateEquipment({ dataEquipment, dataUsername, dataFilial, dataSector, dataSupplier, token, idEquipment }) {
+export default function UpdateEquipment({ dataEquipment, dataUser, dataFilial, dataSector, dataSupplier, token, idEquipment }) {
 
     const valueFilial = []
     const valueUsername = []
@@ -17,7 +19,7 @@ export default function UpdateEquipment({ dataEquipment, dataUsername, dataFilia
         return valueFilial.push(value.filial)
     })
 
-    dataUsername.map(value => {
+    dataUser.map(value => {
         return valueUsername.push(value.username)
     })
 
@@ -97,7 +99,7 @@ export default function UpdateEquipment({ dataEquipment, dataUsername, dataFilia
         const idFilial = []
         const idSupplier = []
 
-        dataUsername.map(value => {
+        dataUser.map(value => {
             if (value.username == username) {
                 return idUsername.push(value.idUser)
             }
@@ -132,39 +134,15 @@ export default function UpdateEquipment({ dataEquipment, dataUsername, dataFilia
             idSector: idSector[0],
             idSupplier: idSupplier[0],
         }
-
-
-        await fetch(`http://localhost:3001/updateEquipment/${idEquipment}`, {
-            method: 'PUT',
-            body: JSON.stringify(data),
-            headers: {
-                'content-type': 'application/json',
-                'Authorization': token
-            }
-        }).then(
-            result => result.json()
-        ).then(
-            res => setResult(res.message)
-        )
+        await updateData(`http://localhost:3001/updateEquipment/${idEquipment}`, data, token, setResult)
     }
 
     const returnEquipment = async () => {
         let data = {
             returnDate: returnDate
         }
+        await inactivateData(`http://localhost:3001/returnEquipment/${idEquipment}`, data, token, setResult)
 
-        await fetch(`http://localhost:3001/returnEquipment/${idEquipment}`, {
-            method: 'PUT',
-            body: JSON.stringify(data),
-            headers: {
-                'content-type': 'application/json',
-                'Authorization': token
-            }
-        }).then(
-            res => res.json()
-        ).then(
-            res => setResult(res.message)
-        )
     }
 
     return (
