@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import RegisterProfile from "./registerProfile";
+import fetchData from "../../../../utils/fetchData";
 
 
 export default async function PageRegisterProfile() {
@@ -10,8 +11,8 @@ export default async function PageRegisterProfile() {
     if (!token) {
         redirect('../login')
     }
-
+    const permission = await fetchData('http://localhost:3001/findAllPermission', token)
     return (
-        <RegisterProfile token={token}></RegisterProfile>
+        <RegisterProfile token={token} dataPermission={permission}></RegisterProfile>
     )
 }
