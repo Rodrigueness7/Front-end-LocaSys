@@ -15,7 +15,7 @@ export default async function PageUpdateSupplier({ params }) {
         redirect('../../login')
 
     }
-
+    
     const supplier = await fetchData(`http://localhost:3001/findSupplier/${idSupplier}`, token)
 
     return (

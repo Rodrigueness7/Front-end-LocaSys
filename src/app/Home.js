@@ -15,7 +15,7 @@ export default function PageHome() {
                     <Link href={'./equipment'} className="hover:text-blue-500 transition duration-300">Equipamento</Link>
                 </div>
                 <div>
-                    <Link href={'./filial'} className="hover:text-blue-500 transition duration-300">Filial</Link>
+                    <Link href={'./branch'} className="hover:text-blue-500 transition duration-300">Filial</Link>
                 </div>
                 <div>
                     <Link href={'./sector'} className="hover:text-blue-500 transition duration-300">Setor</Link>

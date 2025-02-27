@@ -1,10 +1,10 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import PageRegisterFilial from "./RegisterFilial";
+import PageRegisterBranch from "./RegisterBranch";
 
 
 
-export default async function RegisterFilial() {
+export default async function RegisterBranch() {
 
     const cookieStore = cookies()
     const token = (await cookieStore).get('token')?.value
@@ -14,6 +14,6 @@ export default async function RegisterFilial() {
     }
 
     return (
-        <PageRegisterFilial token={token}></PageRegisterFilial>
+        <PageRegisterBranch token={token}></PageRegisterBranch>
     )
 }
