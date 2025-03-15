@@ -132,7 +132,14 @@ export default function RegisterUser({ dataSector, dataProfile, token }) {
         }
 
         await addData('http://localhost:3001/addUser', data, token, setResult)
-
+        setFirstName("")
+        setLastName("")
+        setCpf("")
+        setUsername("")
+        setPassword("")
+        setConfirmationPassword("")
+        setEmail("")
+        setConfirmationEmail("")
     }
 
     return (

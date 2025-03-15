@@ -5,9 +5,14 @@ import InputForm from "../../../../../components/InputForm"
 import InputSelect from "../../../../../components/InputSelect"
 import updateData from "../../../../../utils/updateData"
 import inactivateData from "../../../../../utils/inactivateData"
+import { useRouter } from 'next/navigation'
+
+
+
 
 export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser, token }) {
 
+   
     const valueSector = []
     const valueProfile = []
 
@@ -32,6 +37,9 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
     const [sector, setSector] = useState(dataUserId['Sector'].sector)
     const [profile, setProfile] = useState(dataUserId['Profile'].profile)
     const [result, setResult] = useState('')
+    const router = useRouter()
+
+    
 
     const changeFirstName = (e) => {
         let newFirstName = e.target.value
@@ -132,7 +140,11 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
         }
 
         await updateData(`http://localhost:3001/updateUser/${idUser}`, data, token, setResult)
-
+        setTimeout(() => {
+            router.push('../')
+        }, 2000)
+        
+        
     }
 
     const deleteUser = async () => {
@@ -141,6 +153,9 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
         }
 
         await inactivateData(`http://localhost:3001/inactivateUser/${idUser}`, data, token, setResult)
+        setTimeout(() => {
+            router.push('../')
+        }, 2000)
 
     }
 
@@ -172,6 +187,7 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
                     <button onClick={updateUser} className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ">Atualizar</button>
                 </div>
                 <div>{result}</div>
+
             </div>
         </section>
     )
