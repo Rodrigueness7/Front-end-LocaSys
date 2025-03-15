@@ -2,7 +2,6 @@ import { redirect } from 'next/navigation'
 import { cookies } from "next/headers"
 import Table from '../../../components/table'
 import Link from 'next/link'
-import changeProperty, { alterProperty } from '../../../utils/changeProperty'
 import fetchData from '../../../utils/fetchData'
 
 
@@ -35,7 +34,8 @@ export default async function Equipments() {
         }
         return result
     })
-    let attribute = Object.keys(data[0])
+    let x = ['Código', 'Equipamento', 'Tipo', 'Data Entrada', 'Usuario', 'Filial', 'Setor', 'Fornecedor', 'Valor']
+    let attribute = data.length === 0 ? x : Object.keys(data[0]);
    
     
     return (

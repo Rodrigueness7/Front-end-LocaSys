@@ -18,9 +18,9 @@ export default async function Sector() {
     let data = []
 
     sector.map((itens) => {
-        changeProperty(itens, 'Filial', 'filial', 'filial')
-        changeProperty(itens, 'Filial', 'uniqueIdentifier', 'uniqueIdentifier')
-        changeProperty(itens, 'Filial', 'idFilial', 'idFilial')
+        changeProperty(itens, 'Branch', 'filial', 'branch')
+        changeProperty(itens, 'Branch', 'uniqueIdentifier', 'uniqueIdentifier')
+
         data.push(itens)
     })
 

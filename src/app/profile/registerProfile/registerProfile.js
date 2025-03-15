@@ -21,11 +21,12 @@ export default function RegisterProfile({ token, dataPermission }) {
     }
 
     const handleChange = (e) => {
-        const { value, checked } = e.target
+        const {value, checked } = e.target
         setSelectPermissions(prev => prev.map(
             p => p.value === value ? {...p, checked} : p
         ))
-
+       
+       
     }
     const addProfile = async (e) => {
         e.preventDefault()

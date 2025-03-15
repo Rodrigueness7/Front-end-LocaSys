@@ -25,14 +25,14 @@ export default async function Users() {
             Usuario: itens.username,
             Email: itens.email,
             Setor: itens['Sector'].sector,
-            Perfil: itens['Profile'].profile,     
+            Perfil: itens['Profile'].profile,
         }
-    )  
-)
-    
+    )
+    )
+
     let attribute = Object.keys(data[0])
 
-   
+
     return (
         <div className='bg-gray-100 py-8 overflow-x-auto h-screen' >
             <div className="flex items-start mb-8 lg:px-8 sm:px-8">

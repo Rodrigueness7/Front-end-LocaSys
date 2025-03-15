@@ -20,10 +20,10 @@ export default async function PageUpdateEquipment({ params }) {
     let supplier = await fetchData('http://localhost:3001/findAllSupplier', token)
     let equipment = await fetchData(`http://localhost:3001/findEquipmentId/${idEquipment}`, token)
 
-   
+
 
     return (
         <UpdateEquipment dataEquipment={equipment} dataUser={user} dataFilial={filial} dataSector={sector} dataSupplier={supplier} token={token} idEquipment={idEquipment}></UpdateEquipment>
-        
+
     )
 }

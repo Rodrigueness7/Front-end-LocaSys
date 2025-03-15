@@ -15,8 +15,10 @@ export default async function PageUpdateProfile({ params }) {
     }
 
     const profile = await fetchData(`http://localhost:3001/findProfile/${idProfile}`, token)
+    const permission = await fetchData(`http://localhost:3001/findPermissionIdProfile_permission/${idProfile}`, token)
 
     return (
-        <UpdateProfile data={profile} idProfile={idProfile} token={token}></UpdateProfile>
+        <UpdateProfile data={profile} idProfile={idProfile} dataPermission={permission} token={token}></UpdateProfile>
+
     )
 }
