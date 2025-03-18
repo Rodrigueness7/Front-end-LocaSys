@@ -3,6 +3,7 @@ import { redirect } from "next/navigation"
 import ChangeProperty from "../../../utils/changeProperty"
 import Table from "../../../components/table"
 import fetchData from "../../../utils/fetchData"
+import Message from "../../../utils/message"
 
 
 export default async function logs() {
@@ -16,8 +17,9 @@ export default async function logs() {
 
     let log = await fetchData('http://localhost:3001/findAllLog', token)
     if(log.message){
-        redirect('./')
+        return<Message message={'Usuário sem permissão'} />
     }
+    
     let data = []
 
     log.map(itens => {

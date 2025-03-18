@@ -14,7 +14,7 @@ export default async function PageUpdateSector({ params }) {
     }
 
     const sector = await fetchData(`http://localhost:3001/findSector/${idSector}`, token)
-    const filial = await fetchData('http://localhost:3001/findAllFilial', token)
+    const filial = await fetchData('http://localhost:3001/findAllBranch', token)
 
     return (
         <UpdateSector idSector={idSector} dataSector={sector} dataFilial={filial} token={token}></UpdateSector>

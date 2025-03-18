@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Table from '../../../components/table'
 import changeProperty from '../../../utils/changeProperty'
 import fetchData from '../../../utils/fetchData'
+import Message from '../../../utils/message'
 
 
 export default async function Users() {
@@ -15,6 +16,10 @@ export default async function Users() {
     }
 
     const users = await fetchData('http://localhost:3001/findAllUser', token)
+    
+    if(users.message) {
+        return(<Message message={'Usuário sem permissão'}/>)
+    }
 
     let data = users.map(itens => (
         {
@@ -42,5 +47,6 @@ export default async function Users() {
                 <Table Table={'table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={attribute} data={data} attributos={attribute} id={'idUsuario'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./users/updateUser'} bt={'...'}></Table>
             </div>
         </div>
+        
     )
 }

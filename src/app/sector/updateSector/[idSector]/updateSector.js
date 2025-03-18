@@ -11,12 +11,12 @@ export default function UpdateSector({ idSector, dataSector, dataFilial, token }
     let newFilial = []
 
     dataFilial.map(itens => {
-        newFilial.push(itens.filial)
+        newFilial.push(itens.branch)
     })
 
 
     const [sector, setSector] = useState(dataSector.sector)
-    const [filial, setFilial] = useState(dataSector['Filial'].filial)
+    const [filial, setFilial] = useState(dataSector['Branch'].branch)
     const [result, setResult] = useState()
 
     const changeSector = (e) => {
@@ -30,7 +30,7 @@ export default function UpdateSector({ idSector, dataSector, dataFilial, token }
     const updateSector = async () => {
         let idFilial = []
         dataFilial.map(values => {
-            if (values.filial == filial) {
+            if (values.branch == filial) {
                 idFilial.push(values.idFilial)
             }
         })

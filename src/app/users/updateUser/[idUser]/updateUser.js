@@ -38,6 +38,7 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
     const [profile, setProfile] = useState(dataUserId['Profile'].profile)
     const [result, setResult] = useState('')
     const router = useRouter()
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false)
 
     
 
@@ -110,6 +111,14 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
         setProfile(e.target.value)
     }
 
+    const handleSuccess = () => {
+        setShowSuccessMessage(true)
+
+        setTimeout(() => {
+            setShowSuccessMessage(false)
+        }, 3000)
+    }
+
     const updateUser = async () => {
         let idSector = []
         let idProfile = []
@@ -143,8 +152,8 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
         setTimeout(() => {
             router.push('../')
         }, 2000)
-        
-        
+
+        handleSuccess()
     }
 
     const deleteUser = async () => {
@@ -161,7 +170,7 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
 
 
     return (
-        <section className="bg-gray-100 py-3 ">
+        <section className="bg-gray-100 py-3 min-h-screen">
             <div className="flex items-start mb-8 lg:px-2 sm:px-0">
                 <button onClick={deleteUser} className="p-2 bg-indigo-500 rounded-lg text-white">Deletar</button>
             </div>
@@ -186,11 +195,13 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
                 <div className="mb-6">
                     <button onClick={updateUser} className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ">Atualizar</button>
                 </div>
-                <div>{result}</div>
-
+                {showSuccessMessage && (
+                    <div className="flex items-center justify-center p-2 bg-white border border-gray-300 text-gray-800 rounded-md shadow-md text-lg font-semibold">
+                        {result}
+                    </div>
+                )}
             </div>
         </section>
     )
-
 
 }

@@ -1,9 +1,21 @@
 'use client'
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 
 export default function PageHome() {
+    const router = useRouter()
+
+    const handleExit = () => {
+        const clearCookie = (name) => {
+            document.cookie = `${name}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
+          };
+          
+          clearCookie('token');
+          router.push('./login')
+          
+    }
 
     return (
         <div className="flex">
@@ -28,6 +40,9 @@ export default function PageHome() {
                 </div>
                 <div>
                     <Link href={'./logs'} className="hover:text-blue-500 transition duration-300">Logs</Link>
+                </div>
+                <div>
+                    <button onClick={handleExit}>Sair</button>
                 </div>
             </div>
         </div>

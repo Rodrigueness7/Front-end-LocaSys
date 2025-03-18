@@ -3,6 +3,7 @@ import { useState } from "react"
 import InputForm from "../../../../components/InputForm"
 import InputSelect from "../../../../components/InputSelect"
 import addData from "../../../../utils/addData"
+import fetchData from "../../../../utils/fetchData"
 
 
 export default function PageRegisterEquipment({ dataUser, dataFilial, dataSector, dataSupplier, token }) {
@@ -13,7 +14,7 @@ export default function PageRegisterEquipment({ dataUser, dataFilial, dataSector
     const valueSupplier = []
 
     dataFilial.map(value => {
-        return valueFilial.push(value.filial)
+        return valueFilial.push(value.branch)
     })
 
     dataUser.map(value => {
@@ -100,8 +101,8 @@ export default function PageRegisterEquipment({ dataUser, dataFilial, dataSector
         })
 
         dataFilial.map(value => {
-            if (value.filial == filial) {
-                return idFilial.push(value.idFilial)
+            if (value.branch == filial) {
+                return idFilial.push(value.idBranch)
             }
         })
 
@@ -117,13 +118,30 @@ export default function PageRegisterEquipment({ dataUser, dataFilial, dataSector
             equipment: equipment,
             type: type,
             value: value,
-            idFilial: idFilial[0],
+            idBranch: idFilial[0],
             idUser: idUsername[0],
             idSector: idSector[0],
             idSupplier: idSupplier[0],
             entryDate: new Date().toLocaleString('pt-BR').slice(0, 10)
         }
         await addData('http://localhost:3001/addEquipment', data, token, setResult)
+
+       
+
+        setTimeout(async () => {
+            let fetchEquipment = await fetchData('http://localhost:3001/findAllEquipment', token)
+            let fetchIdEquipment = fetchEquipment.find(item => item.codProd == codProd).idEquipment
+
+            let dataEquipmentHistory = {
+                idEquipmentHistory: 0,
+                idEquipment: fetchIdEquipment,
+                reason: null,
+                entryDate: new Date().toLocaleString('pt-BR').slice(0, 10),
+                returnDate: null
+            }
+            addData('http://localhost:3001/addEquipmentHistory', dataEquipmentHistory, token, setResult)
+            
+        },2000)
 
     }
 

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import Table from "../../../components/table";
 import fetchData from "../../../utils/fetchData";
+import Message from "../../../utils/message";
 
 
 export default async function Branch() {
@@ -14,6 +15,10 @@ export default async function Branch() {
     }
 
     const branch = await fetchData('http://localhost:3001/findAllBranch', token)
+
+    if(branch.message) {
+        return(<Message message={'Usuário sem permissão'}/>)
+    }
     
 
     return (

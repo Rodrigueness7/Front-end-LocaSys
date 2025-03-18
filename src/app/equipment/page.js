@@ -3,6 +3,7 @@ import { cookies } from "next/headers"
 import Table from '../../../components/table'
 import Link from 'next/link'
 import fetchData from '../../../utils/fetchData'
+import Message from '../../../utils/message'
 
 
 export default async function Equipments() {
@@ -16,6 +17,9 @@ export default async function Equipments() {
 
     const equipments = await fetchData('http://localhost:3001/findAllEquipment', token)
 
+    if(equipments.message) {
+        return(<Message message={'Usuário sem permissão'}/>)
+    }
     
     let data = equipments.map(itens => {
         let result = {

@@ -4,6 +4,7 @@ import changeProperty from "../../../utils/changeProperty"
 import Link from "next/link"
 import Table from "../../../components/table"
 import fetchData from "../../../utils/fetchData"
+import Message from "../../../utils/message"
 
 
 export default async function Sector() {
@@ -15,6 +16,11 @@ export default async function Sector() {
     }
 
     let sector = await fetchData('http://localhost:3001/findAllSector', token)
+
+    if(sector.message) {
+            return(<Message message={'Usuário sem permissão'}/>)
+        }
+
     let data = []
 
     sector.map((itens) => {

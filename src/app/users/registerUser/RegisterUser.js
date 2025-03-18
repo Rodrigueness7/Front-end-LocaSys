@@ -30,6 +30,7 @@ export default function RegisterUser({ dataSector, dataProfile, token }) {
     const [sector, setSector] = useState(valueSector[0])
     const [profile, setProfile] = useState(valueProfile[0])
     const [result, setResult] = useState('')
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false)
 
     const changeFirstName = (e) => {
         let newFirstName = e.target.value
@@ -100,6 +101,14 @@ export default function RegisterUser({ dataSector, dataProfile, token }) {
         setProfile(e.target.value)
     }
 
+    const handleSuccess = () => {
+        setShowSuccessMessage(true)
+
+        setTimeout(()=> {
+            setShowSuccessMessage(false)
+        }, 3000)
+    }
+
 
     const addUser = async () => {
 
@@ -132,6 +141,7 @@ export default function RegisterUser({ dataSector, dataProfile, token }) {
         }
 
         await addData('http://localhost:3001/addUser', data, token, setResult)
+        handleSuccess()
         setFirstName("")
         setLastName("")
         setCpf("")
@@ -161,7 +171,11 @@ export default function RegisterUser({ dataSector, dataProfile, token }) {
                 <div className="mb-6">
                     <button onClick={addUser} className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ">Cadastrar</button>
                 </div>
-                <div>{result}</div>
+                {showSuccessMessage && (
+                    <div className="flex items-center justify-center p-2 bg-white border border-gray-300 text-gray-800 rounded-md shadow-md text-lg font-semibold">
+                        {result}
+                    </div>
+                )}
             </div>
         </section>
     )

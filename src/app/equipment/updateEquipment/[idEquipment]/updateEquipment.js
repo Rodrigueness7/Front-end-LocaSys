@@ -41,6 +41,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataFilial, d
     const [supplier, setSupplier] = useState(dataEquipment['Supplier'].supplier)
     const [entryDate, setEntryDate] = useState(new Date(dataEquipment.entryDate).toLocaleDateString('pt-br').split('/').reverse().join('-'))
     const [returnDate, setReturnDate] = useState('')
+    const [reason, setReason] = useState('')
     const [result, setResult] = useState('')
 
     const changeCodProd = (e) => {
@@ -90,6 +91,13 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataFilial, d
 
     const changeReturnDate = (e) => {
         setReturnDate(e.target.value)
+    }
+
+    const changeReason = (e) => {
+      let  reasonLength = e.target.value 
+        if(reasonLength.length <= 250) {
+            setReason(reasonLength)
+        }
     }
 
     const updateEquipment = async () => {
@@ -142,15 +150,19 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataFilial, d
             returnDate: returnDate
         }
         await inactivateData(`http://localhost:3001/returnEquipment/${idEquipment}`, data, token, setResult)
-
+        
     }
-    console.log(value)
+   
     return (
         <section className="bg-gray-100 py-3">
             <Modal classFirstDivButton={'flex items-start mb-8 lg:px-2 sm:px-0'} classFirstButton={"p-2 bg-indigo-500 rounded-lg text-white"} FirstButton={'Devolver'} classCloseModal={'fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'} classDivChildren={'bg-white rounded-lg shadow-lg w-96 p-6'} classDivButton={'flex justify-end mt-6'} classSecondButton={'px-4 py-2 text-gray-600 bg-gray-200 rounded hover:bg-gray-300'} secondButton={'Fechar'} Children={
                 <div>
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Data Devolução'} type={'date'} name={'returnDate'} value={returnDate} onchange={changeReturnDate}></InputForm>
-                    <button onClick={returnEquipment} className="p-2 bg-indigo-500 rounded-lg text-white">Devolver</button>
+                   <form>
+                     <label className="'block text-sm font-medium text-gray-700'" for='mensage'>Motivo</label>
+                     <textarea className= "mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" name="reason" rows={'4'} cols={'60'} value={reason} onChange={changeReason}></textarea>
+                   </form>
+                    <button onClick={returnEquipment} className="p-2 mt-4 bg-indigo-500 rounded-lg text-white">Devolver</button>
                 </div>
             }></Modal>
             <div className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">

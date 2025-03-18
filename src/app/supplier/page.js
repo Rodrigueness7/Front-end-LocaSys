@@ -3,6 +3,7 @@ import { redirect } from "next/navigation"
 import Table from "../../../components/table"
 import Link from "next/link"
 import fetchData from "../../../utils/fetchData"
+import Message from "../../../utils/message"
 
 
 export default async function Supplier() {
@@ -14,6 +15,10 @@ export default async function Supplier() {
     }
 
     const supplier = await fetchData('http://localhost:3001/findAllSupplier', token)
+
+    if(supplier.message) {
+            return(<Message message={'Usuário sem permissão'}/>)
+        }
 
     return (
         <div className="bg-gray-100 py-8 overflow-x-auto h-screen px-8">
