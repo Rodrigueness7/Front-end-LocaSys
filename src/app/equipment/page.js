@@ -28,6 +28,7 @@ export default async function Equipments() {
             ['Equipamento']: itens.equipment,
             ['Tipo']: itens.type,
             ['Data Entrada']: new Date(itens.entryDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+            ['Data Retorno']: itens.returnDate ? new Date(itens.returnDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }) : '',
             ['Usuario']: itens['User'].username,
             ['Filial']: itens['Branch'].branch,
             ['Setor']: itens['Sector'].sector,
@@ -38,8 +39,8 @@ export default async function Equipments() {
         }
         return result
     })
-    let x = ['Código', 'Equipamento', 'Tipo', 'Data Entrada', 'Usuario', 'Filial', 'Setor', 'Fornecedor', 'Valor']
-    let attribute = data.length === 0 ? x : Object.keys(data[0]);
+    let attributeStand = ['Código', 'Equipamento', 'Tipo', 'Data Entrada', 'Data Retorno', 'Usuario', 'Filial', 'Setor', 'Fornecedor', 'Valor']
+    let attribute = data.length === 0 ? attributeStand : Object.keys(data[0]);
    
     
     return (

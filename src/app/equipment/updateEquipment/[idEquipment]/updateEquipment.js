@@ -5,10 +5,14 @@ import InputSelect from "../../../../../components/InputSelect"
 import Modal from "../../../../../components/modal"
 import updateData from "../../../../../utils/updateData"
 import inactivateData from "../../../../../utils/inactivateData"
+import addData from "../../../../../utils/addData"
+import { useRouter } from "next/navigation"
+
 
 
 export default function UpdateEquipment({ dataEquipment, dataUser, dataFilial, dataSector, dataSupplier, token, idEquipment }) {
 
+    const router = useRouter()
     const valueFilial = []
     const valueUsername = []
     const valueSector = []
@@ -120,8 +124,8 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataFilial, d
         })
 
         dataFilial.map(value => {
-            if (value.filial == filial) {
-                return idFilial.push(value.idFilial)
+            if (value.branch == filial) {
+                return idFilial.push(value.idBranch)
             }
         })
 
@@ -137,20 +141,69 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataFilial, d
             equipment: equipment,
             type: type,
             value: value,
-            idFilial: idFilial[0],
+            idBranch: idFilial[0],
             idUser: idUsername[0],
             idSector: idSector[0],
             idSupplier: idSupplier[0],
+            entryDate: entryDate
         }
         await updateData(`http://localhost:3001/updateEquipment/${idEquipment}`, data, token, setResult)
     }
 
     const returnEquipment = async () => {
-        let data = {
+        const idUsername = []
+        const idSector = []
+        const idFilial = []
+        const idSupplier = []
+
+        dataUser.map(value => {
+            if (value.username == username) {
+                return idUsername.push(value.idUser)
+            }
+        })
+
+        dataSector.map(value => {
+            if (value.sector == sector) {
+                return idSector.push(value.idSector)
+            }
+        })
+
+        dataFilial.map(value => {
+            if (value.branch == filial) {
+                return idFilial.push(value.idBranch)
+            }
+        })
+
+        dataSupplier.map(value => {
+            if (value.supplier == supplier) {
+                return idSupplier.push(value.idSupplier)
+            }
+        })
+        const data = {
+            idEquipment: 0,
+            codProd: codProd,
+            equipment: equipment,
+            type: type,
+            value: value,
+            idBranch: idFilial[0],
+            idUser: idUsername[0],
+            idSector: idSector[0],
+            idSupplier: idSupplier[0],
             returnDate: returnDate
         }
         await inactivateData(`http://localhost:3001/returnEquipment/${idEquipment}`, data, token, setResult)
         
+        let dataEquipmentHistory = {
+            idEquipmentHistory: 0,
+            idEquipment: idEquipment,
+            reason: reason,
+            entryDate: entryDate,
+            returnDate: returnDate
+        }
+
+       await addData('http://localhost:3001/addEquipmentHistory', dataEquipmentHistory, token, setResult)
+        router.push('../')
+
     }
    
     return (
@@ -159,7 +212,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataFilial, d
                 <div>
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Data Devolução'} type={'date'} name={'returnDate'} value={returnDate} onchange={changeReturnDate}></InputForm>
                    <form>
-                     <label className="'block text-sm font-medium text-gray-700'" for='mensage'>Motivo</label>
+                     <label className="'block text-sm font-medium text-gray-700'" htmlFor='mensage'>Motivo</label>
                      <textarea className= "mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" name="reason" rows={'4'} cols={'60'} value={reason} onChange={changeReason}></textarea>
                    </form>
                     <button onClick={returnEquipment} className="p-2 mt-4 bg-indigo-500 rounded-lg text-white">Devolver</button>
