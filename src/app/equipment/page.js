@@ -39,8 +39,8 @@ export default async function Equipments() {
         }
         return result
     })
-    let attributeStand = ['Código', 'Equipamento', 'Tipo', 'Data Entrada', 'Data Retorno', 'Usuario', 'Filial', 'Setor', 'Fornecedor', 'Valor']
-    let attribute = data.length === 0 ? attributeStand : Object.keys(data[0]);
+    let defaultAtrribute = ['Código', 'Equipamento', 'Tipo', 'Data Entrada', 'Data Retorno', 'Usuario', 'Filial', 'Setor', 'Fornecedor', 'Valor']
+    let attribute = data.length === 0 ? defaultAtrribute : Object.keys(data[0]);
    
     
     return (

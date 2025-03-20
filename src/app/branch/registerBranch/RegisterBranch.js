@@ -50,7 +50,6 @@ export default function PageRegisterBranch({ token }) {
         }
 
         await addData('http://localhost:3001/addBranch', data, token, setResult)
-        console.log(data)
 
     }
 

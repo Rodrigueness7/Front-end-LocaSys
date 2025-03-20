@@ -10,6 +10,6 @@ export default async function addData(url, data, token, result) {
     }).then(
         result => result.json()
     ).then(
-        res => result(res.message)
+        res => result(res.errorMessage)
     )
 }

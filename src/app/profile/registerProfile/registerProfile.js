@@ -49,7 +49,6 @@ export default function RegisterProfile({ token, dataPermission }) {
          allow: itens.checked
         }))
         addData('http://localhost:3001/addProfile_permission', dataProfile_permission, token, setResult)
-        console.log(dataProfile_permission)
       },3000)
 
     }

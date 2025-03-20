@@ -36,9 +36,10 @@ export default function Login() {
     })
 
     let values = await data.json()
+    console.log(values)
     setCookie('token', values.token, { maxAge: 8600000 })
 
-    if (values.message === 'Logged in user') {
+    if (values.successMessage) {
       route.push('./')
       localStorage.setItem('username', username)
 
@@ -47,7 +48,7 @@ export default function Login() {
       }, 8600000)
 
     }
-    return setResult(values.message)
+    return setResult(values.errorMessage)
 
   }
 

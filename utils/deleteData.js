@@ -1,4 +1,4 @@
-export default async function deleteData(url, token, result) {
+export default async function deleteData(url, token, result, message) {
     const res = await fetch(url, {
         method: 'DELETE',
         headers: {
@@ -8,7 +8,13 @@ export default async function deleteData(url, token, result) {
     }).then(
         result => result.json()
     ).then(
-        res => result(res.message)
+        res => {
+            if(res.successMessage){
+                result(message)
+            } else {
+                result(res.errorMessage)
+            }
+        }
     )
     
 }

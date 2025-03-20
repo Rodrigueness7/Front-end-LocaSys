@@ -25,7 +25,6 @@ export default async function logs() {
     log.map(itens => {
         ChangeProperty(itens, 'User', 'username', 'username')
         itens.actionDate = new Date(itens.actionDate).toLocaleDateString('pt-BR', {timeZone: 'UTC'})
-
         data.push(itens)     
     })
     

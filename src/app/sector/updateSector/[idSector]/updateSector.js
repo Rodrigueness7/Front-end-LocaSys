@@ -40,7 +40,7 @@ export default function UpdateSector({ idSector, dataSector, dataFilial, token }
             idFilial: idFilial[0]
         }
 
-        await updateData(`http://localhost:3001/updateSector/${idSector}`, data, token, setResult)
+        await updateData(`http://localhost:3001/updateSector/${idSector}`, data, token, setResult, 'Atualizado com sucesso')
     }
 
     const deleteSector = async () => {
@@ -48,7 +48,7 @@ export default function UpdateSector({ idSector, dataSector, dataFilial, token }
             deletionDate: new Date().toLocaleDateString('pt-BR')
         }
 
-        await inactivateData(`http://localhost:3001/inactivateSector/${idSector}`, data, token, setResult)
+        await inactivateData(`http://localhost:3001/inactivateSector/${idSector}`, data, token, setResult, 'Deletado com sucesso')
 
     }
 

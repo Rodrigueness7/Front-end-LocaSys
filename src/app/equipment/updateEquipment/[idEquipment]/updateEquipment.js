@@ -147,10 +147,13 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataFilial, d
             idSupplier: idSupplier[0],
             entryDate: entryDate
         }
-        await updateData(`http://localhost:3001/updateEquipment/${idEquipment}`, data, token, setResult)
+        await updateData(`http://localhost:3001/updateEquipment/${idEquipment}`, data, token, setResult, 'Reativado com sucesso')
     }
 
     const returnEquipment = async () => {
+        setTimeout(() => {
+
+        })
         const idUsername = []
         const idSector = []
         const idFilial = []
@@ -191,7 +194,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataFilial, d
             idSupplier: idSupplier[0],
             returnDate: returnDate
         }
-        await inactivateData(`http://localhost:3001/returnEquipment/${idEquipment}`, data, token, setResult)
+        await inactivateData(`http://localhost:3001/returnEquipment/${idEquipment}`, data, token, setResult, 'Retornado com sucesso')
         
         let dataEquipmentHistory = {
             idEquipmentHistory: 0,
@@ -202,22 +205,38 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataFilial, d
         }
 
        await addData('http://localhost:3001/addEquipmentHistory', dataEquipmentHistory, token, setResult)
+       
+       
+      setTimeout(() => {
         router.push('../')
+      }, 2000)
 
+    }
+
+    const reactivate = async () => {
+        let data = {
+            returnDate: null
+        }
+        await updateData(`http://localhost:3001/returnEquipment/${idEquipment}`, data, token, setResult, 'Reativado com sucesso')
+       
     }
    
     return (
         <section className="bg-gray-100 py-3">
-            <Modal classFirstDivButton={'flex items-start mb-8 lg:px-2 sm:px-0'} classFirstButton={"p-2 bg-indigo-500 rounded-lg text-white"} FirstButton={'Devolver'} classCloseModal={'fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'} classDivChildren={'bg-white rounded-lg shadow-lg w-96 p-6'} classDivButton={'flex justify-end mt-6'} classSecondButton={'px-4 py-2 text-gray-600 bg-gray-200 rounded hover:bg-gray-300'} secondButton={'Fechar'} Children={
+           <div className="flex justify-between">
+           <Modal classFirstDivButton={'flex items-start mb-8 lg:px-2 sm:px-0'} classFirstButton={"p-2 bg-indigo-500 rounded-lg text-white"} FirstButton={'Devolver'} classCloseModal={'fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'} classDivChildren={'bg-white rounded-lg shadow-lg w-96 p-6'} classDivButton={'flex justify-end mt-6'} classSecondButton={'px-4 py-2 text-gray-600 bg-gray-200 rounded hover:bg-gray-300'} secondButton={'Fechar'} Children={
                 <div>
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Data Devolução'} type={'date'} name={'returnDate'} value={returnDate} onchange={changeReturnDate}></InputForm>
                    <form>
                      <label className="'block text-sm font-medium text-gray-700'" htmlFor='mensage'>Motivo</label>
                      <textarea className= "mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" name="reason" rows={'4'} cols={'60'} value={reason} onChange={changeReason}></textarea>
                    </form>
+                   <div>{result}</div>
                     <button onClick={returnEquipment} className="p-2 mt-4 bg-indigo-500 rounded-lg text-white">Devolver</button>
                 </div>
             }></Modal>
+            <button className="p-2 bg-indigo-500 rounded-lg text-white font-bold h-10" onClick={reactivate}>Reativar</button>
+           </div>
             <div className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
                 <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">Atualizar Equipamento</h1>
                 <form className="grid grid-cols-1 gap-x-8 gap-y-4">
@@ -234,7 +253,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataFilial, d
                     <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Fonercedor'} name={'supplier'} datas={valueSupplier} value={supplier} onchange={changeSupplier}></InputSelect>
                 </form>
                 <div className="mb-6">
-                    <button onClick={updateEquipment} className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ">Adicionar</button>
+                    <button onClick={updateEquipment} className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">Atualizar</button>
                 </div>
                 <div>{result}</div>
             </div>

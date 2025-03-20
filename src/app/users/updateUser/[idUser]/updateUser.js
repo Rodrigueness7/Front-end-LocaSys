@@ -148,7 +148,7 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
             idProfile: idProfile[0]
         }
 
-        await updateData(`http://localhost:3001/updateUser/${idUser}`, data, token, setResult)
+        await updateData(`http://localhost:3001/updateUser/${idUser}`, data, token, setResult, 'Atualizado com sucesso')
         setTimeout(() => {
             router.push('../')
         }, 2000)
@@ -161,7 +161,7 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
             deletionDate: new Date().toLocaleDateString('pt-BR')
         }
 
-        await inactivateData(`http://localhost:3001/inactivateUser/${idUser}`, data, token, setResult)
+        await inactivateData(`http://localhost:3001/inactivateUser/${idUser}`, data, token, setResult, 'Deletado com sucesso')
         setTimeout(() => {
             router.push('../')
         }, 2000)
