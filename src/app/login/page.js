@@ -4,6 +4,7 @@ import InputForm from "../../../components/InputForm";
 import { setCookie } from "cookies-next";
 import { useRouter } from 'next/navigation';
 
+
 export default function Login() {
 
   const route = useRouter()
@@ -11,6 +12,9 @@ export default function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [result, setResult] = useState('')
+  
+ 
+  
   const changeUsername = (e) => {
     setUsername(e.target.value)
   }
@@ -36,9 +40,7 @@ export default function Login() {
     })
 
     let values = await data.json()
-    console.log(values)
     setCookie('token', values.token, { maxAge: 8600000 })
-
     if (values.successMessage) {
       route.push('./')
       localStorage.setItem('username', username)
@@ -48,14 +50,14 @@ export default function Login() {
       }, 8600000)
 
     }
+    console.log(values)
     return setResult(values.errorMessage)
-
   }
 
   return (
     <section className="bg-gray-100 h-screen flex justify-center items-center">
-      <div className=" flex justify-center items-center flex-col bg-white shadow hover:shadow-lg h-80 w-96 rounded-lg">
-        <form onSubmit={submit}>
+      <div className=" flex justify-center items-center flex-col bg-white shadow hover:shadow-lg h-80 w-96 rounded-lg"> 
+      <form onSubmit={submit}>
           <div>
             <h1 className="font-sans pb-8 text-2xl">Acesse a sua conta</h1>
           </div>

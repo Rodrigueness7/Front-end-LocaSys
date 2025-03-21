@@ -2,6 +2,7 @@
 import { useState } from "react";
 import InputForm from "../../../../components/InputForm";
 import addData from "../../../../utils/addData";
+import MessageModal from "../../../../components/messageModal";
 
 
 export default function PageRegisterBranch({ token }) {
@@ -11,6 +12,7 @@ export default function PageRegisterBranch({ token }) {
     const [corporateName, setCoporateName] = useState('')
     const [uniqueIdentifier, setUniqueIdentifier] = useState('')
     const [result, setResult] = useState('')
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
 
     const changeBranch = (e) => {
@@ -40,6 +42,9 @@ export default function PageRegisterBranch({ token }) {
             setUniqueIdentifier(fieldUniqueIdentifier)
         }
     }
+    const handleCloseModal = () => {
+        setIsModalOpen(false)
+    }
 
     const addBranch = async () => {
         const data = {
@@ -50,7 +55,7 @@ export default function PageRegisterBranch({ token }) {
         }
 
         await addData('http://localhost:3001/addBranch', data, token, setResult)
-
+        setIsModalOpen(true)
     }
 
     return (
@@ -66,7 +71,7 @@ export default function PageRegisterBranch({ token }) {
                 <div className="mb-6">
                     <button onClick={addBranch} className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ">Cadastrar</button>
                 </div>
-                <div>{result}</div>
+                <MessageModal isOpen={isModalOpen} onClose={handleCloseModal} message={result} ></MessageModal>
             </div>
         </section>
     )

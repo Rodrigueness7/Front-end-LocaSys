@@ -8,8 +8,9 @@ export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, 
                     {headers.map((header, index) => (
                         <th className={Th} key={index}>
                             {header}
-                        </th>
+                        </th>    
                     ))}
+                    <th></th>
                 </tr>
             </thead>
             <tbody>

@@ -14,7 +14,6 @@ export default function PageHome() {
           
           clearCookie('token');
           router.push('./login')
-   
     }
 
     return (
