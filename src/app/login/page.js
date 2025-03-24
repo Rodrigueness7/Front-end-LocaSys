@@ -1,6 +1,6 @@
 'use client'
 import { useState } from "react";
-import InputForm from "../../../components/InputForm";
+import InputForm from "../../components/InputForm";
 import { setCookie } from "cookies-next";
 import { useRouter } from 'next/navigation';
 

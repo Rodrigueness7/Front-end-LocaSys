@@ -1,7 +1,7 @@
 import UpdateSector from "@/app/sector/updateSector/[idSector]/updateSector"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
-import fetchData from "../../../../../utils/fetchData"
+import fetchData from "../../../../utils/fetchData"
 
 export default async function PageUpdateSector({ params }) {
 

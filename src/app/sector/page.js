@@ -1,10 +1,10 @@
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
-import changeProperty from "../../../utils/changeProperty"
+import changeProperty from "../../utils/changeProperty"
 import Link from "next/link"
-import Table from "../../../components/table"
-import fetchData from "../../../utils/fetchData"
-import Message from "../../../utils/message"
+import Table from "../../components/table"
+import fetchData from "../../utils/fetchData"
+import Message from "../../utils/message"
 
 
 export default async function Sector() {

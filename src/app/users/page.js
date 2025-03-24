@@ -1,10 +1,10 @@
 import { redirect } from 'next/navigation'
 import { cookies } from "next/headers"
 import Link from 'next/link'
-import Table from '../../../components/table'
-import changeProperty from '../../../utils/changeProperty'
-import fetchData from '../../../utils/fetchData'
-import Message from '../../../utils/message'
+import Table from '../../components/table'
+import changeProperty from '../../utils/changeProperty'
+import fetchData from '../../utils/fetchData'
+import Message from '../../utils/message'
 
 
 export default async function Users() {

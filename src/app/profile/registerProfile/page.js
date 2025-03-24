@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import RegisterProfile from "./registerProfile";
-import fetchData from "../../../../utils/fetchData";
+import fetchData from "../../../utils/fetchData";
 
 
 export default async function PageRegisterProfile() {

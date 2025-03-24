@@ -1,6 +1,6 @@
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
-import fetchData from "../../../../../utils/fetchData"
+import fetchData from "../../../../utils/fetchData"
 import UpdateBranch from "./updateBranch"
 
 

@@ -1,7 +1,7 @@
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import UpdateSupplier from "./updateSupplier"
-import fetchData from "../../../../../utils/fetchData"
+import fetchData from "../../../../utils/fetchData"
 
 
 export default async function PageUpdateSupplier({ params }) {

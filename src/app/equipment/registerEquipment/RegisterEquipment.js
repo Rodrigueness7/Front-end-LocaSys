@@ -1,9 +1,9 @@
 'use client'
 import { useState } from "react"
-import InputForm from "../../../../components/InputForm"
-import InputSelect from "../../../../components/InputSelect"
-import addData from "../../../../utils/addData"
-import fetchData from "../../../../utils/fetchData"
+import InputForm from "../../../components/InputForm"
+import InputSelect from "../../../components/InputSelect"
+import addData from "../../../utils/addData"
+import fetchData from "../../../utils/fetchData"
 
 
 export default function PageRegisterEquipment({ dataUser, dataFilial, dataSector, dataSupplier, token }) {

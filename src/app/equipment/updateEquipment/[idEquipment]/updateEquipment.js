@@ -1,11 +1,11 @@
 'use client'
 import { useState } from "react"
-import InputForm from "../../../../../components/InputForm"
-import InputSelect from "../../../../../components/InputSelect"
-import Modal from "../../../../../components/modal"
-import updateData from "../../../../../utils/updateData"
-import inactivateData from "../../../../../utils/inactivateData"
-import addData from "../../../../../utils/addData"
+import InputForm from "../../../../components/InputForm"
+import InputSelect from "../../../../components/InputSelect"
+import Modal from "../../../../components/modal"
+import updateData from "../../../../utils/updateData"
+import inactivateData from "../../../../utils/inactivateData"
+import addData from "../../../../utils/addData"
 import { useRouter } from "next/navigation"
 
 

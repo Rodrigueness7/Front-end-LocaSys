@@ -1,7 +1,7 @@
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import UpdateUser from "./updateUser"
-import fetchData from "../../../../../utils/fetchData"
+import fetchData from "../../../../utils/fetchData"
 
 
 

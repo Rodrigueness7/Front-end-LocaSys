@@ -1,9 +1,9 @@
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
-import ChangeProperty from "../../../utils/changeProperty"
-import Table from "../../../components/table"
-import fetchData from "../../../utils/fetchData"
-import Message from "../../../utils/message"
+import ChangeProperty from "../../utils/changeProperty"
+import Table from "../../components/table"
+import fetchData from "../../utils/fetchData"
+import Message from "../../utils/message"
 
 
 export default async function logs() {

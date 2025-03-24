@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from "react"
-import InputForm from "../../../../components/InputForm"
-import InputSelect from "../../../../components/InputSelect"
-import addData from "../../../../utils/addData"
+import InputForm from "../../../components/InputForm"
+import InputSelect from "../../../components/InputSelect"
+import addData from "../../../utils/addData"
 
 export default function PageRegisterSector({ dataFilial, token }) {
 

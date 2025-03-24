@@ -12,9 +12,9 @@ export default async function updateData(url, data, token, result, message) {
     ).then(
         res => {
             if(res.successMessage){
-                result(message)
+                result({success: success})
             } else {
-                result(res.errorMessage)
+                result({error: error})
             }
         }
 

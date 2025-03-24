@@ -1,7 +1,7 @@
 'use client'
 import { useState } from "react";
-import InputForm from "../../../../components/InputForm";
-import addData from "../../../../utils/addData";
+import InputForm from "../../../components/InputForm";
+import addData from "../../../utils/addData";
 
 
 export default function RegisterSupplier({ token }) {

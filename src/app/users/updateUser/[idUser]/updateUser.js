@@ -1,10 +1,10 @@
 'use client'
 
 import { useState } from "react"
-import InputForm from "../../../../../components/InputForm"
-import InputSelect from "../../../../../components/InputSelect"
-import updateData from "../../../../../utils/updateData"
-import inactivateData from "../../../../../utils/inactivateData"
+import InputForm from "../../../../components/InputForm"
+import InputSelect from "../../../../components/InputSelect"
+import updateData from "../../../../utils/updateData"
+import inactivateData from "../../../../utils/inactivateData"
 import { useRouter } from 'next/navigation'
 
 

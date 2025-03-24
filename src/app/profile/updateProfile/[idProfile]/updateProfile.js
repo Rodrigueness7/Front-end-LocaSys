@@ -1,8 +1,8 @@
 'use client'
 import { useState } from "react"
-import InputForm from "../../../../../components/InputForm"
-import updateData from "../../../../../utils/updateData"
-import deleteData from "../../../../../utils/deleteData"
+import InputForm from "../../../../components/InputForm"
+import updateData from "../../../../utils/updateData"
+import deleteData from "../../../../utils/deleteData"
 
 
 export default function UpdateProfile({ data, idProfile, dataPermission, token }) {

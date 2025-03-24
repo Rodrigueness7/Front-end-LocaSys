@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from "react"
-import InputForm from "../../../../../components/InputForm"
-import updateData from "../../../../../utils/updateData"
-import inactivateData from "../../../../../utils/inactivateData"
+import InputForm from "../../../../components/InputForm"
+import updateData from "../../../../utils/updateData"
+import inactivateData from "../../../../utils/inactivateData"
 
 export default function UpdateSupplier({ idSupplier, data, token }) {
 

@@ -2,7 +2,7 @@
 import { cookies } from "next/headers"
 import PageRegisterEquipment from "./RegisterEquipment"
 import { redirect } from 'next/navigation'
-import fetchData from "../../../../utils/fetchData"
+import fetchData from "../../../utils/fetchData"
 
 
 export default async function RegisterEquipment() {

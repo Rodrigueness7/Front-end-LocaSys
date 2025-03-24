@@ -1,10 +1,10 @@
 'use client'
 
 import { useState } from "react"
-import InputSelect from "../../../../../components/InputSelect"
-import InputForm from "../../../../../components/InputForm"
-import updateData from "../../../../../utils/updateData"
-import inactivateData from "../../../../../utils/inactivateData"
+import InputSelect from "../../../../components/InputSelect"
+import InputForm from "../../../../components/InputForm"
+import updateData from "../../../../utils/updateData"
+import inactivateData from "../../../../utils/inactivateData"
 
 export default function UpdateSector({ idSector, dataSector, dataFilial, token }) {
 

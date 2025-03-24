@@ -10,9 +10,9 @@ export default async function deleteData(url, token, result, message) {
     ).then(
         res => {
             if(res.successMessage){
-                result(message)
+                result({success: success})
             } else {
-                result(res.errorMessage)
+                result({error: error})
             }
         }
     )

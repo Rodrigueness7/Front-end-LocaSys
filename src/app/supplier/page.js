@@ -1,9 +1,9 @@
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
-import Table from "../../../components/table"
+import Table from "../../components/table"
 import Link from "next/link"
-import fetchData from "../../../utils/fetchData"
-import Message from "../../../utils/message"
+import fetchData from "../../utils/fetchData"
+import Message from "../../utils/message"
 
 
 export default async function Supplier() {
