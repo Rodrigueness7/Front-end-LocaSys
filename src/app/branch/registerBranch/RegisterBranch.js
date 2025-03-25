@@ -5,6 +5,7 @@ import addData from "../../../utils/addData";
 import MessageModal from "../../../components/messageModal";
 import { FaCheckCircle } from 'react-icons/fa';
 import { FaTimesCircle } from 'react-icons/fa'
+import { useRouter } from "next/navigation";
 
 
 export default function PageRegisterBranch({ token }) {
@@ -15,7 +16,7 @@ export default function PageRegisterBranch({ token }) {
     const [uniqueIdentifier, setUniqueIdentifier] = useState('')
     const [result, setResult] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)
-
+    const router = useRouter()
 
     const changeBranch = (e) => {
         let fieldBranch = e.target.value
@@ -46,6 +47,9 @@ export default function PageRegisterBranch({ token }) {
     }
     const handleCloseModal = () => {
         setIsModalOpen(false)
+        if(result.success) {
+           router.push('./')
+        }
     }
 
     const addBranch = async () => {

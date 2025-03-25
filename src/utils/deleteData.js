@@ -1,4 +1,4 @@
-export default async function deleteData(url, token, result, message) {
+export default async function deleteData(url, token, result, success, error) {
     const res = await fetch(url, {
         method: 'DELETE',
         headers: {

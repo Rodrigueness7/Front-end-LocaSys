@@ -1,5 +1,5 @@
 
-export default async function updateData(url, data, token, result, message) {
+export default async function updateData(url, data, token, result, success, error) {
     await fetch(url, {
         method: 'PUT',
         body: JSON.stringify(data),
