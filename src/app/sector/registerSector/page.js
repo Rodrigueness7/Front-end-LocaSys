@@ -12,7 +12,7 @@ export default async function RegisterSector() {
         redirect('../login')
     }
 
-    const filial = await fetchData('http://localhost:3001/findAllFilial', token)
+    const filial = await fetchData('http://localhost:3001/findAllBranch', token)
 
     return (
         <PageRegisterSector dataFilial={filial} token={token}></PageRegisterSector>

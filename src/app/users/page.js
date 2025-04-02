@@ -23,7 +23,7 @@ export default async function Users() {
 
     let data = users.map(itens => (
         {
-            idUsuario: itens.idUser,
+            id: itens.idUser,
             Nome: itens.firstName,
             Sobrenome: itens.lastName,
             CPF: itens.cpf,
@@ -44,7 +44,7 @@ export default async function Users() {
                 <Link href={'../users/registerUser'}><button className='p-2 bg-indigo-500 rounded-lg text-white w-full '>Novo Usuário</button></Link>
             </div>
             <div className='ml-8 flex-1'>
-                <Table Table={'table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={attribute} data={data} attributos={attribute} id={'idUsuario'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./users/updateUser'} bt={'...'}></Table>
+                <Table Table={'table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={attribute} data={data} attributos={attribute} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./users/updateUser'} bt={'...'}></Table>
             </div>
         </div>
         

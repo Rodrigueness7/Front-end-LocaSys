@@ -61,7 +61,7 @@ export default function UpdateBranch({dataBranch, idBranch, token }) {
             uniqueIdentifier: uniqueIdentifier
         }
 
-        await updateData(`http://localhost:3001/updateBranch/${idBranch}`, data, token, setResult, 'Atualizado com sucesso', 'Erro ao atualizar')
+        await updateData(`http://localhost:3001/updateBranch/${idBranch}`, data, token, setResult, 'Atualizado com sucesso', 'Não foi possível atualizar, pois a Filial estar registrada no setor')
         setIsModalOpen(true)
     }
 

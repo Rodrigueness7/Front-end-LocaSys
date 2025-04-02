@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, attributos, id, href, classButton, bt }) {
+export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, attributos, id, href, classButton, bt, positionTd }) {
     return (
         <table className={Table}>
             <thead>
@@ -19,7 +19,7 @@ export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, 
                         {attributos.map(item => (
                             <td key={item} className={Td}>{row[item]}</td>
                         ))}
-                        <td><Link href={href + `/${row[id]}`}><button className={classButton}>{bt}</button></Link></td>
+                        <td className={positionTd}><Link href={href + `/${row[id]}`}><button className={classButton}>{bt}</button></Link></td>
                     </tr>
                 ))}
             </tbody>

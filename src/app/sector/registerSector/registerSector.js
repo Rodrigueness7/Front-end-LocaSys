@@ -10,7 +10,7 @@ export default function PageRegisterSector({ dataFilial, token }) {
     let data = []
 
     dataFilial.map(itens => {
-        data.push(itens.filial)
+        data.push(itens.branch)
     })
 
     const [sector, setSector] = useState('')
@@ -28,8 +28,8 @@ export default function PageRegisterSector({ dataFilial, token }) {
     const addSector = async () => {
         let idFilial = []
         dataFilial.map((itens) => {
-            if (itens.filial === filial) {
-                idFilial.push(itens.idFilial)
+            if (itens.branch === filial) {
+                idFilial.push(itens.idBranch)
             }
         })
 
@@ -39,7 +39,7 @@ export default function PageRegisterSector({ dataFilial, token }) {
         }
 
         await addData('http://localhost:3001/addSector', data, token, setResult)
-
+        
     }
 
     return (

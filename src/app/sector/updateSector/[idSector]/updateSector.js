@@ -37,7 +37,7 @@ export default function UpdateSector({ idSector, dataSector, dataFilial, token }
 
         let data = {
             sector: sector,
-            idFilial: idFilial[0]
+            idBranch: idBranch[0]
         }
 
         await updateData(`http://localhost:3001/updateSector/${idSector}`, data, token, setResult, 'Atualizado com sucesso')

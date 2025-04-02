@@ -13,9 +13,11 @@ export default async function updateData(url, data, token, result, success, erro
         res => {
             if(res.successMessage){
                 result({success: success})
-            } else {
-                result({error: error})
+            } else if(res.successMessageObs) {
+                result(res.successMessageObs)
             }
+            
+            result({error: error})
         }
 
     )

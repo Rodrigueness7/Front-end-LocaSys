@@ -39,9 +39,10 @@ export default function Login() {
       }
     })
 
-    let values = await data.json()
-    setCookie('token', values.token, { maxAge: 8600000 })
-    if (values.successMessage) {
+ 
+    let value = await data.json()
+    setCookie('token', value.token, { maxAge: 8600000 })
+    if (value.successMessage) {
       route.push('./')
       localStorage.setItem('username', username)
 
@@ -50,13 +51,16 @@ export default function Login() {
       }, 8600000)
 
     }
-    console.log(values)
-    return setResult(values.errorMessage)
+      console.log(value)
+      if(value.errorMessage) {
+        setResult('Usuário ou Senha inválido')
+        setTimeout(() => {setResult('')}, 1000)
+      }
   }
 
   return (
     <section className="bg-gray-100 h-screen flex justify-center items-center">
-      <div className=" flex justify-center items-center flex-col bg-white shadow hover:shadow-lg h-80 w-96 rounded-lg"> 
+      <div className=" flex justify-center items-center flex-col bg-white shadow hover:shadow-lg h-96 w-96 rounded-lg"> 
       <form onSubmit={submit}>
           <div>
             <h1 className="font-sans pb-8 text-2xl">Acesse a sua conta</h1>
@@ -65,7 +69,7 @@ export default function Login() {
           <InputForm classNameInput={"w-full font-sans pt-2 border-solid border-2 border-current rounded"} classNameLabe={" mb-2 text-sm font-medium text-gray-900"} label={'Password'} type={'password'} value={password} onchange={changePassword}></InputForm>
           <button type="submit" className="w-64 mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" >Acesse</button>
         </form>
-        <div>{result}</div>
+        <div className="mt-4">{result}</div>
       </div>
     </section>
   );
