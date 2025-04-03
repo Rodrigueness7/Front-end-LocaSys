@@ -2,10 +2,14 @@
 import { useState } from "react";
 import InputForm from "../../../components/InputForm";
 import addData from "../../../utils/addData";
+import { useRouter } from "next/navigation";
+import MessageModal from "@/components/messageModal";
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 
 export default function RegisterSupplier({ token }) {
 
+    const router = useRouter()
     const [supplier, setSupplier] = useState('')
     const [email, setEmail] = useState('')
     const [contact, setContact] = useState('')
@@ -15,6 +19,8 @@ export default function RegisterSupplier({ token }) {
     const [state, setState] = useState('')
     const [city, setCity] = useState('')
     const [result, setResult] = useState('')
+    const [isModalOpen, setIsModalOpen] = useState(false)
+
 
     const changeSupplier = (e) => {
         let newSupplier = e.target.value
@@ -72,6 +78,13 @@ export default function RegisterSupplier({ token }) {
         }
     }
 
+    const handleCloseModal = () => {
+        setIsModalOpen(false)
+        if (result.success) {
+            router.push('./')
+        }
+    }
+
     const addSupplier = async () => {
         const data = {
             supplier: supplier,
@@ -85,7 +98,7 @@ export default function RegisterSupplier({ token }) {
         }
 
         await addData('http://localhost:3001/addSupplier', data, token, setResult)
-
+        setIsModalOpen(true)
     }
 
     return (
@@ -105,7 +118,11 @@ export default function RegisterSupplier({ token }) {
                 <div className="mb-6">
                     <button onClick={addSupplier} className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ">Cadastrar</button>
                 </div>
-                <div>{result}</div>
+                <MessageModal isOpen={isModalOpen} onClose={handleCloseModal} message={result.error ? result.error : result.success} icone={
+                    result?.error ? (<FaTimesCircle className="text-red-500 w-24 h-24 mx-auto mb-4 rounded-full" />) : (
+                        <FaCheckCircle className="text-green-500 w-24 h-24 mx-auto mb-4 rounded-full" />
+                    )
+                }></MessageModal>
             </div>
         </section>
     )

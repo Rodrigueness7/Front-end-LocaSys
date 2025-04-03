@@ -1,5 +1,5 @@
 
-export default async function updateData(url, data, token, result, success, error) {
+export default async function updateData(url, data, token, result) {
     await fetch(url, {
         method: 'PUT',
         body: JSON.stringify(data),
@@ -11,13 +11,14 @@ export default async function updateData(url, data, token, result, success, erro
         result => result.json()
     ).then(
         res => {
-            if(res.successMessage){
-                result({success: success})
-            } else if(res.successMessageObs) {
-                result(res.successMessageObs)
+            if (res.successMessage) {
+                result({ success: res.successMessage })
+            } else if (res.successMessageObs) {
+                result({ success: res.successMessageObs })
+            } else {
+                result({ error: res.errorMessage })
             }
-            
-            result({error: error})
+
         }
 
     )

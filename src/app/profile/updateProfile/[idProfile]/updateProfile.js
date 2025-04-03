@@ -3,10 +3,14 @@ import { useState } from "react"
 import InputForm from "../../../../components/InputForm"
 import updateData from "../../../../utils/updateData"
 import deleteData from "../../../../utils/deleteData"
+import MessageModal from "@/components/messageModal"
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
+import { useRouter } from "next/navigation"
 
 
 export default function UpdateProfile({ data, idProfile, dataPermission, token }) {
 
+    const router = useRouter()
     const [profile, setProfile] = useState(data.profile)
     const [result, setResult] = useState('')
     const [selectPermission, setSelectPermission] = useState(
@@ -18,6 +22,7 @@ export default function UpdateProfile({ data, idProfile, dataPermission, token }
 
         }))
     )
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
     const changeProfile = (e) => {
         setProfile(e.target.value)
@@ -27,6 +32,13 @@ export default function UpdateProfile({ data, idProfile, dataPermission, token }
         const { id, checked } = e.target
         setSelectPermission((p) => p.map((p) => p.id == id ? { ...p, checked } : p
         ))
+    }
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false)
+        if (result.success) {
+            router.push('../')
+        }
     }
 
     const updateProfile = async () => {
@@ -42,6 +54,7 @@ export default function UpdateProfile({ data, idProfile, dataPermission, token }
 
         await updateData(`http://localhost:3001/updateProfile/${idProfile}`, dataProfile, token, setResult, 'Atualizado com sucesso')
         await updateData(`http://localhost:3001/updateProfile_permission`, dataProfile_permission, token, setResult, 'Atualizado com sucesso')
+        setIsModalOpen(true)
 
 
     }
@@ -49,6 +62,7 @@ export default function UpdateProfile({ data, idProfile, dataPermission, token }
     const deleteProfile = async () => {
         await deleteData(`http://localhost:3001/deleteProfile_permission/${idProfile}`, token, setResult, 'Deletado com sucesso')
         await deleteData(`http://localhost:3001/deleteProfile/${idProfile}`, token, setResult, 'Deletado com sucesso')
+        setIsModalOpen(true)
     }
 
     return (
@@ -72,7 +86,11 @@ export default function UpdateProfile({ data, idProfile, dataPermission, token }
                 <div className="mb-6">
                     <button onClick={updateProfile} className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ">Atualizar</button>
                 </div>
-                <div>{result}</div>
+                <MessageModal isOpen={isModalOpen} onClose={handleCloseModal} message={result.error ? result.error : result.success} icone={
+                    result?.error ? (<FaTimesCircle className="text-red-500 w-24 h-24 mx-auto mb-4 rounded-full" />) : (
+                        <FaCheckCircle className="text-green-500 w-24 h-24 mx-auto mb-4 rounded-full" />
+                    )
+                }></MessageModal>
             </div>
         </section>
     )

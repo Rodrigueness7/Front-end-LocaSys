@@ -3,6 +3,9 @@ import { useState } from "react";
 import InputForm from "../../../components/InputForm";
 import InputSelect from "../../../components/InputSelect";
 import addData from "../../../utils/addData";
+import { useRouter } from "next/navigation";
+import MessageModal from "@/components/messageModal";
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 
 export default function RegisterUser({ dataSector, dataProfile, token }) {
@@ -18,7 +21,7 @@ export default function RegisterUser({ dataSector, dataProfile, token }) {
         return valueProfile.push(item.profile)
     })
 
-
+    const router = useRouter()
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [cpf, setCpf] = useState('')
@@ -30,7 +33,7 @@ export default function RegisterUser({ dataSector, dataProfile, token }) {
     const [sector, setSector] = useState(valueSector[0])
     const [profile, setProfile] = useState(valueProfile[0])
     const [result, setResult] = useState('')
-    const [showSuccessMessage, setShowSuccessMessage] = useState(false)
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
     const changeFirstName = (e) => {
         let newFirstName = e.target.value
@@ -101,14 +104,12 @@ export default function RegisterUser({ dataSector, dataProfile, token }) {
         setProfile(e.target.value)
     }
 
-    const handleSuccess = () => {
-        setShowSuccessMessage(true)
-
-        setTimeout(()=> {
-            setShowSuccessMessage(false)
-        }, 3000)
+    const handleCloseModal = () => {
+        setIsModalOpen(false)
+        if (result.success) {
+            router.push('./')
+        }
     }
-
 
     const addUser = async () => {
 
@@ -141,7 +142,6 @@ export default function RegisterUser({ dataSector, dataProfile, token }) {
         }
 
         await addData('http://localhost:3001/addUser', data, token, setResult)
-        handleSuccess()
         setFirstName("")
         setLastName("")
         setCpf("")
@@ -150,6 +150,7 @@ export default function RegisterUser({ dataSector, dataProfile, token }) {
         setConfirmationPassword("")
         setEmail("")
         setConfirmationEmail("")
+        setIsModalOpen(true)
     }
 
     return (
@@ -171,11 +172,11 @@ export default function RegisterUser({ dataSector, dataProfile, token }) {
                 <div className="mb-6">
                     <button onClick={addUser} className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ">Cadastrar</button>
                 </div>
-                {showSuccessMessage && (
-                    <div className="flex items-center justify-center p-2 bg-white border border-gray-300 text-gray-800 rounded-md shadow-md text-lg font-semibold">
-                        {result}
-                    </div>
-                )}
+                <MessageModal isOpen={isModalOpen} onClose={handleCloseModal} message={result.error ? result.error : result.success} icone={
+                    result?.error ? (<FaTimesCircle className="text-red-500 w-24 h-24 mx-auto mb-4 rounded-full" />) : (
+                        <FaCheckCircle className="text-green-500 w-24 h-24 mx-auto mb-4 rounded-full" />
+                    )
+                }></MessageModal>
             </div>
         </section>
     )

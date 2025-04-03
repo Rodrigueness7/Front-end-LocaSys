@@ -12,9 +12,9 @@ export default function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [result, setResult] = useState('')
-  
- 
-  
+
+
+
   const changeUsername = (e) => {
     setUsername(e.target.value)
   }
@@ -39,7 +39,7 @@ export default function Login() {
       }
     })
 
- 
+
     let value = await data.json()
     setCookie('token', value.token, { maxAge: 8600000 })
     if (value.successMessage) {
@@ -51,17 +51,17 @@ export default function Login() {
       }, 8600000)
 
     }
-      console.log(value)
-      if(value.errorMessage) {
-        setResult('Usuário ou Senha inválido')
-        setTimeout(() => {setResult('')}, 1000)
-      }
+    console.log(value)
+    if (value.errorMessage) {
+      setResult('Usuário ou Senha inválido')
+      setTimeout(() => { setResult('') }, 1000)
+    }
   }
 
   return (
     <section className="bg-gray-100 h-screen flex justify-center items-center">
-      <div className=" flex justify-center items-center flex-col bg-white shadow hover:shadow-lg h-96 w-96 rounded-lg"> 
-      <form onSubmit={submit}>
+      <div className=" flex justify-center items-center flex-col bg-white shadow hover:shadow-lg h-96 w-96 rounded-lg">
+        <form onSubmit={submit}>
           <div>
             <h1 className="font-sans pb-8 text-2xl">Acesse a sua conta</h1>
           </div>

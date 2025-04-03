@@ -1,5 +1,5 @@
 
-export default async function addData(url, data, token, result, success, error) {
+export default async function addData(url, data, token, result) {
     await fetch(url, {
         method: 'POST',
         body: JSON.stringify(data),
@@ -11,10 +11,10 @@ export default async function addData(url, data, token, result, success, error) 
         result => result.json()
     ).then(
         res => {
-            if(res.successMessage) {
-                result({success: success})
+            if (res.successMessage) {
+                result({ success: res.successMessage })
             } else {
-                result({error: error})
+                result({ error: res.errorMessage })
             }
         }
     )

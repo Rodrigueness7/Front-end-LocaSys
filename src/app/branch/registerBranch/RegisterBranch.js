@@ -47,8 +47,8 @@ export default function PageRegisterBranch({ token }) {
     }
     const handleCloseModal = () => {
         setIsModalOpen(false)
-        if(result.success) {
-           router.push('./')
+        if (result.success) {
+            router.push('./')
         }
     }
 
@@ -60,9 +60,9 @@ export default function PageRegisterBranch({ token }) {
             uniqueIdentifier: uniqueIdentifier
         }
 
-        await addData('http://localhost:3001/addBranch', data, token, setResult, 'Adicionado com sucesso', 'Já existe cadastro para essa Filial')
+        await addData('http://localhost:3001/addBranch', data, token, setResult)
         setIsModalOpen(true)
-       
+
     }
 
     return (
@@ -78,9 +78,9 @@ export default function PageRegisterBranch({ token }) {
                 <div className="mb-6">
                     <button onClick={addBranch} className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ">Cadastrar</button>
                 </div>
-                <MessageModal isOpen={isModalOpen} onClose={handleCloseModal} message={result.error? result.error : result.success} icone={
-                    result?.error ? (<FaTimesCircle className="text-red-500 w-24 h-24 mx-auto mb-4 rounded-full"/>) : (
-                        <FaCheckCircle className="text-green-500 w-24 h-24 mx-auto mb-4 rounded-full"/>
+                <MessageModal isOpen={isModalOpen} onClose={handleCloseModal} message={result.error ? result.error : result.success} icone={
+                    result?.error ? (<FaTimesCircle className="text-red-500 w-24 h-24 mx-auto mb-4 rounded-full" />) : (
+                        <FaCheckCircle className="text-green-500 w-24 h-24 mx-auto mb-4 rounded-full" />
                     )
                 }></MessageModal>
             </div>

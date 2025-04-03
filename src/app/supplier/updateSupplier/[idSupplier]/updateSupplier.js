@@ -4,9 +4,11 @@ import { useState } from "react"
 import InputForm from "../../../../components/InputForm"
 import updateData from "../../../../utils/updateData"
 import inactivateData from "../../../../utils/inactivateData"
+import { useRouter } from "next/navigation"
 
 export default function UpdateSupplier({ idSupplier, data, token }) {
 
+    const router = useRouter()
     const [supplier, setSupplier] = useState(data.supplier)
     const [email, setEmail] = useState(data.email)
     const [contact, setContact] = useState(data.contact)
@@ -16,6 +18,7 @@ export default function UpdateSupplier({ idSupplier, data, token }) {
     const [state, setState] = useState(data.state)
     const [city, setCity] = useState(data.city)
     const [result, setResult] = useState('')
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
     const changeSupplier = (e) => {
         let newSupplier = e.target.value
@@ -73,6 +76,13 @@ export default function UpdateSupplier({ idSupplier, data, token }) {
         }
     }
 
+    const handleCloseModal = () => {
+        setIsModalOpen(false)
+        if (result.success) {
+            router.push('../')
+        }
+    }
+
     const UpdateSupplier = async () => {
         const data = {
             supplier: supplier,
@@ -86,6 +96,7 @@ export default function UpdateSupplier({ idSupplier, data, token }) {
         }
 
         await updateData(`http://localhost:3001/updateSupplier/${idSupplier}`, data, token, setResult, 'Atualizar com sucesso')
+        setIsModalOpen(true)
     }
 
     const deleteSupplier = async () => {
@@ -94,7 +105,7 @@ export default function UpdateSupplier({ idSupplier, data, token }) {
         }
 
         await inactivateData(`http://localhost:3001/inactivateSupplier/${idSupplier}`, data, token, setResult, 'Deletado com sucesso')
-
+        setIsModalOpen(true)
     }
 
     return (

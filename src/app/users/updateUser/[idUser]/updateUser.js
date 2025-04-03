@@ -5,14 +5,14 @@ import InputForm from "../../../../components/InputForm"
 import InputSelect from "../../../../components/InputSelect"
 import updateData from "../../../../utils/updateData"
 import inactivateData from "../../../../utils/inactivateData"
-import { useRouter } from 'next/navigation'
-
-
+import { useRouter } from "next/navigation"
+import MessageModal from "@/components/messageModal"
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
 
 
 export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser, token }) {
 
-   
+
     const valueSector = []
     const valueProfile = []
 
@@ -24,23 +24,23 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
         return valueProfile.push(item.profile)
     })
 
-    
 
     const [firstName, setFirstName] = useState(dataUserId.firstName)
     const [lastName, setLastName] = useState(dataUserId.lastName)
-    const [cpf, setCpf] = useState((dataUserId.cpf == null)? "" : dataUserId.cpf)
+    const [cpf, setCpf] = useState((dataUserId.cpf == null) ? "" : dataUserId.cpf)
     const [username, setUsername] = useState(dataUserId.username)
     const [password, setPassword] = useState(dataUserId.password)
     const [confirmationPassword, setConfirmationPassword] = useState(dataUserId.password)
-    const [email, setEmail] = useState((dataUserId.email == null)? "" : dataUserId.email)
-    const [confirmationEmail, setConfirmationEmail] = useState((dataUserId.email == null)? "" : dataUserId.email)
+    const [email, setEmail] = useState((dataUserId.email == null) ? "" : dataUserId.email)
+    const [confirmationEmail, setConfirmationEmail] = useState((dataUserId.email == null) ? "" : dataUserId.email)
     const [sector, setSector] = useState(dataUserId['Sector'].sector)
     const [profile, setProfile] = useState(dataUserId['Profile'].profile)
     const [result, setResult] = useState('')
+    const [isModalOpen, setIsModalOpen] = useState(false)
     const router = useRouter()
-    const [showSuccessMessage, setShowSuccessMessage] = useState(false)
 
-    
+
+
 
     const changeFirstName = (e) => {
         let newFirstName = e.target.value
@@ -111,12 +111,11 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
         setProfile(e.target.value)
     }
 
-    const handleSuccess = () => {
-        setShowSuccessMessage(true)
-
-        setTimeout(() => {
-            setShowSuccessMessage(false)
-        }, 3000)
+    const handleCloseModal = () => {
+        setIsModalOpen(false)
+        if (result.success) {
+            router.push('../')
+        }
     }
 
     const updateUser = async () => {
@@ -149,11 +148,7 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
         }
 
         await updateData(`http://localhost:3001/updateUser/${idUser}`, data, token, setResult, 'Atualizado com sucesso')
-        setTimeout(() => {
-            router.push('../')
-        }, 2000)
-
-        handleSuccess()
+        setIsModalOpen(true)
     }
 
     const deleteUser = async () => {
@@ -162,9 +157,7 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
         }
 
         await inactivateData(`http://localhost:3001/inactivateUser/${idUser}`, data, token, setResult, 'Deletado com sucesso')
-        setTimeout(() => {
-            router.push('../')
-        }, 2000)
+        setIsModalOpen(true)
 
     }
 
@@ -183,23 +176,23 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
                     <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={"Usuário"} name={"username"} type={'text'} value={username} onchange={changeUsername}></InputForm>
                     <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={"Email"} name={"email"} type={'email'} value={email} onchange={changeEmail}></InputForm>
                     <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={"Confirmação do Email"} name={"email"} type={'email'} value={confirmationEmail} onchange={changeConfirmationEmail}></InputForm>
-                  {password && confirmationPassword !== undefined ? (
-                    <>
-                      <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={"Senha"} name={"password"} type={'password'} value={password} onchange={changePassword}></InputForm>
-                      <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={"Confirmação da Senha"} name={"password"} type={'password'} value={confirmationPassword} onchange={changeConfirmationPassword}></InputForm>
-                    </>  
-                  ): null}
+                    {password && confirmationPassword !== undefined ? (
+                        <>
+                            <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={"Senha"} name={"password"} type={'password'} value={password} onchange={changePassword}></InputForm>
+                            <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={"Confirmação da Senha"} name={"password"} type={'password'} value={confirmationPassword} onchange={changeConfirmationPassword}></InputForm>
+                        </>
+                    ) : null}
                     <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Setor'} name={'sector'} datas={valueSector} value={sector} onchange={changeSector}></InputSelect>
                     <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Perfil'} name={'profile'} datas={valueProfile} value={profile} onchange={changeProfile}></InputSelect>
                 </form>
                 <div className="mb-6">
                     <button onClick={updateUser} className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ">Atualizar</button>
                 </div>
-                {showSuccessMessage && (
-                    <div className="flex items-center justify-center p-2 bg-white border border-gray-300 text-gray-800 rounded-md shadow-md text-lg font-semibold">
-                        {result}
-                    </div>
-                )}
+                <MessageModal isOpen={isModalOpen} onClose={handleCloseModal} message={result.error ? result.error : result.success} icone={
+                    result?.error ? (<FaTimesCircle className="text-red-500 w-24 h-24 mx-auto mb-4 rounded-full" />) : (
+                        <FaCheckCircle className="text-green-500 w-24 h-24 mx-auto mb-4 rounded-full" />
+                    )
+                }></MessageModal>
             </div>
         </section>
     )

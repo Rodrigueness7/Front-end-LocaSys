@@ -1,4 +1,4 @@
-export default async function inactivateData(url, data, token, result, success, error) {
+export default async function inactivateData(url, data, token, result) {
     await fetch(url, {
         method: 'PUT',
         body: JSON.stringify(data),
@@ -10,10 +10,10 @@ export default async function inactivateData(url, data, token, result, success, 
         result => result.json()
     ).then(
         res => {
-            if(res.successMessage){
-                result({success: success})
+            if (res.successMessage) {
+                result({ success: successMessage })
             } else {
-                result({error: error})
+                result({ error: res.errorMessage })
             }
         }
     )

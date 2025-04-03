@@ -8,13 +8,11 @@ import { useRouter } from "next/navigation"
 import MessageModal from "@/components/messageModal"
 
 
-
-
-export default function UpdateBranch({dataBranch, idBranch, token }) {
+export default function UpdateBranch({ dataBranch, idBranch, token }) {
 
     const [branch, setBranch] = useState(dataBranch.branch)
-    const [CNPJ, setCNPJ] = useState((dataBranch.CNPJ == null)? "" : dataBranch.CNPJ )
-    const [corporateName, setCoporateName] = useState((dataBranch.corporateName == null)? "": dataBranch.corporateName)
+    const [CNPJ, setCNPJ] = useState((dataBranch.CNPJ == null) ? "" : dataBranch.CNPJ)
+    const [corporateName, setCoporateName] = useState((dataBranch.corporateName == null) ? "" : dataBranch.corporateName)
     const [uniqueIdentifier, setUniqueIdentifier] = useState(dataBranch.uniqueIdentifier)
     const [result, setResult] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -29,7 +27,7 @@ export default function UpdateBranch({dataBranch, idBranch, token }) {
 
     const changeCNPJ = (e) => {
         let fieldCNPJ = e.target.value
-        if(fieldCNPJ === '' || fieldCNPJ.length <= 14) {
+        if (fieldCNPJ === '' || fieldCNPJ.length <= 14) {
             setCNPJ(fieldCNPJ)
         }
 
@@ -48,7 +46,7 @@ export default function UpdateBranch({dataBranch, idBranch, token }) {
 
     const handleCloseModal = () => {
         setIsModalOpen(false)
-        if(result.success) {
+        if (result.success) {
             router.push('../')
         }
     }
@@ -61,7 +59,7 @@ export default function UpdateBranch({dataBranch, idBranch, token }) {
             uniqueIdentifier: uniqueIdentifier
         }
 
-        await updateData(`http://localhost:3001/updateBranch/${idBranch}`, data, token, setResult, 'Atualizado com sucesso', 'Não foi possível atualizar, pois a Filial estar registrada no setor')
+        await updateData(`http://localhost:3001/updateBranch/${idBranch}`, data, token, setResult)
         setIsModalOpen(true)
     }
 
@@ -71,7 +69,7 @@ export default function UpdateBranch({dataBranch, idBranch, token }) {
             deletionDate: new Date().toLocaleDateString('pt-BR')
         }
 
-        await inactivateData(`http://localhost:3001/inactivateBranch/${idBranch}`, data, token, setResult, 'Deletado com sucesso', 'Erro ao deletar')
+        await inactivateData(`http://localhost:3001/inactivateBranch/${idBranch}`, data, token, setResult)
         setIsModalOpen(true)
     }
 
@@ -91,9 +89,9 @@ export default function UpdateBranch({dataBranch, idBranch, token }) {
                 <div className="mb-6">
                     <button onClick={updateBranch} className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ">Atualizar</button>
                 </div>
-                <MessageModal isOpen={isModalOpen} onClose={handleCloseModal} message={result.error? result.error : result.success} icone={
-                    result?.error ? (<FaTimesCircle className="text-red-500 w-24 h-24 mx-auto mb-4 rounded-full"/>) : (
-                        <FaCheckCircle className="text-green-500 w-24 h-24 mx-auto mb-4 rounded-full"/>
+                <MessageModal isOpen={isModalOpen} onClose={handleCloseModal} message={result.error ? result.error : result.success} icone={
+                    result?.error ? (<FaTimesCircle className="text-red-500 w-24 h-24 mx-auto mb-4 rounded-full" />) : (
+                        <FaCheckCircle className="text-green-500 w-24 h-24 mx-auto mb-4 rounded-full" />
                     )
                 }></MessageModal>
             </div>
