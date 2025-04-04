@@ -4,6 +4,7 @@ import Table from '../../components/table'
 import Link from 'next/link'
 import fetchData from '../../utils/fetchData'
 import Message from '../../utils/message'
+import Equipment from './equipment'
 
 
 export default async function Equipments() {
@@ -16,10 +17,14 @@ export default async function Equipments() {
     }
 
     const equipments = await fetchData('http://localhost:3001/findAllEquipment', token)
+    const branch = await fetchData('http://localhost:3001/findAllBranch', token)
+    const user = await fetchData('http://localhost:3001/findAllUser', token)
+
 
     if(equipments.message) {
         return(<Message message={'Usuário sem permissão'}/>)
     }
+
     
     let data = equipments.map(itens => {
         let result = {
@@ -44,15 +49,6 @@ export default async function Equipments() {
    
     
     return (
-        <div className='bg-gray-100 py-8 overflow-x-auto h-screen'>
-            <div className="flex mb-8 lg:px-8 sm:px-8">
-                <Link href={'../equipment/registerEquipment'}>
-                    <button className='p-2 bg-indigo-500 rounded-lg text-white'>Novo Equipamento</button>
-                </Link>
-            </div>
-            <div className='ml-8 flex-1'>
-                <Table Table={' table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={attribute} data={data} attributos={attribute} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./equipment/updateEquipment'} bt={'...'}></Table>
-            </div>
-        </div>
+        <Equipment equipmentData={data} attribute={attribute} userData={user} branchData={branch}></Equipment>
     )
 }
