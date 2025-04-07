@@ -6,25 +6,27 @@ import Table from "@/components/table"
 import Link from "next/link"
 import { useState } from "react"
 
-export default function Equipment({ equipmentData, attribute, userData, branchData }) {
+export default function Equipment({tableEquipment, attribute, userData, branchData, equipmentData}) {
 
     let valueFilial = []
     let valueUser = [] 
     let valueType = [] 
+    let valueEquipment = []
    
     branchData.filter(value => valueFilial.push(value.branch))
     userData.filter(value => valueUser.push(value.username))
-    equipmentData.filter(value => valueType.push(value['Tipo']))
+    valueType.push(... new Set(equipmentData.map(obj => obj.type)))
+    valueEquipment.push(... new Set(equipmentData.map(obj => obj.equipment)))
     
-console.log(valueType)
 
-
-    const [dataEquipment, setDataEquipment] = useState(equipmentData)
+    const [dataEquipment, setDataEquipment] = useState(tableEquipment)
     const [codProd, setCodProd] = useState('')
     const [equipment, setEquipment] = useState('')
     const [type, setType] = useState('')
     const [filial, setFilial] = useState('')
     const [username, setUsername] = useState('')
+
+   
 
     const changeCodProd = (e) => {
         const newValue = e.target.value
@@ -50,6 +52,53 @@ console.log(valueType)
     const changeUsername = (e) => {
         setUsername(e.target.value)
     }
+
+    
+   equipmentData.map(itens => {
+
+    if(itens.type === type) {
+        valueEquipment = []
+        valueFilial = []
+        valueUser = []
+
+        valueEquipment.push(itens.equipment)
+        valueFilial.push(itens['Branch'].branch)
+        valueUser.push(itens['User'].username)
+
+    }
+    
+    if(itens.equipment === equipment) {
+        valueType = []
+        valueFilial = []
+        valueUser = []
+
+        valueType.push(itens.type)
+        valueFilial.push(itens['Branch'].branch)
+        valueUser.push(itens['User'].username)
+
+    } 
+    
+    if(itens['Branch'].branch === filial) {
+        valueEquipment = []
+        valueType = [] 
+        valueUser = []
+
+        valueEquipment.push(itens.equipment)
+        valueType.push(itens.type)
+        valueUser.push(itens['User'].username)
+    }
+
+    if(itens['User'].username === username) {
+        valueEquipment = []
+        valueType = []
+        valueFilial = []
+
+        valueEquipment.push(itens.equipment)
+        valueType.push(itens.type)
+        valueFilial.push(itens['Branch'].branch)
+    }
+   })
+   
 
     const searchEquipment = (e) => {
         e.preventDefault()
@@ -82,7 +131,7 @@ console.log(valueType)
             </div>
             <form className=" ml-8 flex" onSubmit={searchEquipment}>
                 <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Código'} type={'text'} name={'codProd'} value={codProd} onchange={changeCodProd} maxLength={'10'}></InputForm>
-                <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Equipamento'} type={'text'} name={'equipment'} value={equipment} onchange={changeEquipment}></InputForm>
+                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Equipamento'} name={'equipment'} datas={valueEquipment} value={equipment} onchange={changeEquipment}></InputSelect>
                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Tipo'} name={'type'} datas={valueType} value={type} onchange={changeType}></InputSelect>
                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Filial'} name={'filial'} datas={valueFilial} value={filial} onchange={changeFilial}></InputSelect>
                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Usuário'} name={'username'} datas={valueUser} value={username} onchange={changeUsername}></InputSelect>

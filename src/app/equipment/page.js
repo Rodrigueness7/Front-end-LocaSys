@@ -16,17 +16,17 @@ export default async function Equipments() {
         redirect('./login')
     }
 
-    const equipments = await fetchData('http://localhost:3001/findAllEquipment', token)
+    const equipment = await fetchData('http://localhost:3001/findAllEquipment', token)
     const branch = await fetchData('http://localhost:3001/findAllBranch', token)
     const user = await fetchData('http://localhost:3001/findAllUser', token)
 
 
-    if(equipments.message) {
+    if(equipment.message) {
         return(<Message message={'Usuário sem permissão'}/>)
     }
 
     
-    let data = equipments.map(itens => {
+    let data = equipment.map(itens => {
         let result = {
             id: itens.idEquipment,
             ['Código']: itens.codProd,
@@ -49,6 +49,6 @@ export default async function Equipments() {
    
     
     return (
-        <Equipment equipmentData={data} attribute={attribute} userData={user} branchData={branch}></Equipment>
+        <Equipment tableEquipment={data} attribute={attribute} userData={user} branchData={branch} equipmentData={equipment}></Equipment>
     )
 }
