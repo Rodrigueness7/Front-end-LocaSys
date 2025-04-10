@@ -1,13 +1,11 @@
 import { redirect } from 'next/navigation'
 import { cookies } from "next/headers"
-import Table from '../../components/table'
-import Link from 'next/link'
 import fetchData from '../../utils/fetchData'
 import Message from '../../utils/message'
 import Equipment from './equipment'
 
 
-export default async function Equipments() {
+export default async function PageEquipment() {
 
     const cookieStore = cookies()
     const token = (await cookieStore).get('token')?.value
@@ -17,9 +15,7 @@ export default async function Equipments() {
     }
 
     const equipment = await fetchData('http://localhost:3001/findAllEquipment', token)
-    const branch = await fetchData('http://localhost:3001/findAllBranch', token)
-    const user = await fetchData('http://localhost:3001/findAllUser', token)
-
+    
 
     if(equipment.message) {
         return(<Message message={'Usuário sem permissão'}/>)
@@ -49,6 +45,6 @@ export default async function Equipments() {
    
     
     return (
-        <Equipment tableEquipment={data} attribute={attribute} userData={user} branchData={branch} equipmentData={equipment}></Equipment>
+        <Equipment tableEquipment={data} attribute={attribute}></Equipment>
     )
 }

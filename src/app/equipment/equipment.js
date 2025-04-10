@@ -6,7 +6,7 @@ import Table from "@/components/table"
 import Link from "next/link"
 import { useMemo, useState } from "react"
 
-export default function Equipment({ tableEquipment, attribute, equipmentData }) {
+export default function Equipment({ tableEquipment, attribute }) {
 
 
     const [dataEquipment, setDataEquipment] = useState(tableEquipment)
@@ -29,19 +29,22 @@ export default function Equipment({ tableEquipment, attribute, equipmentData }) 
         })
     }
 
-    const obterOpcoes = (campo) => {
-        const filtraDados = filtrar()
-        const opcoes = filtraDados.map((itens) => {
-            return itens[campo]
-        })
+    const obterOpcoes = (campo, ignorar = '') => {
+        const filtraDados = tableEquipment.filter((item) => 
+            (codProd && ignorar != 'Código' ? item['Código'] == codProd.toString : true) &&
+            (equipment && ignorar != 'Equipamento' ? item['Equipamento'] === equipment : true) &&
+            (type && ignorar != 'Tipo' ? item['Tipo'] === type : true) &&
+            (filial && ignorar != 'Filial' ? item['Filial'] === filial: true) &&
+            (username && ignorar != 'Usuario' ? item['Usuario'] === username : true)
+    )
+       const opcoes = filtraDados.map(item => item[campo])
         return [... new Set(opcoes)]
     }
-
-    const opcoesFiliais = useMemo(() => obterOpcoes('Filial'), [type, equipment, username])
-    const opcoesTipo = useMemo(() => obterOpcoes('Tipo'), [filial, equipment, username])
-    const opcoesEquipamento = useMemo(() => obterOpcoes('Equipamento'), [filial, type, username])
-    const opcoesUsuario = useMemo(() => obterOpcoes('Usuario'), [filial, type, equipment])
-
+    
+    const opcoesFiliais = useMemo(() => obterOpcoes('Filial', 'Filial'), [type, equipment, username])
+    const opcoesTipo = useMemo(() => obterOpcoes('Tipo', 'Tipo'), [filial, equipment, username])
+    const opcoesEquipamento = useMemo(() => obterOpcoes('Equipamento', 'Equipamento'), [filial, type, username])
+    const opcoesUsuario = useMemo(() => obterOpcoes('Usuario', 'Usuario'), [filial, type, equipment])
 
 
     const changeCodProd = (e) => {
@@ -72,7 +75,6 @@ export default function Equipment({ tableEquipment, attribute, equipmentData }) 
     }
 
 
-
     const searchEquipment = (e) => {
         e.preventDefault()
 
@@ -87,12 +89,12 @@ export default function Equipment({ tableEquipment, attribute, equipmentData }) 
                     <button className='p-2 bg-indigo-500 rounded-lg text-white'>Novo Equipamento</button>
                 </Link>
             </div>
-            <form className=" ml-8 flex" onSubmit={searchEquipment}>
-                <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Código'} type={'text'} name={'codProd'} value={codProd} onchange={changeCodProd} maxLength={'10'}></InputForm>
-                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Equipamento'} name={'equipment'} datas={opcoesEquipamento} value={equipment} onchange={changeEquipment}></InputSelect>
-                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Tipo'} name={'type'} datas={opcoesTipo} value={type} onchange={changeType}></InputSelect>
-                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Filial'} name={'filial'} datas={opcoesFiliais} value={filial} onchange={changeFilial}></InputSelect>
-                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Usuário'} name={'username'} datas={opcoesUsuario} value={username} onchange={changeUsername}></InputSelect>
+            <form className=" ml-8 flex relative" onSubmit={searchEquipment}>
+                <InputForm   classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4 mr-4'} label={'Código'} type={'text'} name={'codProd'} value={codProd} onchange={changeCodProd} maxLength={'10'}></InputForm>
+                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4 mr-4'} label={'Equipamento'} name={'equipment'} datas={opcoesEquipamento} value={equipment} onchange={changeEquipment}></InputSelect>
+                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4 mr-4'} label={'Tipo'} name={'type'} datas={opcoesTipo} value={type} onchange={changeType}></InputSelect>
+                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4 mr-4'} label={'Filial'} name={'filial'} datas={opcoesFiliais} value={filial} onchange={changeFilial}></InputSelect>
+                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4 mr-4'} label={'Usuário'} name={'username'} datas={opcoesUsuario} value={username} onchange={changeUsername}></InputSelect>
                 <div className="flex items-center ml-2 mt-2">
                     <button className='p-3 bg-indigo-500 rounded-lg text-white' type="submit">Buscar</button>
                 </div>
