@@ -10,45 +10,28 @@ import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
 
 export default function PageRegisterEquipment({ dataUser, dataFilial, dataSector, dataSupplier, token }) {
 
-    const valueFilial = []
-    const valueUsername = []
-    const valueSector = []
-    const valueSupplier = []
+    const listBranch = dataFilial.map(item => item.branch)
+    const listUsername = dataUser.map(item => item.username)
+    const listSector = dataSector.map(item => item.sector)
+    const listSupplier = dataSupplier.map(item => item.supplier)
 
-    dataFilial.map(value => {
-        return valueFilial.push(value.branch)
-    })
-
-    dataUser.map(value => {
-        return valueUsername.push(value.username)
-    })
-
-    dataSector.map(value => {
-        return valueSector.push(value.sector)
-    })
-
-    dataSupplier.map(value => {
-        return valueSupplier.push(value.supplier)
-    })
 
     const [codProd, setCodProd] = useState('')
     const [equipment, setEquipment] = useState('')
     const [type, setType] = useState('')
     const [value, setValue] = useState('')
-    const [filial, setFilial] = useState(valueFilial[0])
-    const [username, setUsername] = useState(valueUsername[0])
-    const [sector, setSector] = useState(valueSector[0])
-    const [supplier, setSupplier] = useState(valueSupplier[0])
+    const [branch, setBranch] = useState(listBranch[0])
+    const [username, setUsername] = useState(listUsername[0])
+    const [sector, setSector] = useState(listSector[0])
+    const [supplier, setSupplier] = useState(listSupplier[0])
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [result, setResult] = useState('')
 
     const changeCodProd = (e) => {
         const newValue = e.target.value
-
         if (/^[0-9]*$/.test(newValue) && newValue.length <= 10) {
             setCodProd(newValue)
         }
-
     }
 
     const changeEquipment = (e) => {
@@ -61,14 +44,13 @@ export default function PageRegisterEquipment({ dataUser, dataFilial, dataSector
 
     const changeValue = (e) => {
         const newValue = e.target.value
-
         if (newValue === '' || newValue.length <= 13) {
             setValue(newValue)
         }
     }
 
-    const changeFilial = (e) => {
-        setFilial(e.target.value)
+    const changeBranch = (e) => {
+        setBranch(e.target.value)
     }
 
     const changeUsername = (e) => {
@@ -87,40 +69,16 @@ export default function PageRegisterEquipment({ dataUser, dataFilial, dataSector
     const handleCloseModal = () => {
         setIsModalOpen(false)
         if (result.success) {
-            router.push('./')
+            router.push('../')
         }
     }
 
     const addEquipment = async () => {
 
-        const idUsername = []
-        const idSector = []
-        const idFilial = []
-        const idSupplier = []
-
-        dataUser.map(value => {
-            if (value.username == username) {
-                return idUsername.push(value.idUser)
-            }
-        })
-
-        dataSector.map(value => {
-            if (value.sector == sector) {
-                return idSector.push(value.idSector)
-            }
-        })
-
-        dataFilial.map(value => {
-            if (value.branch == filial) {
-                return idFilial.push(value.idBranch)
-            }
-        })
-
-        dataSupplier.map(value => {
-            if (value.supplier == supplier) {
-                return idSupplier.push(value.idSupplier)
-            }
-        })
+        const idUsername = dataUser.find(item => item.username === username).idUser
+        const idSector = dataSector.find(item => item.sector === sector).idSector
+        const idBranch = dataFilial.find(item => item.branch === branch).idBranch
+        const idSupplier = dataSupplier.find(item => item.supplier === supplier).idSupplier
 
         const data = {
             idEquipment: 0,
@@ -128,12 +86,13 @@ export default function PageRegisterEquipment({ dataUser, dataFilial, dataSector
             equipment: equipment,
             type: type,
             value: value,
-            idBranch: idFilial[0],
-            idUser: idUsername[0],
-            idSector: idSector[0],
-            idSupplier: idSupplier[0],
+            idBranch: idBranch,
+            idUser: idUsername,
+            idSector: idSector,
+            idSupplier: idSupplier,
             entryDate: new Date().toLocaleString('pt-BR').slice(0, 10)
         }
+
         await addData('http://localhost:3001/addEquipment', data, token, setResult)
         setIsModalOpen(true)
 
@@ -164,10 +123,10 @@ export default function PageRegisterEquipment({ dataUser, dataFilial, dataSector
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Equipamento'} type={'text'} name={'equipment'} value={equipment} onchange={changeEquipment}></InputForm>
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Tipo'} type={'text'} name={'type'} value={type} onchange={changeType}></InputForm>
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Valor'} type={'decimal'} name={'value'} value={value} onchange={changeValue} maxLength={'10'}></InputForm>
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Filial'} name={'filial'} datas={valueFilial} value={filial} onchange={changeFilial}></InputSelect>
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Usuário'} name={'username'} datas={valueUsername} value={username} onchange={changeUsername}></InputSelect>
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Setor'} name={'sector'} datas={valueSector} value={sector} onchange={changeSector}></InputSelect>
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Fonercedor'} name={'supplier'} datas={valueSupplier} value={supplier} onchange={changeSupplier}></InputSelect>
+                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Filial'} name={'branch'} datas={listBranch} value={branch} onchange={changeBranch}></InputSelect>
+                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Usuário'} name={'username'} datas={listUsername} value={username} onchange={changeUsername}></InputSelect>
+                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Setor'} name={'sector'} datas={listSector} value={sector} onchange={changeSector}></InputSelect>
+                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Fonercedor'} name={'supplier'} datas={listSupplier} value={supplier} onchange={changeSupplier}></InputSelect>
                 </form>
                 <div className="mb-6">
                     <button onClick={addEquipment} className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ">Adicionar</button>

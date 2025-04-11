@@ -1,5 +1,6 @@
 'use client'
 
+import InputForm from "@/components/InputForm"
 import InputSelect from "@/components/InputSelect"
 import Table from "@/components/table"
 import Link from "next/link"
@@ -8,6 +9,7 @@ import { useMemo, useState } from "react"
 export default function Sector({ tableSector }) {
 
     const [dataSector, setDataSector] = useState(tableSector)
+    const [id, setId] = useState('')
     const [sector, setSector] = useState('')
     const [branch, setBranch] = useState('')
 
@@ -15,6 +17,7 @@ export default function Sector({ tableSector }) {
     const filter = () => {
         return tableSector.filter((item) => {
             return (
+                (id ? item.idSector == id : true) &&
                 (sector ? item.sector === sector : true) &&
                 (branch ? item.branch === branch : true)
             )
@@ -34,16 +37,15 @@ export default function Sector({ tableSector }) {
     const optionsSector = useMemo(() => getOptions('sector', 'sector'), [branch])
     const optionsBranch = useMemo(() => getOptions('branch', 'branch'), [sector])
 
-    const changeSector = (e) => {
-        setSector(e.target.value)
-    }
+    const changeId = (e) => {setId(e.target.value)}
 
-    const changeBranch = (e) => {
-        setBranch(e.target.value)
-    }
+    const changeSector = (e) => {setSector(e.target.value)}
+
+    const changeBranch = (e) => {setBranch(e.target.value)}
 
     const searchSector = (e) => {
         e.preventDefault()
+        setDataSector(filter())
     }
 
     return (
@@ -54,6 +56,7 @@ export default function Sector({ tableSector }) {
                 </Link>
             </div>
             <form className=" ml-8 flex relative" onSubmit={searchSector}>
+                <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-24 px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4 mr-4'} label={"Id"} name={"idSector"} type={'text'} value={id} onchange={changeId}></InputForm>
                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4 mr-4'} label={'Setor'} name={'sector'} datas={optionsSector} value={sector} onchange={changeSector}></InputSelect>
                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4 mr-4'} label={'Filial'} name={'branch'} datas={optionsBranch} value={branch} onchange={changeBranch}></InputSelect>
                 <div className="flex items-center ml-2 mt-2">

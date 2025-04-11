@@ -4,9 +4,10 @@ import Table from "../../components/table"
 import Link from "next/link"
 import fetchData from "../../utils/fetchData"
 import Message from "../../utils/message"
+import Supplier from "./supplier"
 
 
-export default async function Supplier() {
+export default async function PageSupplier() {
     const cookieStore = cookies()
     const token = (await cookieStore).get('token')?.value
 
@@ -14,20 +15,13 @@ export default async function Supplier() {
         redirect('../login')
     }
 
-    const supplier = await fetchData('http://localhost:3001/findAllSupplier', token)
+    const dataSupplier = await fetchData('http://localhost:3001/findAllSupplier', token)
 
-    if(supplier.message) {
-            return(<Message message={'Usuário sem permissão'}/>)
-        }
+    if (dataSupplier.message) {
+        return (<Message message={'Usuário sem permissão'} />)
+    }
 
     return (
-        <div className="bg-gray-100 py-8 overflow-x-auto h-screen px-8">
-            <div className="flex mb-8 lg:px-8 sm:px-8 items-center">
-                <Link href={'../supplier/registerSupplier'}><button className='p-2 bg-indigo-500 rounded-lg text-white'>Novo Fonercedor</button></Link>
-            </div>
-            <div className="flex-1 ml-8">
-                <Table Table={'table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={['id','Fornecedor', 'Email', 'Contato', 'CNPJ', 'Endereço', 'Cep', 'Estado', 'Cidade']} data={supplier} attributos={['idSupplier','supplier', 'email', 'contact', 'CNPJ', 'address', 'zipCode', 'state', 'city']} id={'idSupplier'} href={'./supplier/updateSupplier'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} bt={'...'}></Table>
-            </div>
-        </div>
+        <Supplier tableSupplier={dataSupplier}></Supplier>
     )
 }
