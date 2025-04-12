@@ -15,7 +15,7 @@ export default async function PageUpdateEquipment({ params }) {
     }
 
     let user = await fetchData('http://localhost:3001/findAllUser', token)
-    let filial = await fetchData('http://localhost:3001/findAllBranch', token)
+    let branch = await fetchData('http://localhost:3001/findAllBranch', token)
     let sector = await fetchData('http://localhost:3001/findAllSector', token)
     let supplier = await fetchData('http://localhost:3001/findAllSupplier', token)
     let equipment = await fetchData(`http://localhost:3001/findEquipmentId/${idEquipment}`, token)
@@ -23,7 +23,7 @@ export default async function PageUpdateEquipment({ params }) {
 
 
     return (
-        <UpdateEquipment dataEquipment={equipment} dataUser={user} dataFilial={filial} dataSector={sector} dataSupplier={supplier} token={token} idEquipment={idEquipment}></UpdateEquipment>
+        <UpdateEquipment dataEquipment={equipment} dataUser={user} dataBranch={branch} dataSector={sector} dataSupplier={supplier} token={token} idEquipment={idEquipment}></UpdateEquipment>
 
     )
 }

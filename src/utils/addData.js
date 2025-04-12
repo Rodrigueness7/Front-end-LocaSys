@@ -15,7 +15,7 @@ export default async function addData(url, data, token, result) {
                 result({ success: res.successMessage })
             } else {
                 result({ error: res.errorMessage })
-            }
+            } 
         }
     )
 }

@@ -13,16 +13,8 @@ import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
 export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser, token }) {
 
 
-    const valueSector = []
-    const valueProfile = []
-
-    dataSector.map(item => {
-        return valueSector.push(item.sector)
-    })
-
-    dataProfile.map(item => {
-        return valueProfile.push(item.profile)
-    })
+    const listSector = dataSector.map(item => item.sector)
+    const listProfile = dataProfile.map(item => item.profile)
 
 
     const [firstName, setFirstName] = useState(dataUserId.firstName)
@@ -119,20 +111,8 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
     }
 
     const updateUser = async () => {
-        let idSector = []
-        let idProfile = []
-
-        dataSector.map(values => {
-            if (values.sector == sector) {
-                idSector.push(values.idSector)
-            }
-        })
-
-        dataProfile.map(values => {
-            if (values.profile == profile) {
-                idProfile.push(values.idProfile)
-            }
-        })
+        const idProfile = dataProfile.find(item => item.profile === profile).idProfile
+        const idSector = dataSector.find(item => item.sector === sector).idSector
 
         let data = {
             firstName: firstName,
@@ -143,8 +123,8 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
             confirmationPassword: confirmationPassword,
             email: email,
             confirmationEmail: confirmationEmail,
-            idSector: idSector[0],
-            idProfile: idProfile[0]
+            idSector: idSector,
+            idProfile: idProfile
         }
 
         await updateData(`http://localhost:3001/updateUser/${idUser}`, data, token, setResult, 'Atualizado com sucesso')
@@ -182,8 +162,8 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
                             <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={"Confirmação da Senha"} name={"password"} type={'password'} value={confirmationPassword} onchange={changeConfirmationPassword}></InputForm>
                         </>
                     ) : null}
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Setor'} name={'sector'} datas={valueSector} value={sector} onchange={changeSector}></InputSelect>
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Perfil'} name={'profile'} datas={valueProfile} value={profile} onchange={changeProfile}></InputSelect>
+                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Setor'} name={'sector'} datas={listSector} value={sector} onchange={changeSector}></InputSelect>
+                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Perfil'} name={'profile'} datas={listProfile} value={profile} onchange={changeProfile}></InputSelect>
                 </form>
                 <div className="mb-6">
                     <button onClick={updateUser} className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ">Atualizar</button>

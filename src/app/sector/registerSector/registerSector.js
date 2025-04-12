@@ -8,26 +8,22 @@ import { useRouter } from "next/navigation"
 import MessageModal from "@/components/messageModal"
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
 
-export default function PageRegisterSector({ dataFilial, token }) {
+export default function PageRegisterSector({dataBranch, token }) {
 
-    let data = []
-
-    dataFilial.map(itens => {
-        data.push(itens.branch)
-    })
+    const listBranch = dataBranch.map(item => item.branch)
 
     const router = useRouter()
     const [sector, setSector] = useState('')
-    const [filial, setFilial] = useState(data[0])
-    const [result, setResult] = useState()
+    const [branch, setBranch] = useState(listBranch[0])
+    const [result, setResult] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)
 
     const changeSector = (e) => {
         setSector(e.target.value)
     }
 
-    const changeFilial = (e) => {
-        setFilial(e.target.value)
+    const changeBranch = (e) => {
+        setBranch(e.target.value)
     }
 
     const handleCloseModal = () => {
@@ -38,15 +34,10 @@ export default function PageRegisterSector({ dataFilial, token }) {
     }
 
     const addSector = async () => {
-        let idFilial = []
-        dataFilial.map((itens) => {
-            if (itens.branch === filial) {
-                idFilial.push(itens.idBranch)
-            }
-        })
+        const idBranch = dataBranch.find(item => item.branch === branch).idBranch 
 
         const data = {
-            idFilial: idFilial[0],
+            idBranch: idBranch,
             sector: sector
         }
 
@@ -59,7 +50,7 @@ export default function PageRegisterSector({ dataFilial, token }) {
             <div className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
                 <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">Adicionar Setor</h1>
                 <form className="grid grid-cols-1 gap-x-8 gap-y-4">
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Filial'} name={'filial'} datas={data} value={filial} onchange={changeFilial}></InputSelect>
+                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Filial'} name={'branch'} datas={listBranch} value={branch} onchange={changeBranch}></InputSelect>
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Setor'} type={'text'} name={'sector'} value={sector} onchange={changeSector}></InputForm>
                 </form>
                 <div className="mb-6">

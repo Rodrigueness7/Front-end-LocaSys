@@ -6,16 +6,17 @@ import addData from "../../../utils/addData"
 import fetchData from "../../../utils/fetchData"
 import MessageModal from "@/components/messageModal"
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
+import { useRouter } from "next/navigation"
 
 
-export default function PageRegisterEquipment({ dataUser, dataFilial, dataSector, dataSupplier, token }) {
+export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector, dataSupplier, token }) {
 
-    const listBranch = dataFilial.map(item => item.branch)
+    const listBranch = dataBranch.map(item => item.branch)
     const listUsername = dataUser.map(item => item.username)
     const listSector = dataSector.map(item => item.sector)
     const listSupplier = dataSupplier.map(item => item.supplier)
 
-
+    const router = useRouter()
     const [codProd, setCodProd] = useState('')
     const [equipment, setEquipment] = useState('')
     const [type, setType] = useState('')
@@ -69,7 +70,7 @@ export default function PageRegisterEquipment({ dataUser, dataFilial, dataSector
     const handleCloseModal = () => {
         setIsModalOpen(false)
         if (result.success) {
-            router.push('../')
+            router.push('./')
         }
     }
 
@@ -77,7 +78,7 @@ export default function PageRegisterEquipment({ dataUser, dataFilial, dataSector
 
         const idUsername = dataUser.find(item => item.username === username).idUser
         const idSector = dataSector.find(item => item.sector === sector).idSector
-        const idBranch = dataFilial.find(item => item.branch === branch).idBranch
+        const idBranch = dataBranch.find(item => item.branch === branch).idBranch
         const idSupplier = dataSupplier.find(item => item.supplier === supplier).idSupplier
 
         const data = {
@@ -95,11 +96,11 @@ export default function PageRegisterEquipment({ dataUser, dataFilial, dataSector
 
         await addData('http://localhost:3001/addEquipment', data, token, setResult)
         setIsModalOpen(true)
-
+        
 
         setTimeout(async () => {
             let fetchEquipment = await fetchData('http://localhost:3001/findAllEquipment', token)
-            let fetchIdEquipment = fetchEquipment.find(item => item.codProd == codProd).idEquipment
+            let fetchIdEquipment = fetchEquipment.find(item => item.codProd == codProd)
 
             let dataEquipmentHistory = {
                 idEquipmentHistory: 0,
@@ -108,8 +109,7 @@ export default function PageRegisterEquipment({ dataUser, dataFilial, dataSector
                 entryDate: new Date().toLocaleString('pt-BR').slice(0, 10),
                 returnDate: null
             }
-            addData('http://localhost:3001/addEquipmentHistory', dataEquipmentHistory, token, setResult)
-            setIsModalOpen(true)
+            addData('http://localhost:3001/addEquipmentHistory', dataEquipmentHistory, token, setResult) 
         }, 2000)
 
     }

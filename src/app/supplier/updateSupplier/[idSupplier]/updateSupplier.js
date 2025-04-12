@@ -5,6 +5,8 @@ import InputForm from "../../../../components/InputForm"
 import updateData from "../../../../utils/updateData"
 import inactivateData from "../../../../utils/inactivateData"
 import { useRouter } from "next/navigation"
+import MessageModal from "@/components/messageModal"
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
 
 export default function UpdateSupplier({ idSupplier, data, token }) {
 
@@ -57,21 +59,21 @@ export default function UpdateSupplier({ idSupplier, data, token }) {
 
     const changeZipCode = (e) => {
         let newZipCode = e.target.value
-        if (newZipCode === '' || newZipCode.length <= 45) {
+        if (newZipCode === '' || newZipCode.length <= 8) {
             setZipCode(newZipCode)
         }
     }
 
     const changeState = (e) => {
         let newState = e.target.value
-        if (newState === '' || newState.length <= 45) {
+        if (newState === '' || newState.length <= 20) {
             setState(newState)
         }
     }
 
     const changeCity = (e) => {
         let newCity = e.target.value
-        if (newCity === '' || newCity.length <= 45) {
+        if (newCity === '' || newCity.length <= 20) {
             setCity(newCity)
         }
     }
@@ -95,7 +97,7 @@ export default function UpdateSupplier({ idSupplier, data, token }) {
             city: city,
         }
 
-        await updateData(`http://localhost:3001/updateSupplier/${idSupplier}`, data, token, setResult, 'Atualizar com sucesso')
+        await updateData(`http://localhost:3001/updateSupplier/${idSupplier}`, data, token, setResult)
         setIsModalOpen(true)
     }
 
@@ -104,7 +106,7 @@ export default function UpdateSupplier({ idSupplier, data, token }) {
             deletionDate: new Date().toLocaleDateString('pt-BR')
         }
 
-        await inactivateData(`http://localhost:3001/inactivateSupplier/${idSupplier}`, data, token, setResult, 'Deletado com sucesso')
+        await inactivateData(`http://localhost:3001/inactivateSupplier/${idSupplier}`, data, token, setResult)
         setIsModalOpen(true)
     }
 
@@ -128,7 +130,11 @@ export default function UpdateSupplier({ idSupplier, data, token }) {
                 <div className="mb-6">
                     <button onClick={UpdateSupplier} className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ">Atualizar</button>
                 </div>
-                <div>{result}</div>
+                <MessageModal isOpen={isModalOpen} onClose={handleCloseModal} message={result.error ? result.error : result.success} icone={
+                    result?.error ? (<FaTimesCircle className="text-red-500 w-24 h-24 mx-auto mb-4 rounded-full" />) : (
+                        <FaCheckCircle className="text-green-500 w-24 h-24 mx-auto mb-4 rounded-full" />
+                    )
+                }></MessageModal>
             </div>
         </section>
     )

@@ -11,36 +11,21 @@ import MessageModal from "@/components/messageModal"
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
 
 
-export default function UpdateEquipment({ dataEquipment, dataUser, dataFilial, dataSector, dataSupplier, token, idEquipment }) {
+export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, dataSector, dataSupplier, token, idEquipment }) {
 
     const router = useRouter()
-    const valueFilial = []
-    const valueUsername = []
-    const valueSector = []
-    const valueSupplier = []
+    const listBranch = dataBranch.map(item => item.branch)
+    const listUsername = dataUser.map(item => item.username)
+    const listSector = dataSector.map(item => item.sector)
+    const listSupplier = dataSupplier.map(item => item.supplier)
 
 
-    dataFilial.map(value => {
-        return valueFilial.push(value.branch)
-    })
-
-    dataUser.map(value => {
-        return valueUsername.push(value.username)
-    })
-
-    dataSector.map(value => {
-        return valueSector.push(value.sector)
-    })
-
-    dataSupplier.map(value => {
-        return valueSupplier.push(value.supplier)
-    })
 
     const [codProd, setCodProd] = useState(dataEquipment.codProd)
     const [equipment, setEquipment] = useState(dataEquipment.equipment)
     const [type, setType] = useState(dataEquipment.type)
     const [value, setValue] = useState(dataEquipment.value)
-    const [filial, setFilial] = useState(dataEquipment['Branch'].branch)
+    const [branch, setBranch] = useState(dataEquipment['Branch'].branch)
     const [username, setUsername] = useState(dataEquipment['User'].username)
     const [sector, setSector] = useState(dataEquipment['Sector'].sector)
     const [supplier, setSupplier] = useState(dataEquipment['Supplier'].supplier)
@@ -73,8 +58,8 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataFilial, d
         }
     }
 
-    const changeFilial = (e) => {
-        setFilial(e.target.value)
+    const changeBranch = (e) => {
+        setBranch(e.target.value)
     }
 
     const changeUsername = (e) => {
@@ -114,34 +99,10 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataFilial, d
 
     const updateEquipment = async () => {
 
-        const idUsername = []
-        const idSector = []
-        const idFilial = []
-        const idSupplier = []
-
-        dataUser.map(value => {
-            if (value.username == username) {
-                return idUsername.push(value.idUser)
-            }
-        })
-
-        dataSector.map(value => {
-            if (value.sector == sector) {
-                return idSector.push(value.idSector)
-            }
-        })
-
-        dataFilial.map(value => {
-            if (value.branch == filial) {
-                return idFilial.push(value.idBranch)
-            }
-        })
-
-        dataSupplier.map(value => {
-            if (value.supplier == supplier) {
-                return idSupplier.push(value.idSupplier)
-            }
-        })
+        const idUsername = dataUser.find(item => item.username === username).idUser
+        const idSector = dataSector.find(item => item.sector === sector).idSector
+        const idBranch = dataBranch.find(item => item.branch === branch).idBranch
+        const idSupplier = dataSupplier.find(item => item.supplier === supplier).idSupplier
 
         const data = {
             idEquipment: 0,
@@ -149,10 +110,10 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataFilial, d
             equipment: equipment,
             type: type,
             value: value,
-            idBranch: idFilial[0],
-            idUser: idUsername[0],
-            idSector: idSector[0],
-            idSupplier: idSupplier[0],
+            idBranch: idBranch,
+            idUser: idUsername,
+            idSector: idSector,
+            idSupplier: idSupplier,
             entryDate: entryDate
         }
         await updateData(`http://localhost:3001/updateEquipment/${idEquipment}`, data, token, setResult)
@@ -163,34 +124,10 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataFilial, d
         setTimeout(() => {
 
         })
-        const idUsername = []
-        const idSector = []
-        const idFilial = []
-        const idSupplier = []
-
-        dataUser.map(value => {
-            if (value.username == username) {
-                return idUsername.push(value.idUser)
-            }
-        })
-
-        dataSector.map(value => {
-            if (value.sector == sector) {
-                return idSector.push(value.idSector)
-            }
-        })
-
-        dataFilial.map(value => {
-            if (value.branch == filial) {
-                return idFilial.push(value.idBranch)
-            }
-        })
-
-        dataSupplier.map(value => {
-            if (value.supplier == supplier) {
-                return idSupplier.push(value.idSupplier)
-            }
-        })
+        const idUsername = dataUser.find(item => item.username === username).idUser
+        const idSector = dataSector.find(item => item.sector === sector).idSector
+        const idBranch = dataBranch.find(item => item.branch === branch).idBranch
+        const idSupplier = dataSupplier.find(item => item.supplier === supplier).idSupplier
 
         const data = {
             idEquipment: 0,
@@ -198,10 +135,10 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataFilial, d
             equipment: equipment,
             type: type,
             value: value,
-            idBranch: idFilial[0],
-            idUser: idUsername[0],
-            idSector: idSector[0],
-            idSupplier: idSupplier[0],
+            idBranch: idBranch,
+            idUser: idUsername,
+            idSector: idSector,
+            idSupplier: idSupplier,
             returnDate: returnDate
         }
         await inactivateData(`http://localhost:3001/returnEquipment/${idEquipment}`, data, token, setResult)
@@ -254,10 +191,10 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataFilial, d
                         <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Valor'} type={'decimal'} name={'value'} value={value} onchange={changeValue} maxLength={'10'}></InputForm>
                     ) : null}
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Data Entrada'} type={'date'} name={'entryDate'} value={entryDate} onchange={changeEntryDate} maxLength={'10'}></InputForm>
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Filial'} name={'filial'} datas={valueFilial} value={filial} onchange={changeFilial}></InputSelect>
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Usuário'} name={'username'} datas={valueUsername} value={username} onchange={changeUsername}></InputSelect>
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Setor'} name={'sector'} datas={valueSector} value={sector} onchange={changeSector}></InputSelect>
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Fonercedor'} name={'supplier'} datas={valueSupplier} value={supplier} onchange={changeSupplier}></InputSelect>
+                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Filial'} name={'branch'} datas={listBranch} value={branch} onchange={changeBranch}></InputSelect>
+                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Usuário'} name={'username'} datas={listUsername} value={username} onchange={changeUsername}></InputSelect>
+                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Setor'} name={'sector'} datas={listSector} value={sector} onchange={changeSector}></InputSelect>
+                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Fonercedor'} name={'supplier'} datas={listSupplier} value={supplier} onchange={changeSupplier}></InputSelect>
                 </form>
                 <div className="mb-6">
                     <button onClick={updateEquipment} className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">Atualizar</button>

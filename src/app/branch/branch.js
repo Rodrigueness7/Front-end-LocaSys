@@ -3,7 +3,6 @@
 import Table from "@/components/table"
 import Link from "next/link"
 
-
 export default function Branch({ tableBranch }) {
 
     return (

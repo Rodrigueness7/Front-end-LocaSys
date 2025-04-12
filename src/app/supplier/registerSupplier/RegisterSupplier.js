@@ -59,21 +59,21 @@ export default function RegisterSupplier({ token }) {
 
     const changeZipCode = (e) => {
         let newZipCode = e.target.value
-        if (newZipCode === '' || newZipCode.length <= 45) {
+        if (newZipCode === '' || newZipCode.length <= 8) {
             setZipCode(newZipCode)
         }
     }
 
     const changeState = (e) => {
         let newState = e.target.value
-        if (newState === '' || newState.length <= 45) {
+        if (newState === '' || newState.length <= 20) {
             setState(newState)
         }
     }
 
     const changeCity = (e) => {
         let newCity = e.target.value
-        if (newCity === '' || newCity.length <= 45) {
+        if (newCity === '' || newCity.length <= 20) {
             setCity(newCity)
         }
     }
