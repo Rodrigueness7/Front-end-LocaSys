@@ -3,7 +3,7 @@
 import React from "react"
 import { Page, Text, View, Document, StyleSheet, PDFViewer } from "@react-pdf/renderer"
 
-export default function TablePDF({ data }) {
+export default function TablePDF({ data, title }) {
 
     const styles = StyleSheet.create({
         page: {
@@ -53,7 +53,7 @@ export default function TablePDF({ data }) {
         <PDFViewer style={{ width: '100%', height: '100vh' }}>
             <Document>
                 <Page size={'A4'} style={styles.page} >
-                    <Text style={styles.textTitle}>Lista de Equipamentos</Text>
+                    <Text style={styles.textTitle}>{title}</Text>
                     <View style={styles.table}>
                         <View style={styles.row}>
                         {header.map((item, index) => (
