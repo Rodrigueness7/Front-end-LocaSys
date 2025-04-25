@@ -22,12 +22,12 @@ export default function TablePDF({ data, title }) {
             borderColor: '#000',
         },
         cellHeader: {
-            width: '20%',
+            width: '25%',
             padding: 5
            
         },
         cell: {
-            width: '20%',
+            width: '25%',
             padding: 5,
         },
         textHeader: {
@@ -36,7 +36,7 @@ export default function TablePDF({ data, title }) {
             textAlign: 'left',
         },
         text: {
-            fontSize: '12px',
+            fontSize: '10px',
             textAlign: 'left',
         },
         textTitle: {
@@ -53,7 +53,7 @@ export default function TablePDF({ data, title }) {
         <PDFViewer style={{ width: '100%', height: '100vh' }}>
             <Document>
                 <Page size={'A4'} style={styles.page} >
-                    <Text style={styles.textTitle}>{title}</Text>
+                    <Text  style={styles.textTitle}>{title}</Text>
                     <View style={styles.table}>
                         <View style={styles.row}>
                         {header.map((item, index) => (
