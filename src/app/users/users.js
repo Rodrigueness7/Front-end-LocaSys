@@ -14,6 +14,7 @@ export default function Users({ tableUsers, attribute }) {
     const [sector, setSector] = useState('')
     const [profile, setProfile] = useState('')
 
+   
     const filter = () => {
         return tableUsers.filter((item) => {
             return (
@@ -67,10 +68,16 @@ export default function Users({ tableUsers, attribute }) {
 
     }
 
+    const generation = () => {
+        sessionStorage.setItem('dataUser', JSON.stringify(dataUsers))
+           window.open('/users/report', '_blank') 
+    }
+
     return (
         <div className='bg-gray-100 py-8 overflow-x-auto h-screen' >
-            <div className="flex items-start mb-8 lg:px-8 sm:px-8">
+            <div className="flex justify-between mb-8 lg:px-8 sm:px-8 xl:w-1/2">
                 <Link href={'../users/registerUser'}><button className='p-2 bg-indigo-500 rounded-lg text-white w-full '>Novo Usuário</button></Link>
+                <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={generation}>Gerar PDF</button>
             </div>
             <form className=" ml-8 flex relative" onSubmit={searchUser}>
                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4 mr-4'} label={'Nome'} name={'firstName'} datas={optionsFirstName} value={firstName} onchange={changeFirstName}></InputSelect>

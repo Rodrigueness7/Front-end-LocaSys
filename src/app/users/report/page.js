@@ -13,14 +13,14 @@ export default function Report() {
     const [data, setData] = useState(null)
 
     useEffect(() => {
-        const storedData = sessionStorage.getItem('dataBranch')
+        const storedData = sessionStorage.getItem('dataUser')
         setData(JSON.parse(storedData))
     }, [])
 
     return(
         <>
          {data !== null && (
-            <TablePdf data={data} title={'Lista de Filiais'} wCellHeader={'25%'} wCell={'25%'} size={'A4'}></TablePdf>
+            <TablePdf data={data} title={'Lista de Usuário'} wCell={'40%'} wCellHeader={'40%'} size={'A3'}></TablePdf>
          )}
         </>
     )
