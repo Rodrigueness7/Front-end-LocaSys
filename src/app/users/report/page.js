@@ -11,16 +11,22 @@ const TablePdf = dynamic(() => import('../../../components/tablePdf'), {
 export default function Report() {
 
     const [data, setData] = useState(null)
+    const [user, setUser] = useState(null)
+    
 
     useEffect(() => {
         const storedData = sessionStorage.getItem('dataUser')
+        const user = localStorage.getItem('username')
         setData(JSON.parse(storedData))
+        setUser(user)
     }, [])
+
+    
 
     return(
         <>
          {data !== null && (
-            <TablePdf data={data} title={'Lista de Usuário'} wCell={'40%'} wCellHeader={'40%'} size={'A3'}></TablePdf>
+            <TablePdf data={data} title={'Relátorio de Usuário'} wCell={'50%'} wCellHeader={'50%'} size={'A3'} user={user}></TablePdf>
          )}
         </>
     )

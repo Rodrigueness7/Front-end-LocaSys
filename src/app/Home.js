@@ -13,6 +13,7 @@ export default function PageHome() {
           };
           
           clearCookie('token');
+          localStorage.clear()
           router.push('./login')
     }
 
