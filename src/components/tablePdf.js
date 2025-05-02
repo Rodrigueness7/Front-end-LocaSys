@@ -7,6 +7,7 @@ export default function TablePDF({ data, title, wCellHeader, wCell, size, user }
 
     const styles = StyleSheet.create({
         page: {
+            position: 'relative',
             padding: 20,
             fontSize: 12,
             fontFamily: 'Helvetica',
@@ -69,6 +70,12 @@ export default function TablePDF({ data, title, wCellHeader, wCell, size, user }
           flexDirection: 'row',
             justifyContent: 'space-between',
         },
+        footer: {
+            position: 'absolute',
+            top: '735px',   
+            left: '20px',
+           
+          }
     })
    
     const header = Object.keys(data[0])
@@ -106,6 +113,7 @@ export default function TablePDF({ data, title, wCellHeader, wCell, size, user }
                        </View>
                     ))}
                     <Text style={styles.total}>{`Totalizador: ${total}`}</Text>
+                    <Text style={styles.footer} render={({pageNumber}) => `Página ${pageNumber} `} fixed />
                     </View>
                 </Page>
             </Document>

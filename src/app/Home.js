@@ -20,6 +20,7 @@ export default function PageHome() {
     return (
         <div className="flex">
             <div className={`bg-slate-800 text-white w-64 h-screen p-8 space-y-4 md:block`}>
+                <h1 className="font-bold text-2xl">Locasys</h1>
                 <div >
                     <Link href={'./users'} className="hover:text-blue-500 transition duration-300">Usuário</Link>
                 </div>
