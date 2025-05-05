@@ -25,7 +25,7 @@ export default function Report() {
     return(
         <>
          {data !== null && (
-            <TablePdf data={data} title={'Relátorio de Filial'} wCellHeader={'25%'} wCell={'25%'} size={'A4'} user={user}></TablePdf>
+            <TablePdf data={data} title={'Relátorio de Filial'} wCellHeader={'25%'} wCell={'25%'} size={'A4'} user={user} widthFooter={'735px'}></TablePdf>
          )}
         </>
     )

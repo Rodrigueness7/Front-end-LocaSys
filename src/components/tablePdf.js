@@ -3,7 +3,7 @@
 import React from "react"
 import { Page, Text, View, Document, StyleSheet, PDFViewer } from "@react-pdf/renderer"
 
-export default function TablePDF({ data, title, wCellHeader, wCell, size, user }) {
+export default function TablePDF({ data, title, wCellHeader, wCell, size, user, widthFooter }) {
 
     const styles = StyleSheet.create({
         page: {
@@ -11,12 +11,13 @@ export default function TablePDF({ data, title, wCellHeader, wCell, size, user }
             padding: 20,
             fontSize: 12,
             fontFamily: 'Helvetica',
+            
         },
         
         table: {
             display: 'table',
             width: 'auto',
-            top: '10px'
+            top: '10px',
            
         },
         row: {
@@ -72,8 +73,7 @@ export default function TablePDF({ data, title, wCellHeader, wCell, size, user }
         },
         footer: {
             position: 'absolute',
-            top: '735px',   
-            left: '20px',
+            top: widthFooter
            
           }
     })
