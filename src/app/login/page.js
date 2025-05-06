@@ -60,7 +60,7 @@ export default function Login() {
 
   return (
     <section className="bg-gray-100 h-screen flex justify-center items-center">
-      <div className=" flex justify-center items-center flex-col bg-white shadow hover:shadow-lg h-96 w-96 rounded-lg">
+      <div className="flex justify-center items-center flex-col bg-white shadow hover:shadow-lg h-96 w-96 rounded-lg relative">
         <form onSubmit={submit}>
           <div>
             <h1 className="font-sans pb-8 text-2xl">Acesse a sua conta</h1>
@@ -69,7 +69,7 @@ export default function Login() {
           <InputForm classNameInput={"w-full font-sans pt-2 border-solid border-2 border-current rounded"} classNameLabe={" mb-2 text-sm font-medium text-gray-900"} label={'Password'} type={'password'} value={password} onchange={changePassword}></InputForm>
           <button type="submit" className="w-64 mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" >Acesse</button>
         </form>
-        <div className="mt-4">{result}</div>
+        <div className="absolute bottom-8">{result}</div>
       </div>
     </section>
   );

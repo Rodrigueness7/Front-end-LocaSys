@@ -10,6 +10,23 @@ export default function Supplier({ tableSupplier }) {
     const [dataSupplier, setDataSupplier] = useState(tableSupplier)
     const [supplier, setSupplier] = useState('')
 
+    const data = dataSupplier.map((item) => {
+        let dataTable = {
+            ['id'] : item.idSupplier,
+            ['Fornecedor'] : item.supplier,
+            ['Email'] : item.email,
+            ['Contato'] : item.contact,
+            ['CNPJ'] : item.CNPJ,
+            ['Endereço'] : item.address,
+            ['Cep'] : item.zipCode,
+            ['Estado'] : item.state,
+            ['Cidade'] : item.city
+        }
+        return dataTable
+    })
+
+
+
     const filter = () => {
         return tableSupplier.filter((item) => {
             return (
@@ -27,10 +44,16 @@ export default function Supplier({ tableSupplier }) {
         setDataSupplier(filter())
     }
 
+    const generation = async () => {
+        sessionStorage.setItem('dataSupplier', JSON.stringify(data))
+       window.open(`/supplier/report`, '_blank') 
+ }
+
     return (
         <div className="bg-gray-100 py-8 overflow-x-auto h-screen px-8">
-            <div className="flex mb-8 lg:px-8 sm:px-8 items-center">
+            <div className="flex justify-between mb-8 lg:px-8 sm:px-8 items-center xl:w-1/2">
                 <Link href={'../supplier/registerSupplier'}><button className='p-2 bg-indigo-500 rounded-lg text-white'>Novo Fonercedor</button></Link>
+                <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={generation}>Gerar PDF</button>
             </div>
             <form className=" ml-8 flex relative" onSubmit={searchSupplier}>
                 <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4 mr-4'} label={'Fornecedor'} type={'text'} name={'supplier'} value={supplier} onchange={changeSupplier} maxLength={'10'}></InputForm>

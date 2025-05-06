@@ -82,7 +82,6 @@ export default function TablePDF({ data, title, wCellHeader, wCell, size, user, 
     const date = new Date()
     const total = data.length
 
-    
 
 
     return (

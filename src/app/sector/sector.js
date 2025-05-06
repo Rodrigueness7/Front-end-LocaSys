@@ -13,6 +13,16 @@ export default function Sector({ tableSector }) {
     const [sector, setSector] = useState('')
     const [branch, setBranch] = useState('')
 
+    let data = dataSector.map((item) => {
+        let dataTable = {
+            ['id'] : item.idSector,
+            ['Setor'] : item.sector,
+            ['Filial'] : item.branch
+        }
+        return dataTable
+    })
+
+   
 
     const filter = () => {
         return tableSector.filter((item) => {
@@ -48,12 +58,16 @@ export default function Sector({ tableSector }) {
         setDataSector(filter())
     }
 
+    const generation = async () => {
+        sessionStorage.setItem('dataSector', JSON.stringify(data))
+       window.open(`/sector/report`, '_blank') 
+ }
+
     return (
         <div className='bg-gray-100 py-8 overflow-x-auto h-screen'>
-            <div className="flex mb-8 lg:px-8 sm:px-8">
-                <Link href={'../sector/registerSector'}>
-                    <button className='p-2 bg-indigo-500 rounded-lg text-white'>Novo Setor </button>
-                </Link>
+            <div className="flex justify-between mb-8 lg:px-8 sm:px-8 xl:w-1/2">
+                <Link href={'../sector/registerSector'}><button className='p-2 bg-indigo-500 rounded-lg text-white'>Novo Setor </button></Link>
+                <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={generation}>Gerar PDF</button>
             </div>
             <form className=" ml-8 flex relative" onSubmit={searchSector}>
                 <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-24 px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4 mr-4'} label={"Id"} name={"idSector"} type={'text'} value={id} onchange={changeId}></InputForm>
