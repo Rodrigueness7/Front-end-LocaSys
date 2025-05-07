@@ -20,11 +20,22 @@ export default function Report() {
         setData(JSON.parse(storedData))
     }, [])
 
+    const getStyle = {
+        id: '8%',
+        Fornecedor: '32%',
+        Email: '46%',
+        Contato: '35%',
+        CNPJ: '35%',
+        Endereço: '30%',
+        Cep: '20%',
+        Estado: '20%',
+        Cidade: '18%'
+    }
 
     return(
         <>
          {data !== null && (
-            <TablePdf data={data} title={'Relátorio de Fornecedor'} wCellHeader={'25%'} wCell={'25%'} size={'A3'} user={user} widthFooter={'725px'}></TablePdf>
+            <TablePdf data={data} title={'Relátorio de Fornecedor'}  size={'A4'} user={user} widthFooter={'725px'} getStyle={getStyle}></TablePdf>
          )}
         </>
     )

@@ -21,11 +21,17 @@ export default function Report() {
         setData(JSON.parse(storedData))
     }, [])
 
+    const getStyle = {
+        id: '60%',
+        Setor: '60%',
+        Filial: '20%'
+    }
+
 
     return(
         <>
          {data !== null && (
-            <TablePdf data={data} title={'Relátorio dos Setores'} wCellHeader={'25%'} wCell={'25%'} size={'A4'} user={user} widthFooter={'720px'}></TablePdf>
+            <TablePdf data={data} title={'Relátorio dos Setores'} size={'A4'} user={user} widthFooter={'720px'} getStyle={getStyle}></TablePdf>
          )}
         </>
     )

@@ -3,7 +3,7 @@
 import React from "react"
 import { Page, Text, View, Document, StyleSheet, PDFViewer } from "@react-pdf/renderer"
 
-export default function TablePDF({ data, title, wCellHeader, wCell, size, user, widthFooter }) {
+export default function TablePDF({ data, title, size, user, widthFooter, getStyle }) {
 
     const styles = StyleSheet.create({
         page: {
@@ -26,14 +26,7 @@ export default function TablePDF({ data, title, wCellHeader, wCell, size, user, 
             borderColor: '#000',
         },
         
-        cellHeader: {
-            width: wCellHeader,
-            padding: 5, 
-            margin: 5
-        },
-
         cell: {
-            width: wCell,
             padding: 5,
             marginLeft: 5  
         },
@@ -77,11 +70,16 @@ export default function TablePDF({ data, title, wCellHeader, wCell, size, user, 
            
           }
     })
-   
+
+
     const header = Object.keys(data[0])
     const date = new Date()
     const total = data.length
 
+    const getCellWidth = (key) => ({
+        ...styles.cell, width: getStyle[key] || 'auto'
+    })
+   
 
 
     return (
@@ -97,7 +95,7 @@ export default function TablePDF({ data, title, wCellHeader, wCell, size, user, 
                     <View style={styles.table}>
                         <View style={styles.row}>
                         {header.map((item, index) => (
-                        <View key={index} style={styles.cellHeader}>
+                        <View key={index} style={getCellWidth(item)}>
                             <Text style={styles.textHeader}>{item}</Text>
                         </View>
                     ))}
@@ -105,7 +103,7 @@ export default function TablePDF({ data, title, wCellHeader, wCell, size, user, 
                     {data.map((item, index) => (
                        <View key={index} style={styles.row}>
                          {header.map((value, index) => (
-                            <View key={index} style={styles.cell}>
+                            <View key={index} style={getCellWidth(value)}>
                                 <Text style={styles.textRow}>{item[value]}</Text>
                             </View>
                         ))}
