@@ -20,12 +20,18 @@ export default function Report() {
         setData(JSON.parse(storedData))
     }, [])
 
-    
+    const getStyle = {
+        ['Código Filial']: '80px',
+        ['Filial']: '100px',
+        ['CNPJ']: '115px',
+        ['Razão Social']: '130px',
+     
+    }
 
     return(
         <>
          {data !== null && (
-            <TablePdf data={data} title={'Relátorio de Filial'} wCellHeader={'25%'} wCell={'25%'} size={'A4'} user={user} widthFooter={'735px'}></TablePdf>
+            <TablePdf data={data} title={'Relátorio de Filial'} size={'A4'} user={user} getStyle={getStyle}></TablePdf>
          )}
         </>
     )

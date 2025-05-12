@@ -4,7 +4,11 @@ import dynamic from "next/dynamic"
 import { useEffect, useState } from "react"
 
 
-const TablePdf = dynamic(() => import('../../../components/tablePdf'), {
+// const TablePdf = dynamic(() => import('../../../components/tablePdf'), {
+//     ssr: false
+// })
+
+const LargePdfTable = dynamic(() => import('../../../components/largePdfTable'), {
     ssr: false
 })
 
@@ -26,7 +30,7 @@ export default function Report() {
     return(
         <>
          {data !== null && (
-            <TablePdf data={data} title={'Relátorio de Usuário'} wCell={'50%'} wCellHeader={'50%'} size={'A3'} user={user} widthFooter={'1080px'}></TablePdf>
+            <LargePdfTable data={data} size={'A4'} user={user} title={'Relátorio de Usuário'}></LargePdfTable>
          )}
         </>
     )
