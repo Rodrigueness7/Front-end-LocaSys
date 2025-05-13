@@ -5,9 +5,10 @@ import dynamic from "next/dynamic"
 import { useEffect, useState } from "react"
 
 
-const TablePdf = dynamic(() => import('../../../components/tablePdf'), {
+const LargePdfTable = dynamic(() => import('../../../components/largePdfTable'), {
     ssr: false
 })
+
 
 export default function Report() {
 
@@ -21,17 +22,12 @@ export default function Report() {
         setData(JSON.parse(storedData))
     }, [])
 
-    const getStyle = {
-        id: '60%',
-        Setor: '60%',
-        Filial: '20%'
-    }
-
+   
 
     return(
         <>
          {data !== null && (
-            <TablePdf data={data} title={'Relátorio dos Setores'} size={'A4'} user={user} widthFooter={'720px'} getStyle={getStyle}></TablePdf>
+            <LargePdfTable data={data} size={'A4'} user={user} title={'Relátorio de Setor'} width={'35%'}></LargePdfTable>
          )}
         </>
     )

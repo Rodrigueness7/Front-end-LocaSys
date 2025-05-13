@@ -11,7 +11,7 @@ const chunkArray = (array, size) => {
   return result;
 };
 
-export default function LargePdfTable({ data, size = "A4", user, title }) {
+export default function LargePdfTable({ data, size = "A4", user, title, width }) {
   const styles = StyleSheet.create({
     page: {
       padding: 20,
@@ -33,14 +33,14 @@ export default function LargePdfTable({ data, size = "A4", user, title }) {
 
     },
     cellHeader: {
-      width: '25%',
+      width: width,
       fontWeight: 'bold',
       padding: 4,
       backgroundColor: '#f0f0f0',
       borderRight: '1px solid #000',
     },
     cellValue: {
-      width: '25%',
+      width: width,
       padding: 4,
       borderRight: '1px solid #000',
 
