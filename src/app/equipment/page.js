@@ -15,7 +15,7 @@ export default async function PageEquipment() {
     }
 
     const equipment = await fetchData('http://localhost:3001/findAllEquipment', token)
-    
+   
 
     if(equipment.message) {
         return(<Message message={'Usuário sem permissão'}/>)

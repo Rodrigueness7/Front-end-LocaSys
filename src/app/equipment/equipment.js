@@ -15,6 +15,11 @@ export default function Equipment({ tableEquipment, attribute }) {
     const [type, setType] = useState('')
     const [branch, setBranch] = useState('')
     const [username, setUsername] = useState('')
+   
+    const generation = async () => {
+        sessionStorage.setItem('dataEquipment', JSON.stringify(dataEquipment))
+        window.open(`/equipment/report`, '_blank')
+    }
 
 
     const filter = () => {
@@ -81,12 +86,12 @@ export default function Equipment({ tableEquipment, attribute }) {
         setDataEquipment(filter())
     }
 
+
     return (
         <div className='bg-gray-100 py-8 overflow-x-auto h-screen'>
-            <div className="flex mb-8 lg:px-8 sm:px-8">
-                <Link href={'../equipment/registerEquipment'}>
-                    <button className='p-2 bg-indigo-500 rounded-lg text-white'>Novo Equipamento</button>
-                </Link>
+            <div className="flex justify-between mb-8 lg:px-8 sm:px-8 xl:w-1/2">
+                <Link href={'../equipment/registerEquipment'}><button className='p-2 bg-indigo-500 rounded-lg text-white'>Novo Equipamento</button></Link>
+                <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={generation}>Gerar PDF</button>
             </div>
             <form className=" ml-8 flex relative" onSubmit={searchEquipment}>
                 <InputForm   classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4 mr-4'} label={'Código'} type={'text'} name={'codProd'} value={codProd} onchange={changeCodProd} maxLength={'10'}></InputForm>

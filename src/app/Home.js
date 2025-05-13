@@ -1,11 +1,13 @@
 'use client'
 
+import Modal from "@/components/modal";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 
 export default function PageHome() {
     const router = useRouter()
+    
 
     const handleExit = () => {
         const clearCookie = (name) => {
