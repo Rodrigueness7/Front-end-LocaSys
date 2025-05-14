@@ -13,6 +13,6 @@ export default async function Home() {
     }
 
     return (
-        <PageHome></PageHome>
+        <PageHome token={token}></PageHome>
     )
 }
