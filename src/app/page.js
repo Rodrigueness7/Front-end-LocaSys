@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import PageHome from "./Home";
+import fetchData from "@/utils/fetchData";
 
 
 
@@ -12,7 +13,9 @@ export default async function Home() {
         redirect('./login')
     }
 
+    const branch = await fetchData('http://localhost:3001/findAllBranch', token)
+
     return (
-        <PageHome token={token}></PageHome>
+        <PageHome token={token} dataBranch={branch}></PageHome>
     )
 }
