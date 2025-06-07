@@ -1,12 +1,16 @@
 'use client'
 
-
+import FormModal from "@/components/formModal";
 import InputForm from "@/components/InputForm";
 import InputSelect from "@/components/InputSelect";
+import MessageModal from "@/components/messageModal";
 import addData from "@/utils/addData";
+import deleteData from "@/utils/deleteData";
 import Link from "next/link";
 import { useRouter } from "next/navigation"
 import { useState } from "react";
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+
 
 
 export default function PageHome({ token, dataBranch }) {
@@ -15,14 +19,16 @@ export default function PageHome({ token, dataBranch }) {
     const router = useRouter()
     const [show, setShow] = useState(false)
     const [file, setFile] = useState(null)
-    const [result, setResult] = useState(null)
+    const [result, setResult] = useState('')
     const [cellInit, setCellInit] = useState('')
     const [cellFinish, setCellFinish] = useState('')
     const [initPeriod, setInitPeriod] = useState('')
     const [finishPeriod, setFinishPeriod] = useState('')
     const [branch, setBranch] = useState(listBranch[0])
-
-
+    const [showImport, setShowImport] = useState(false)
+    const [showDelete, setShowDelete] = useState(false)
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    
 
     const changeCellInit = (e) => {
         setCellInit(e.target.value)
@@ -61,6 +67,24 @@ export default function PageHome({ token, dataBranch }) {
 
     }
 
+    const handleCloseModal = () => {
+        setIsModalOpen(false)
+        if (result.success) {
+            router.push('./')
+        }
+    }
+
+    const handleShow = (e) => {
+        e.preventDefault()
+
+        if (show == false) {
+            setShow(true)
+        } else {
+            setShow(false)
+        }
+
+    }
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         const formData = new FormData();
@@ -86,7 +110,47 @@ export default function PageHome({ token, dataBranch }) {
         }
 
         await addData('http://localhost:3001/addEquipmentRental', data, token, setResult)
+        setCellInit('')
+        setCellFinish('')
+        setInitPeriod('')
+        setFinishPeriod('')
+        setIsModalOpen(true)
+       
+    }
 
+    const handleDelete = async (e) => {
+        e.preventDefault()
+        const idBranch = dataBranch.find(item => item.branch === branch).idBranch
+        
+        const data = {
+            initPeriod: initPeriod,
+            finishPeriod: finishPeriod,
+            idBranch: idBranch
+        }
+
+        await fetch('http://localhost:3001/deleteAllEquipmentRental', {
+        method: 'DELETE',
+        headers: {
+            'content-type': 'application/json',
+            'Authorization': token
+        }, 
+        body: JSON.stringify(data)
+    }).then(
+        result => result.json()
+    ).then(
+        res => {
+            if (res.successMessage) {
+                setResult({ success: res.successMessage })
+            } else {
+                setResult({ error: res.errorMessage })
+            }
+        }
+    )
+    setInitPeriod('')
+    setFinishPeriod('')
+    setIsModalOpen(true)
+
+        
     }
 
     return (
@@ -115,18 +179,28 @@ export default function PageHome({ token, dataBranch }) {
                     <Link href={'./logs'} className="hover:text-blue-500 transition duration-300">Log</Link>
                 </div>
                 <div>
-                    <button onClick={() => setShow(true)} className="hover:text-blue-500 transition duration-300">Importar</button>
+                    <button onClick={handleShow} className="hover:text-blue-500 transition duration-300">Arquivo</button>
+                    {show == true ? (
+                        <div className="flex flex-col bg-slate-600 ">
+                            <div className="ml-5">
+                                <button onClick={() => setShowImport(true)} className="hover:text-blue-500 transition duration-300">Importar</button>
+                            </div>
+                            <div className="ml-5">
+                                <button onClick={() => setShowDelete(true)} className="hover:text-blue-500 transition duration-300">Excluir</button>
+                            </div>
+                        </div>
+                    ) : null}
                 </div>
                 <div>
                     <button onClick={handleExit}>Sair</button>
                 </div>
             </div>
-            {show && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded shadow-lg ">
+            {showImport && (
+                <FormModal children={
+                    <div>
                         <h2 className="text-lg font-bold mb-4">Importar</h2>
                         <p>Selecione o arquivo para importar.</p>
-                        <form onSubmit={handleSubmit} encType="multipart/form-data">
+                        <form encType="multipart/form-data">
                             <input type="file" accept=".xlsx" required onChange={handleFileUpload} />
                             <div className="mt-5 flex justify-items">
                                 <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={"Celula Inicial"} name={"cell1"} type={'text'} value={cellInit} onchange={changeCellInit}></InputForm>
@@ -135,15 +209,43 @@ export default function PageHome({ token, dataBranch }) {
                                 <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={"Período Final"} name={"finishPeriod"} type={'date'} value={finishPeriod} onchange={changeFinishPeriod}></InputForm>
                                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Filial'} name={'branch'} datas={listBranch} value={branch} onchange={changeBranch}></InputSelect>
                             </div>
-                            <button type="submit" className=" w-full mt-4 bg-blue-500 text-white px-4 py-2 rounded">Enviar</button>
-                        </form>
-                        <div>{console.log(result)}</div>
-                        <div className="flex justify-end mt-4">
-                            <button onClick={() => setShow(false)} className="left-15 mt-4 bg-blue-500 text-white px-4 py-2 rounded float-rigth">Fechar</button>
-                        </div>
+                            <button onClick={handleSubmit} className=" w-full mt-4 bg-blue-500 text-white px-4 py-2 rounded">Enviar</button>
+                        </form>  
+                         <MessageModal isOpen={isModalOpen} onClose={handleCloseModal} message={result.error ? result.error : result.success} icone={
+                    result?.error ? (<FaTimesCircle className="text-red-500 w-24 h-24 mx-auto mb-4 rounded-full" />) : (
+                        <FaCheckCircle className="text-green-500 w-24 h-24 mx-auto mb-4 rounded-full" />
+                    )
+                }></MessageModal>
                     </div>
-                </div>
+                } setShow={setShowImport}></FormModal>
             )}
+            {showDelete && (
+                <FormModal children={
+                    <div>
+                        <h1>Deletar</h1>
+                        <div className="mt-5 flex justify-items">
+                            <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={"Período Inicial"} name={"initPeriod"} type={'date'} value={initPeriod} onchange={changeInitPeriod}></InputForm>
+                            <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={"Período Final"} name={"finishPeriod"} type={'date'} value={finishPeriod} onchange={changeFinishPeriod}></InputForm>
+                            <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Filial'} name={'branch'} datas={listBranch} value={branch} onchange={changeBranch}></InputSelect>
+                        </div>
+                        <button onClick={handleDelete} className=" w-full mt-4 bg-blue-500 text-white px-4 py-2 rounded">Deletar</button>
+                        <MessageModal isOpen={isModalOpen} onClose={handleCloseModal} message={result.error ? result.error : result.success} icone={
+                    result?.error ? (<FaTimesCircle className="text-red-500 w-24 h-24 mx-auto mb-4 rounded-full" />) : (
+                        <FaCheckCircle className="text-green-500 w-24 h-24 mx-auto mb-4 rounded-full" />
+                    )
+                }></MessageModal>
+                    </div>
+                    
+                } setShow={setShowDelete}></FormModal>
+            )}
+             
         </div>
     )
 }
+
+
+
+
+
+
+
