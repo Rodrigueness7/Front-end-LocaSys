@@ -10,10 +10,10 @@ export default async function inactivateData(url, data, token, result) {
         result => result.json()
     ).then(
         res => {
-            if (res.successMessage) {
-                result({ success: successMessage })
+            if(res.successMessage) {
+                result({success: res.successMessage})
             } else {
-                result({ error: res.errorMessage })
+                result({error: res.errorMessage})
             }
         }
     )

@@ -5,7 +5,6 @@ import InputForm from "@/components/InputForm";
 import InputSelect from "@/components/InputSelect";
 import MessageModal from "@/components/messageModal";
 import addData from "@/utils/addData";
-import deleteData from "@/utils/deleteData";
 import Link from "next/link";
 import { useRouter } from "next/navigation"
 import { useState } from "react";
@@ -14,6 +13,7 @@ import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 
 export default function PageHome({ token, dataBranch }) {
+
 
     const listBranch = dataBranch.map(item => item.branch)
     const router = useRouter()
@@ -28,6 +28,7 @@ export default function PageHome({ token, dataBranch }) {
     const [showImport, setShowImport] = useState(false)
     const [showDelete, setShowDelete] = useState(false)
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const [showReport, setShowReport] = useState(false)
     
 
     const changeCellInit = (e) => {
@@ -83,6 +84,17 @@ export default function PageHome({ token, dataBranch }) {
             setShow(false)
         }
 
+    }
+
+    const handleReport = (e) => {
+        e.preventDefault()
+
+        if (showReport == false) {
+            setShowReport(true)
+        } else {
+            setShowReport(false)
+        }
+        
     }
 
     const handleSubmit = async (event) => {
@@ -150,7 +162,6 @@ export default function PageHome({ token, dataBranch }) {
     setFinishPeriod('')
     setIsModalOpen(true)
 
-        
     }
 
     return (
@@ -189,6 +200,14 @@ export default function PageHome({ token, dataBranch }) {
                                 <button onClick={() => setShowDelete(true)} className="hover:text-blue-500 transition duration-300">Excluir</button>
                             </div>
                         </div>
+                    ) : null}
+                </div>
+                <div>
+                    <button onClick={handleReport} className="hover:text-blue-500 transition duration-300" >Relatório</button>
+                    {showReport == true ? (
+                        <ul className="ml-5">
+                            <Link href={'#'}><li>Relatório</li></Link>
+                        </ul>
                     ) : null}
                 </div>
                 <div>

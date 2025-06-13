@@ -20,7 +20,6 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     const listSupplier = dataSupplier.map(item => item.supplier)
 
 
-
     const [codProd, setCodProd] = useState(dataEquipment.codProd)
     const [equipment, setEquipment] = useState(dataEquipment.equipment)
     const [type, setType] = useState(dataEquipment.type)
@@ -29,11 +28,11 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     const [username, setUsername] = useState(dataEquipment['User'].username)
     const [sector, setSector] = useState(dataEquipment['Sector'].sector)
     const [supplier, setSupplier] = useState(dataEquipment['Supplier'].supplier)
-    const [entryDate, setEntryDate] = useState(new Date(dataEquipment.entryDate).toLocaleDateString('pt-br').split('/').reverse().join('-'))
+    const [entryDate, setEntryDate] = useState(new Date(dataEquipment.entryDate).toISOString().split('T')[0])
     const [returnDate, setReturnDate] = useState('')
     const [reason, setReason] = useState('')
-    const [result, setResult] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const [result, setResult] = useState('')
 
     const changeCodProd = (e) => {
         const newValue = e.target.value
@@ -121,28 +120,30 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     }
 
     const returnEquipment = async () => {
-        setTimeout(() => {
+        setTimeout(async () => {
+            const idUsername = dataUser.find(item => item.username === username).idUser
+            const idSector = dataSector.find(item => item.sector === sector).idSector
+            const idBranch = dataBranch.find(item => item.branch === branch).idBranch
+            const idSupplier = dataSupplier.find(item => item.supplier === supplier).idSupplier
 
-        })
-        const idUsername = dataUser.find(item => item.username === username).idUser
-        const idSector = dataSector.find(item => item.sector === sector).idSector
-        const idBranch = dataBranch.find(item => item.branch === branch).idBranch
-        const idSupplier = dataSupplier.find(item => item.supplier === supplier).idSupplier
+            const data = {
+                idEquipment: 0,
+                codProd: codProd,
+                equipment: equipment,
+                type: type,
+                value: value,
+                idBranch: idBranch,
+                idUser: idUsername,
+                idSector: idSector,
+                idSupplier: idSupplier,
+                returnDate: returnDate
+            }
 
-        const data = {
-            idEquipment: 0,
-            codProd: codProd,
-            equipment: equipment,
-            type: type,
-            value: value,
-            idBranch: idBranch,
-            idUser: idUsername,
-            idSector: idSector,
-            idSupplier: idSupplier,
-            returnDate: returnDate
-        }
-        await inactivateData(`http://localhost:3001/returnEquipment/${idEquipment}`, data, token, setResult)
-        setIsModalOpen(true)
+            await inactivateData(`http://localhost:3001/returnEquipment/${idEquipment}`, data, token, setResult)
+            setIsModalOpen(true)
+        }, 1000)
+
+
 
         let dataEquipmentHistory = {
             idEquipmentHistory: 0,
@@ -152,9 +153,9 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             returnDate: returnDate
         }
 
+
         await addData('http://localhost:3001/addEquipmentHistory', dataEquipmentHistory, token, setResult)
         setIsModalOpen(true)
-
     }
 
     const reactivate = async () => {
@@ -164,6 +165,8 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         await updateData(`http://localhost:3001/returnEquipment/${idEquipment}`, data, token, setResult)
         setIsModalOpen(true)
     }
+
+
 
     return (
         <section className="bg-gray-100 py-3">
@@ -175,7 +178,11 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
                             <label className="'block text-sm font-medium text-gray-700'" htmlFor='mensage'>Motivo</label>
                             <textarea className="mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" name="reason" rows={'4'} cols={'60'} value={reason} onChange={changeReason}></textarea>
                         </form>
-                        <div>{result}</div>
+                        <MessageModal isOpen={isModalOpen} onClose={handleCloseModal} message={result.error ? result.error : result.success} icone={
+                            result?.error ? (<FaTimesCircle className="text-red-500 w-24 h-24 mx-auto mb-4 rounded-full" />) : (
+                                <FaCheckCircle className="text-green-500 w-24 h-24 mx-auto mb-4 rounded-full" />
+                            )
+                        }></MessageModal>
                         <button onClick={returnEquipment} className="p-2 mt-4 bg-indigo-500 rounded-lg text-white">Devolver</button>
                     </div>
                 }></Modal>
@@ -204,6 +211,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
                         <FaCheckCircle className="text-green-500 w-24 h-24 mx-auto mb-4 rounded-full" />
                     )
                 }></MessageModal>
+
             </div>
         </section>
     )

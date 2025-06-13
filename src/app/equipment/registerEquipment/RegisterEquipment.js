@@ -16,6 +16,7 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
     const listSector = dataSector.map(item => item.sector)
     const listSupplier = dataSupplier.map(item => item.supplier)
 
+
     const router = useRouter()
     const [codProd, setCodProd] = useState('')
     const [equipment, setEquipment] = useState('')
@@ -24,10 +25,12 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
     const [branch, setBranch] = useState(listBranch[0])
     const [username, setUsername] = useState(listUsername[0])
     const [sector, setSector] = useState(listSector[0])
+    const [entryDate, setEntryDate] = useState('')
     const [supplier, setSupplier] = useState(listSupplier[0])
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [result, setResult] = useState('')
 
+   
     const changeCodProd = (e) => {
         const newValue = e.target.value
         if (/^[0-9]*$/.test(newValue) && newValue.length <= 10) {
@@ -67,6 +70,10 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
         setSupplier(e.target.value)
     }
 
+    const changeEntryDate = (e) => {
+        setEntryDate(e.target.value)
+    }
+
     const handleCloseModal = () => {
         setIsModalOpen(false)
         if (result.success) {
@@ -91,7 +98,7 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
             idUser: idUsername,
             idSector: idSector,
             idSupplier: idSupplier,
-            entryDate: new Date().toLocaleString('pt-BR').slice(0, 10)
+            entryDate: entryDate
         }
 
         await addData('http://localhost:3001/addEquipment', data, token, setResult)
@@ -104,12 +111,12 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
 
             let dataEquipmentHistory = {
                 idEquipmentHistory: 0,
-                idEquipment: fetchIdEquipment,
+                idEquipment: fetchIdEquipment.idEquipment,
                 reason: null,
-                entryDate: new Date().toLocaleString('pt-BR').slice(0, 10),
+                entryDate: entryDate,
                 returnDate: null
             }
-            addData('http://localhost:3001/addEquipmentHistory', dataEquipmentHistory, token, setResult) 
+          await addData('http://localhost:3001/addEquipmentHistory', dataEquipmentHistory, token, setResult) 
         }, 2000)
 
     }
@@ -123,6 +130,7 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Equipamento'} type={'text'} name={'equipment'} value={equipment} onchange={changeEquipment}></InputForm>
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Tipo'} type={'text'} name={'type'} value={type} onchange={changeType}></InputForm>
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Valor'} type={'decimal'} name={'value'} value={value} onchange={changeValue} maxLength={'10'}></InputForm>
+                    <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Data entrada'} type={'date'} name={'entryDate'} value={entryDate} onchange={changeEntryDate}></InputForm>
                     <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Filial'} name={'branch'} datas={listBranch} value={branch} onchange={changeBranch}></InputSelect>
                     <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Usuário'} name={'username'} datas={listUsername} value={username} onchange={changeUsername}></InputSelect>
                     <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Setor'} name={'sector'} datas={listSector} value={sector} onchange={changeSector}></InputSelect>
