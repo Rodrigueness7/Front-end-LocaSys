@@ -9,8 +9,9 @@ export default async function Home() {
     const cookieStore = cookies()
     const token = (await cookieStore).get('token')?.value
 
+   
     if (!token) {
-        redirect('./login')
+        redirect('./login')   
     }
 
     const branch = await fetchData('http://localhost:3001/findAllBranch', token)

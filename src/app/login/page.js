@@ -39,6 +39,7 @@ export default function Login() {
       }
     })
 
+    
 
     let value = await data.json()
     setCookie('token', value.token, { maxAge: 8600000 })
