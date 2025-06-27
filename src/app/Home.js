@@ -31,6 +31,8 @@ export default function PageHome({ token, dataBranch }) {
     const [showReport, setShowReport] = useState(false)
     
 
+    console.log(dataBranch)
+
     const changeCellInit = (e) => {
         setCellInit(e.target.value)
     }

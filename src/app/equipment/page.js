@@ -1,7 +1,6 @@
 import { redirect } from 'next/navigation'
 import { cookies } from "next/headers"
 import fetchData from '../../utils/fetchData'
-import Message from '../../utils/message'
 import Equipment from './equipment'
 
 

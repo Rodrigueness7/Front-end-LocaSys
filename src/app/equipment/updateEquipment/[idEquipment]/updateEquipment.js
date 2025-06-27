@@ -98,7 +98,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
 
     const updateEquipment = async () => {
 
-        const idUsername = dataUser.find(item => item.username === username).idUser
+        const idUser = dataUser.find(item => item.username === username).idUser
         const idSector = dataSector.find(item => item.sector === sector).idSector
         const idBranch = dataBranch.find(item => item.branch === branch).idBranch
         const idSupplier = dataSupplier.find(item => item.supplier === supplier).idSupplier
@@ -110,7 +110,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             type: type,
             value: value,
             idBranch: idBranch,
-            idUser: idUsername,
+            idUser: idUser,
             idSector: idSector,
             idSupplier: idSupplier,
             entryDate: entryDate
@@ -120,12 +120,12 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     }
 
     const returnEquipment = async () => {
-        setTimeout(async () => {
-            const idUsername = dataUser.find(item => item.username === username).idUser
+            const idUser = dataUser.find(item => item.username === username).idUser
             const idSector = dataSector.find(item => item.sector === sector).idSector
             const idBranch = dataBranch.find(item => item.branch === branch).idBranch
             const idSupplier = dataSupplier.find(item => item.supplier === supplier).idSupplier
 
+        setTimeout(async () => {
             const data = {
                 idEquipment: 0,
                 codProd: codProd,
@@ -133,7 +133,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
                 type: type,
                 value: value,
                 idBranch: idBranch,
-                idUser: idUsername,
+                idUser: idUser,
                 idSector: idSector,
                 idSupplier: idSupplier,
                 returnDate: returnDate
@@ -144,15 +144,16 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         }, 1000)
 
 
-
         let dataEquipmentHistory = {
             idEquipmentHistory: 0,
             idEquipment: idEquipment,
             reason: reason,
+            idUsername: idUser,
+            idSector: idSector,
+            idBranch: idBranch,
             entryDate: entryDate,
             returnDate: returnDate
         }
-
 
         await addData('http://localhost:3001/addEquipmentHistory', dataEquipmentHistory, token, setResult)
         setIsModalOpen(true)

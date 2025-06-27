@@ -19,8 +19,12 @@ export default async function RegisterEquipment() {
     let sector = await fetchData('http://localhost:3001/findAllSector', token)
     let supplier = await fetchData('http://localhost:3001/findAllSupplier', token)
 
+    if(branch.message) {
+        redirect('../login')
+    }
+
+
     return (
         <PageRegisterEquipment dataUser={user} dataBranch={branch} dataSector={sector} dataSupplier={supplier} token={token}></PageRegisterEquipment>
-
     )
 }

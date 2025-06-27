@@ -20,7 +20,9 @@ export default async function PageUpdateEquipment({ params }) {
     let supplier = await fetchData('http://localhost:3001/findAllSupplier', token)
     let equipment = await fetchData(`http://localhost:3001/findEquipmentId/${idEquipment}`, token)
 
-
+    if(branch.message) {
+        redirect('../../login')
+    }
 
     return (
         <UpdateEquipment dataEquipment={equipment} dataUser={user} dataBranch={branch} dataSector={sector} dataSupplier={supplier} token={token} idEquipment={idEquipment}></UpdateEquipment>

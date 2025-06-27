@@ -12,7 +12,11 @@ export default async function PageRegisterProfile() {
         redirect('../login')
     }
     const permission = await fetchData('http://localhost:3001/findAllPermission', token)
+
+    if(permission.message) {
+        redirect('../login')
+    }
     return (
-        <RegisterProfile token={token} dataPermission={permission}></RegisterProfile>
+        <RegisterProfile token={token} dataPermission={permission}></RegisterProfile>  
     )
 }

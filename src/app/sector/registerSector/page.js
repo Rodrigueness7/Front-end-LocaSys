@@ -14,6 +14,10 @@ export default async function RegisterSector() {
 
     const branch = await fetchData('http://localhost:3001/findAllBranch', token)
 
+    if(branch.message) {
+        redirect('../login')
+    }
+
     return (
         <PageRegisterSector dataBranch={branch} token={token}></PageRegisterSector>
     )

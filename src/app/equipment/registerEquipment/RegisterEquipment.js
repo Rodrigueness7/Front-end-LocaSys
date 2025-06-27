@@ -83,7 +83,7 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
 
     const addEquipment = async () => {
 
-        const idUsername = dataUser.find(item => item.username === username).idUser
+        const idUser = dataUser.find(item => item.username === username).idUser
         const idSector = dataSector.find(item => item.sector === sector).idSector
         const idBranch = dataBranch.find(item => item.branch === branch).idBranch
         const idSupplier = dataSupplier.find(item => item.supplier === supplier).idSupplier
@@ -95,7 +95,7 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
             type: type,
             value: value,
             idBranch: idBranch,
-            idUser: idUsername,
+            idUser: idUser,
             idSector: idSector,
             idSupplier: idSupplier,
             entryDate: entryDate
@@ -113,10 +113,14 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
                 idEquipmentHistory: 0,
                 idEquipment: fetchIdEquipment.idEquipment,
                 reason: null,
+                idUser: idUser,
+                idSector: idSector,
+                idBranch: idBranch,
                 entryDate: entryDate,
                 returnDate: null
             }
           await addData('http://localhost:3001/addEquipmentHistory', dataEquipmentHistory, token, setResult) 
+        console.log(dataEquipmentHistory)
         }, 2000)
 
     }

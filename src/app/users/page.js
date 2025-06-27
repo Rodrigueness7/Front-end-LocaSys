@@ -1,10 +1,7 @@
 import { redirect } from 'next/navigation'
 import { cookies } from "next/headers"
 import fetchData from '../../utils/fetchData'
-import Message from '../../utils/message'
 import Users from './users'
-
-
 
 
 export default async function PageUsers() {
@@ -18,7 +15,7 @@ export default async function PageUsers() {
     const DataUsers = await fetchData('http://localhost:3001/findAllUser', token)
     
     if(DataUsers.message) {
-        return(<Message message={'Usuário sem permissão'}/>)
+        redirect('../login')
     }
 
     let data = DataUsers.map(itens => (
