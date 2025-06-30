@@ -50,7 +50,7 @@ export default function Supplier({ tableSupplier }) {
  }
 
     return (
-        <div className="bg-gray-100 py-8 overflow-x-auto h-screen px-8">
+        <div className="bg-gray-100 py-8 overflow-x-auto h-screen px-8 w-full">
             <div className="flex justify-between mb-8 lg:px-8 sm:px-8 items-center xl:w-1/2">
                 <Link href={'../supplier/registerSupplier'}><button className='p-2 bg-indigo-500 rounded-lg text-white'>Novo Fonercedor</button></Link>
                 <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={generation}>Gerar PDF</button>

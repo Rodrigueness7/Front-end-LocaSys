@@ -64,7 +64,7 @@ export default function Sector({ tableSector }) {
  }
 
     return (
-        <div className='bg-gray-100 py-8 overflow-x-auto h-screen'>
+        <div className='bg-gray-100 py-8 overflow-x-auto h-screen w-full'>
             <div className="flex justify-between mb-8 lg:px-8 sm:px-8 xl:w-1/2">
                 <Link href={'../sector/registerSector'}><button className='p-2 bg-indigo-500 rounded-lg text-white'>Novo Setor </button></Link>
                 <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={generation}>Gerar PDF</button>

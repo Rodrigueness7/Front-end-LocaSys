@@ -5,7 +5,7 @@ import Link from "next/link"
 
 export default function Profile({tableProfile}) {
     return(
-        <div className="bg-gray-100 py-8 overflow-x-auto h-screen px-12">
+        <div className="bg-gray-100 py-8 overflow-x-auto h-screen px-12 w-full">
         <div className="flex items-start mb-8 lg:px-8 sm:px-8">
             <Link href={'../profile/registerProfile'}><button className='p-2 bg-indigo-600 hover:bg-indigo-700 rounded-lg text-white'>Nova Perfil</button></Link>
         </div>

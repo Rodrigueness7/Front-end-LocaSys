@@ -74,7 +74,7 @@ export default function UpdateBranch({ dataBranch, idBranch, token }) {
     }
 
     return (
-        <section className="bg-gray-100 py-3 h-screen">
+        <section className="bg-gray-100 py-3 h-screen w-full">
             <div className="flex items-start mb-8 lg:px-2 sm:px-0">
                 <button onClick={deleteBranch} className="p-2 bg-indigo-500 rounded-lg text-white">Deletar</button>
             </div>

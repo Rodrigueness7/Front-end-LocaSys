@@ -66,7 +66,7 @@ export default function PageRegisterBranch({ token }) {
     }
 
     return (
-        <section className="bg-gray-100 py-3 h-screen">
+        <section className="bg-gray-100 py-3 h-screen w-full">
             <div className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
                 <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">Cadastro da Filial</h1>
                 <form className="grid grid-cols-1 gap-x-8 gap-y-4">

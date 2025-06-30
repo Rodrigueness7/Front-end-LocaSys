@@ -29,14 +29,14 @@ export default function Report({equipmentHistory, equipmentRental}) {
     const search = (e) => {
         e.preventDefault()
         
-        // let findInitPeriod = equipmentRental.find(item => item.initPeriod).initPeriod.slice(0,10)
-        // let findFinishPeriod = equipmentRental.find(item => item.finishPeriod).finishPeriod.slice(0,10)
+        let findInitPeriod = equipmentRental.find(item => item.initPeriod).initPeriod.slice(0,10)
+        let findFinishPeriod = equipmentRental.find(item => item.finishPeriod).finishPeriod.slice(0,10)
     
-        // if(findInitPeriod != initPeriod && findFinishPeriod != finishPeriod ) {
-        //     return(
-        //         alert('Não há dados para esse periodo')
-        //     )
-        // }
+        if(findInitPeriod != initPeriod && findFinishPeriod != finishPeriod ) {
+            return(
+                alert('Não há dados para esse periodo')
+            )
+        }
 
         const newDataEquipment = equipmentRental.map((item) => {
             
@@ -82,7 +82,7 @@ export default function Report({equipmentHistory, equipmentRental}) {
     }
 
     return(
-        <div className="bg-gray-100 py-8 overflow-x-auto h-screen px-12">
+        <div className="bg-gray-100 py-8 overflow-x-auto h-screen px-12 w-full">
             <div className="flex justify-between mb-8 lg:px-8 sm:px-8 xl:w-1/2">
                 <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={generation}>Gerar PDF</button>
             </div>

@@ -167,10 +167,8 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         setIsModalOpen(true)
     }
 
-
-
     return (
-        <section className="bg-gray-100 py-3">
+        <section className="bg-gray-100 py-3 w-full">
             <div className="flex justify-between">
                 <Modal classFirstDivButton={'flex items-start mb-8 lg:px-2 sm:px-0'} classFirstButton={"p-2 bg-indigo-500 rounded-lg text-white"} FirstButton={'Devolver'} classCloseModal={'fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'} classDivChildren={'bg-white rounded-lg shadow-lg w-96 p-6'} classDivButton={'flex justify-end mt-6'} classSecondButton={'px-4 py-2 text-gray-600 bg-gray-200 rounded hover:bg-gray-300'} secondButton={'Fechar'} Children={
                     <div>

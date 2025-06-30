@@ -60,7 +60,7 @@ export default function Login() {
   }
 
   return (
-    <section className="bg-gray-100 h-screen flex justify-center items-center">
+    <section className="bg-gray-100 h-screen flex justify-center items-center w-full">
       <div className="flex justify-center items-center flex-col bg-white shadow hover:shadow-lg h-96 w-96 rounded-lg relative">
         <form onSubmit={submit}>
           <div>

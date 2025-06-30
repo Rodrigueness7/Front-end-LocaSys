@@ -23,7 +23,7 @@ export default function Branch({ tableBranch }) {
      }
 
     return (
-        <div className="bg-gray-100 py-8 overflow-x-auto h-screen px-12">
+        <div className="bg-gray-100 py-8 overflow-x-auto h-screen px-12 w-full">
             <div className="flex justify-between mb-8 lg:px-8 sm:px-8 xl:w-1/2">
                 <Link href={'../branch/registerBranch'}><button className='p-2 bg-indigo-500 rounded-lg text-white'>Nova Filial</button></Link>
                 <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={generation}>Gerar PDF</button>
