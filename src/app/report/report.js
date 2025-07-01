@@ -79,6 +79,9 @@ export default function Report({equipmentHistory, equipmentRental}) {
 
     const generation = (e) => {
         e.preventDefault()
+        sessionStorage.setItem('equipments', JSON.stringify(dataReport))
+        window.open(`/report/comparativeEquipment`, '_blank')
+       
     }
 
     return(
@@ -95,7 +98,7 @@ export default function Report({equipmentHistory, equipmentRental}) {
             </form>
             {showTable && (
                 <div className="ml-8 flex-1">
-                    <Table Table={'table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b '} Td={'py-2 px-4'} headers={['Código', 'Equipamento', 'Valor', 'Filial', 'Usuário']} data={dataReport} attributos={['codProd', 'equipment', 'value', 'branch', 'user']} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'#'} bt={'...'}></Table>
+                    <Table Table={'table w-5/6 bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b '} Td={'py-2 px-4'} headers={['Código', 'Equipamento', 'Valor', 'Filial', 'Usuário', 'Setor']} data={dataReport} attributos={['codProd', 'equipment', 'value', 'branch', 'user', 'sector']} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'#'} bt={'...'}></Table>
                 </div>
             )}   
         </div>

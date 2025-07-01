@@ -1,4 +1,4 @@
-'use client'
+
 import React from "react";
 import { Page, Text, View, Document, StyleSheet, PDFViewer } from "@react-pdf/renderer";
 
@@ -16,6 +16,7 @@ export default function LargePdfTable({ data, size = "A4", user, title, width })
     page: {
       padding: 20,
       fontSize: 10,
+      paddingBottom: 60,
     },
     section: {
       marginBottom: 15,
