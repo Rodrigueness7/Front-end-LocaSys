@@ -52,7 +52,7 @@ export default function Login() {
       }, 8600000)
 
     }
-    console.log(value)
+    
     if (value.errorMessage) {
       setResult('Usuário ou Senha inválido')
       setTimeout(() => { setResult('') }, 1000)

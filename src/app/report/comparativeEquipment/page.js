@@ -8,25 +8,19 @@ const LargePdfTable = dynamic(() => import('../../../components/largePdfTable'),
     ssr: false
 })
 
-
 export default function Report() {
 
-    const [data, setData] = useState(null)
-    const [user, setUser] = useState(null)
+  const [data, setData] = useState()
+  const [user, setUser] = useState()
 
-    useEffect(() => {
-        const storedData = sessionStorage.getItem('equipments')
-        const user = localStorage.getItem('username')
-        setUser(user)
-        setData(JSON.parse(storedData))
-    }, [])
-
-    console.log(data)
+  useEffect(() => {
+        setData(JSON.parse(sessionStorage.getItem('equipments')))
+        setUser(localStorage.getItem('username'))
+  }, [])
+     
     return(
         <>
-         {data !== null && (
-            <LargePdfTable data={data} size={'A4'} user={user} title={'Relátorio de Comparativo'} width={'25%'}></LargePdfTable>
-         )}
+        {!data || !user ? (<h1>Carregando...</h1>) : ( <LargePdfTable data={data} size={'A4'} user={user} title={'Relátorio de Comparativo'} width={'25%'}></LargePdfTable>)}
         </>
     )
 }

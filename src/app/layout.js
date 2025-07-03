@@ -21,7 +21,7 @@ const geistMono = localFont({
 
 export default function RootLayout({ children }) {
   const pathname = usePathname(); 
-  const hideMenuRoutes = ["/login", '/report/comparativeEquipment', '/equipment/report', '/branch/report', '/sector/report', '/supplier/report'];
+  const hideMenuRoutes = ["/login", '/report/comparativeEquipment', '/equipment/report', '/branch/report', '/sector/report', '/supplier/report', '/users/report'];
   const token = getCookie("token");
   const [branch, setBranch] = useState([]);
 

@@ -1,6 +1,8 @@
 'use client'
 import InputForm from "@/components/InputForm";
 import Table from "@/components/table";
+import {setCookie } from "cookies-next";
+
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -74,25 +76,24 @@ export default function Report({equipmentHistory, equipmentRental}) {
 
     setDataReport(newDataEquipment) 
     setShowTable(true)
-    
     }
+    
 
     const generation = (e) => {
         e.preventDefault()
         sessionStorage.setItem('equipments', JSON.stringify(dataReport))
         window.open(`/report/comparativeEquipment`, '_blank')
-       
+      
     }
-
     return(
         <div className="bg-gray-100 py-8 overflow-x-auto h-screen px-12 w-full">
             <div className="flex justify-between mb-8 lg:px-8 sm:px-8 xl:w-1/2">
-                <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={generation}>Gerar PDF</button>
+                <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={generation}>Gerar Relatório</button>
             </div>
              <form className="ml-8 flex relative">
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Data inicial'} type={'date'} name={'initPeriod'} value={initPeriod} onchange={changeInitPeriod}></InputForm>
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Data final'} type={'date'} name={'finshPeriod'} value={finishPeriod} onchange={changeFinishPeriod}></InputForm>
-                <div className="mt-2">
+                <div className="mt-2 ml-4">
                     <button onClick={search} className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ">Buscar</button>
                 </div>
             </form>
