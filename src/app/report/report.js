@@ -1,19 +1,20 @@
 'use client'
 import InputForm from "@/components/InputForm";
+import InputSelect from "@/components/InputSelect";
 import Table from "@/components/table";
-import {setCookie } from "cookies-next";
-
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Report({equipmentHistory, equipmentRental}) {
 
-
+    const options = [{id: 0, option: 'Comparativo Equipamentos'}, {id: 1, option: 'Comparativo de valor'}]
+    const listOption = options.map(item => item.option)
     const router = useRouter()
     const [initPeriod, setInitPeriod] = useState('')
     const [finishPeriod, setFinishPeriod] = useState('')
     const [dataReport, setDataReport] = useState('')
     const [showTable, setShowTable] = useState(false)
+    const [report, setReport] = useState(listOption[0])
 
     const changeInitPeriod = (e) => {
         setInitPeriod(e.target.value)
@@ -23,9 +24,15 @@ export default function Report({equipmentHistory, equipmentRental}) {
         setFinishPeriod(e.target.value)
     }
 
+    const changeReport = (e) => {
+        setReport(e.target.value)
+    }
+
     if(equipmentRental.message) {
         router.push('./login')
     }
+
+
     
 
     const search = (e) => {
@@ -81,13 +88,19 @@ export default function Report({equipmentHistory, equipmentRental}) {
 
     const generation = (e) => {
         e.preventDefault()
-        sessionStorage.setItem('equipments', JSON.stringify(dataReport))
-        window.open(`/report/comparativeEquipment`, '_blank')
+        if(report == listOption[0]) {
+            sessionStorage.setItem('equipments', JSON.stringify(dataReport))
+            window.open(`/report/comparativeEquipment`, '_blank')
+        }
+        
       
     }
     return(
         <div className="bg-gray-100 py-8 overflow-x-auto h-screen px-12 w-full">
             <div className="flex justify-between mb-8 lg:px-8 sm:px-8 xl:w-1/2">
+                <form>
+                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Relatório'} name={'report'} datas={listOption} value={report} onchange={changeReport}></InputSelect>
+                </form>
                 <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={generation}>Gerar Relatório</button>
             </div>
              <form className="ml-8 flex relative">

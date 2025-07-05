@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Page, Text, View, Document, StyleSheet, PDFViewer } from "@react-pdf/renderer";
 
 
@@ -12,6 +12,8 @@ const chunkArray = (array, size) => {
 };
 
 export default function LargePdfTable({ data, size = "A4", user, title, width }) {
+
+
   const styles = StyleSheet.create({
     page: {
       padding: 20,
