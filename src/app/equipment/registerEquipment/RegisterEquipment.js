@@ -116,11 +116,11 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
                 idUser: idUser,
                 idSector: idSector,
                 idBranch: idBranch,
+                value: value,
                 entryDate: entryDate,
                 returnDate: null
             }
           await addData('http://localhost:3001/addEquipmentHistory', dataEquipmentHistory, token, setResult) 
-        console.log(dataEquipmentHistory)
         }, 2000)
 
     }

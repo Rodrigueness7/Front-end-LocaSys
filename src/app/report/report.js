@@ -33,8 +33,6 @@ export default function Report({equipmentHistory, equipmentRental}) {
     }
 
 
-    
-
     const search = (e) => {
         e.preventDefault()
         
@@ -52,6 +50,7 @@ export default function Report({equipmentHistory, equipmentRental}) {
             const findEquipment = equipmentHistory.find(items => items['Equipment'].codProd == item.codProd)
        
         if (findEquipment) {
+           
 
             if (findEquipment.entryDate.slice(0,10) >= initPeriod && findEquipment.entryDate.slice(0,10) <= finishPeriod) {
 
@@ -59,7 +58,8 @@ export default function Report({equipmentHistory, equipmentRental}) {
                     id: item.idEquipmentRental,
                     codProd: item.codProd,
                     equipment: item.description,
-                    value: item.value,
+                    valueKm: item.value,
+                    value: findEquipment.value,
                     branch: findEquipment['Branch'].branch,
                     user: findEquipment['User'].username,
                     sector: findEquipment['Sector'].sector
@@ -71,7 +71,7 @@ export default function Report({equipmentHistory, equipmentRental}) {
                 id: item.idEquipmentRental,
                 codProd: item.codProd,
                 equipment: item.description,
-                value: item.value,
+                valueKm: item.value,
                 branch: '',
                 user: '',
                 sector: ''
@@ -83,14 +83,14 @@ export default function Report({equipmentHistory, equipmentRental}) {
 
     setDataReport(newDataEquipment) 
     setShowTable(true)
+    sessionStorage.setItem('equipments', JSON.stringify(dataReport))
     }
     
 
-    const generation = (e) => {
+    const generation = async (e) => {
         e.preventDefault()
-        if(report == listOption[0]) {
-            sessionStorage.setItem('equipments', JSON.stringify(dataReport))
-            window.open(`/report/comparativeEquipment`, '_blank')
+         if(report == listOption[0]) {
+            
         }
         
       
@@ -112,7 +112,7 @@ export default function Report({equipmentHistory, equipmentRental}) {
             </form>
             {showTable && (
                 <div className="ml-8 flex-1">
-                    <Table Table={'table w-5/6 bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b '} Td={'py-2 px-4'} headers={['Código', 'Equipamento', 'Valor', 'Filial', 'Usuário', 'Setor']} data={dataReport} attributos={['codProd', 'equipment', 'value', 'branch', 'user', 'sector']} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'#'} bt={'...'}></Table>
+                    <Table Table={'table w-5/6 bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b '} Td={'py-2 px-4'} headers={['Código', 'Equipamento', 'Valor K&M', 'Valor', 'Filial', 'Usuário', 'Setor']} data={dataReport} attributos={['codProd', 'equipment', 'valueKm', 'value', 'branch', 'user', 'sector']} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'#'} bt={'...'}></Table>
                 </div>
             )}   
         </div>

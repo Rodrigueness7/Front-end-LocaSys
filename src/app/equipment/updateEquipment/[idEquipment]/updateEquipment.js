@@ -151,6 +151,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             idUsername: idUser,
             idSector: idSector,
             idBranch: idBranch,
+            value: value,
             entryDate: entryDate,
             returnDate: returnDate
         }
