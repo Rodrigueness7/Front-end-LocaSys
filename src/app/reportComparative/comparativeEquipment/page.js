@@ -5,7 +5,8 @@ import { useEffect, useState } from "react"
 
 
 const LargePdfTable = dynamic(() => import('../../../components/largePdfTable'), {
-    ssr: false
+    ssr: false,
+    loading: () => <h1 className="animate-spin rounded-full border-4 border-t-transparent border-blue-500 w-64 h-64"></h1>
 })
 
 export default function Report() {
@@ -17,6 +18,7 @@ export default function Report() {
   useEffect(() => {
         setData(JSON.parse(sessionStorage.getItem('equipments')))
         setUser(localStorage.getItem('username'))
+    
   }, [])
         
    

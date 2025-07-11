@@ -80,28 +80,31 @@ export default function Report({equipmentHistory, equipmentRental}) {
             return data
         }
     })
-
-    setDataReport(newDataEquipment) 
-    setShowTable(true)
-    sessionStorage.setItem('equipments', JSON.stringify(dataReport))
+    
+     setDataReport(newDataEquipment) 
+     setShowTable(true)
     }
     
 
     const generation = async (e) => {
         e.preventDefault()
+         sessionStorage.setItem('equipments', JSON.stringify(dataReport))
          if(report == listOption[0]) {
+            window.open('/reportComparative/comparativeEquipment')
             
         }
-        
-      
     }
+
     return(
         <div className="bg-gray-100 py-8 overflow-x-auto h-screen px-12 w-full">
             <div className="flex justify-between mb-8 lg:px-8 sm:px-8 xl:w-1/2">
-                <form>
+                <form className="flex">
                     <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Relatório'} name={'report'} datas={listOption} value={report} onchange={changeReport}></InputSelect>
+                    <div className="mt-8 ml-4">
+                        <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={generation}>Gerar Relatório</button>
+                    </div>
                 </form>
-                <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={generation}>Gerar Relatório</button>
+                
             </div>
              <form className="ml-8 flex relative">
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Data inicial'} type={'date'} name={'initPeriod'} value={initPeriod} onchange={changeInitPeriod}></InputForm>

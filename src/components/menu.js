@@ -31,7 +31,6 @@ export default function Menu({ token, dataBranch }) {
     const [showReport, setShowReport] = useState(false)
     
 
-    console.log(dataBranch)
 
     const changeCellInit = (e) => {
         setCellInit(e.target.value)
@@ -214,7 +213,7 @@ export default function Menu({ token, dataBranch }) {
                     <button onClick={handleReport} className="hover:text-blue-500 transition duration-300" >Relatório</button>
                     {showReport == true ? (
                         <ul className="ml-5">
-                            <Link className="hover:text-blue-500 transition duration-300" href={'/report'}><li>Comparativo Equipamentos</li></Link>
+                            <Link className="hover:text-blue-500 transition duration-300" href={'/reportComparative'}><li>Comparativo Equipamentos</li></Link>
                         </ul>
                     ) : null}
                 </div>
