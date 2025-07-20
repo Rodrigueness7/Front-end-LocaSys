@@ -97,7 +97,7 @@ export default function UpdateSupplier({ idSupplier, data, token }) {
             city: city,
         }
 
-        await updateData(`http://localhost:3001/updateSupplier/${idSupplier}`, data, token, setResult)
+        await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateSupplier/${idSupplier}`, data, token, setResult)
         setIsModalOpen(true)
     }
 
@@ -106,7 +106,7 @@ export default function UpdateSupplier({ idSupplier, data, token }) {
             deletionDate: new Date().toLocaleDateString('pt-BR')
         }
 
-        await inactivateData(`http://localhost:3001/inactivateSupplier/${idSupplier}`, data, token, setResult)
+        await inactivateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/inactivateSupplier/${idSupplier}`, data, token, setResult)
         setIsModalOpen(true)
     }
 

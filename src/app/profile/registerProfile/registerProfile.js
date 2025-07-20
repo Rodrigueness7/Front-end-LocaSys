@@ -46,11 +46,11 @@ export default function RegisterProfile({ token, dataPermission }) {
             profile: profile
         }
 
-        addData('http://localhost:3001/addProfile', dataProfile, token, setResult)
+        addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addProfile`, dataProfile, token, setResult)
         setIsModalOpen(true)
 
         setTimeout(async () => {
-            let fetchProfile = await fetchData('http://localhost:3001/findAllProfile', token)
+            let fetchProfile = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllProfile`, token)
             let idProfile = fetchProfile.find(item => item.profile === profile).idProfile
 
             let dataProfile_permission = selectedPermissions.map(itens => ({
@@ -60,7 +60,7 @@ export default function RegisterProfile({ token, dataPermission }) {
                 idPermission: itens.id,
                 allow: itens.checked
             }))
-            addData('http://localhost:3001/addProfile_permission', dataProfile_permission, token, setResult)
+            addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addProfile_permission`, dataProfile_permission, token, setResult)
             setIsModalOpen(true)
         }, 3000)
 

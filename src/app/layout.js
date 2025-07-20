@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
   useEffect(() => {
     async function fetchBranches() {
       try {
-        const data = await fetchData("http://localhost:3001/findAllBranch", token);
+        const data = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllBranch`, token);
         setBranch(data);
       } catch (error) {
         console.error("Erro ao buscar branches:", error);

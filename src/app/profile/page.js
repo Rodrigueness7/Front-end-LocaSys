@@ -13,7 +13,7 @@ export default async function PageProfile() {
         redirect('../login')
     }
 
-    const dataProfile = await fetchData('http://localhost:3001/findAllProfile', token)
+    const dataProfile = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllProfile`, token)
     
     if(dataProfile.message) {
        redirect('../login')

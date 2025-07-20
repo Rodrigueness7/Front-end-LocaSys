@@ -97,7 +97,7 @@ export default function RegisterSupplier({ token }) {
             city: city
         }
 
-        await addData('http://localhost:3001/addSupplier', data, token, setResult)
+        await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addSupplier`, data, token, setResult)
         setIsModalOpen(true)
     }
 

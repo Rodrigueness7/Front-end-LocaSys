@@ -14,8 +14,8 @@ export default async function PageUpdateProfile({ params }) {
         redirect('../../login')
     }
 
-    const profile = await fetchData(`http://localhost:3001/findProfile/${idProfile}`, token)
-    const permission = await fetchData(`http://localhost:3001/findPermissionIdProfile_permission/${idProfile}`, token)
+    const profile = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findProfile/${idProfile}`, token)
+    const permission = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findPermissionIdProfile_permission/${idProfile}`, token)
 
     if(permission.message) {
         redirect('../../login')

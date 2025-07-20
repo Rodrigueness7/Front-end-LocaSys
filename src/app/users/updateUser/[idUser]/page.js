@@ -15,9 +15,9 @@ export default async function PageUpdateUser({ params }) {
         redirect('../../login')
     }
 
-    const sector = await fetchData('http://localhost:3001/findAllSector', token)
-    const profile = await fetchData('http://localhost:3001/findAllProfile', token)
-    const dataUserId = await fetchData(`http://localhost:3001/findIdUser/${idUser}`, token)
+    const sector = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllSector`, token)
+    const profile = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllProfile`, token)
+    const dataUserId = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findIdUser/${idUser}`, token)
 
 
     return (

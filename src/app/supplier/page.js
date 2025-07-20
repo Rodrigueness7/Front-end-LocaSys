@@ -12,7 +12,7 @@ export default async function PageSupplier() {
         redirect('../login')
     }
 
-    const dataSupplier = await fetchData('http://localhost:3001/findAllSupplier', token)
+    const dataSupplier = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllSupplier`, token)
 
     if (dataSupplier.message) {
         redirect('../login')

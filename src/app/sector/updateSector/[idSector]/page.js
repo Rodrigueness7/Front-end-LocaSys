@@ -13,8 +13,8 @@ export default async function PageUpdateSector({ params }) {
         redirect('../../login')
     }
 
-    const sector = await fetchData(`http://localhost:3001/findSector/${idSector}`, token)
-    const branch = await fetchData('http://localhost:3001/findAllBranch', token)
+    const sector = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findSector/${idSector}`, token)
+    const branch = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllBranch`, token)
 
     return (
         <UpdateSector idSector={idSector} dataSector={sector} dataBranch={branch} token={token}></UpdateSector>

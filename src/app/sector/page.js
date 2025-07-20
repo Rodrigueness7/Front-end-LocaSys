@@ -13,7 +13,7 @@ export default async function PageSector() {
         redirect('../login')
     }
 
-    const sector = await fetchData('http://localhost:3001/findAllSector', token)
+    const sector = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllSector`, token)
 
     if (sector.message) {
         redirect('../login')

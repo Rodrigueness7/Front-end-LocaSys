@@ -12,7 +12,7 @@ export default async function PageUsers() {
         redirect('../login')
     }
 
-    const DataUsers = await fetchData('http://localhost:3001/findAllUser', token)
+    const DataUsers = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllUser`, token)
     
     if(DataUsers.message) {
         redirect('../login')

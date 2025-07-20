@@ -13,7 +13,7 @@ export default async function PageEquipment() {
         redirect('./login')
     }
 
-    const equipment = await fetchData('http://localhost:3001/findAllEquipment', token)
+    const equipment = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllEquipment`, token)
    
 
     if(equipment.message) {

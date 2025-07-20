@@ -31,7 +31,7 @@ export default function Login() {
       password: password
     }
 
-    let data = await fetch('http://localhost:3001/login', {
+    let data = await fetch(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/login`, {
       method: 'POST',
       body: JSON.stringify(fetchData),
       headers: {

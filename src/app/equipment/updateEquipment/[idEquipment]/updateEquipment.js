@@ -115,7 +115,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             idSupplier: idSupplier,
             entryDate: entryDate
         }
-        await updateData(`http://localhost:3001/updateEquipment/${idEquipment}`, data, token, setResult)
+        await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateEquipment/${idEquipment}`, data, token, setResult)
         setIsModalOpen(true)
     }
 
@@ -139,7 +139,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
                 returnDate: returnDate
             }
 
-            await inactivateData(`http://localhost:3001/returnEquipment/${idEquipment}`, data, token, setResult)
+            await inactivateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/returnEquipment/${idEquipment}`, data, token, setResult)
             setIsModalOpen(true)
         }, 1000)
 
@@ -156,7 +156,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             returnDate: returnDate
         }
 
-        await addData('http://localhost:3001/addEquipmentHistory', dataEquipmentHistory, token, setResult)
+        await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addEquipmentHistory`, dataEquipmentHistory, token, setResult)
         setIsModalOpen(true)
     }
 
@@ -164,7 +164,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         let data = {
             returnDate: null
         }
-        await updateData(`http://localhost:3001/returnEquipment/${idEquipment}`, data, token, setResult)
+        await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/returnEquipment/${idEquipment}`, data, token, setResult)
         setIsModalOpen(true)
     }
 

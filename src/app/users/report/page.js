@@ -4,10 +4,6 @@ import dynamic from "next/dynamic"
 import { useEffect, useState } from "react"
 
 
-// const TablePdf = dynamic(() => import('../../../components/tablePdf'), {
-//     ssr: false
-// })
-
 const LargePdfTable = dynamic(() => import('../../../components/largePdfTable'), {
     ssr: false
 })

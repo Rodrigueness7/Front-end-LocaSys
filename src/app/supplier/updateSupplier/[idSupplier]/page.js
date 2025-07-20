@@ -16,7 +16,7 @@ export default async function PageUpdateSupplier({ params }) {
 
     }
     
-    const supplier = await fetchData(`http://localhost:3001/findSupplier/${idSupplier}`, token)
+    const supplier = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findSupplier/${idSupplier}`, token)
 
     return (
         <UpdateSupplier idSupplier={idSupplier} data={supplier} token={token}></UpdateSupplier>

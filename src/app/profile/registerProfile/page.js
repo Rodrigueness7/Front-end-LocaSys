@@ -11,7 +11,7 @@ export default async function PageRegisterProfile() {
     if (!token) {
         redirect('../login')
     }
-    const permission = await fetchData('http://localhost:3001/findAllPermission', token)
+    const permission = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllPermission`, token)
 
     if(permission.message) {
         redirect('../login')

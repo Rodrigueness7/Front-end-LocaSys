@@ -15,7 +15,7 @@ export default async function logs() {
         redirect('../login')
     }
 
-    let log = await fetchData('http://localhost:3001/findAllLog', token)
+    let log = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllLog`, token)
     if (log.message) {
         return <Message message={'Usuário sem permissão'} />
     }

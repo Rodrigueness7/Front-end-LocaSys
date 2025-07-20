@@ -101,12 +101,12 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
             entryDate: entryDate
         }
 
-        await addData('http://localhost:3001/addEquipment', data, token, setResult)
+        await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addEquipment`, data, token, setResult)
         setIsModalOpen(true)
         
 
         setTimeout(async () => {
-            let fetchEquipment = await fetchData('http://localhost:3001/findAllEquipment', token)
+            let fetchEquipment = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllEquipment`, token)
             let fetchIdEquipment = fetchEquipment.find(item => item.codProd == codProd)
 
             let dataEquipmentHistory = {
@@ -120,7 +120,7 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
                 entryDate: entryDate,
                 returnDate: null
             }
-          await addData('http://localhost:3001/addEquipmentHistory', dataEquipmentHistory, token, setResult) 
+          await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addEquipmentHistory`, dataEquipmentHistory, token, setResult) 
         }, 2000)
 
     }

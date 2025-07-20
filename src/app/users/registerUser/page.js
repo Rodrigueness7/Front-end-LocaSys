@@ -14,9 +14,9 @@ export default async function PageRegisterUser() {
 
     }
 
-    const dataSector = await fetchData('http://localhost:3001/findAllSector', token)
-    const dataProfile = await fetchData('http://localhost:3001/findAllProfile', token)
-    const dataUser = await fetchData('http://localhost:3001/findAllUser', token)
+    const dataSector = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllSector`, token)
+    const dataProfile = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllProfile`, token)
+    const dataUser = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllUser`, token)
 
     if(dataUser.message) {
         redirect('../login')

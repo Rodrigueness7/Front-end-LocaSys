@@ -41,7 +41,7 @@ export default function PageRegisterSector({dataBranch, token }) {
             sector: sector
         }
 
-        await addData('http://localhost:3001/addSector', data, token, setResult)
+        await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addSector`, data, token, setResult)
         setIsModalOpen(true)
     }
 

@@ -60,7 +60,7 @@ export default function PageRegisterBranch({ token }) {
             uniqueIdentifier: uniqueIdentifier
         }
 
-        await addData('http://localhost:3001/addBranch', data, token, setResult)
+        await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addBranch`, data, token, setResult)
         setIsModalOpen(true)
 
     }

@@ -14,7 +14,7 @@ export default async function PageUpdateBranch({ params }) {
         redirect('../../login')
     }
     
-    let branch = await fetchData(`http://localhost:3001/findBranch/${idBranch}`, token)
+    let branch = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findBranch/${idBranch}`, token)
 
     if(branch.message) {
         redirect('../../login')

@@ -122,7 +122,7 @@ export default function RegisterUser({ dataSector, dataProfile, token }) {
             idProfile: idProfile
         }
 
-        await addData('http://localhost:3001/addUser', data, token, setResult)
+        await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addUser`, data, token, setResult)
         setIsModalOpen(true)
     }
 

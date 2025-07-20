@@ -12,7 +12,7 @@ export default async function RegisterSector() {
         redirect('../login')
     }
 
-    const branch = await fetchData('http://localhost:3001/findAllBranch', token)
+    const branch = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllBranch`, token)
 
     if(branch.message) {
         redirect('../login')
