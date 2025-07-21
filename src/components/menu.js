@@ -108,7 +108,7 @@ export default function Menu({ token, dataBranch }) {
         formData.append('file', file);
 
 
-        await fetch('http://localhost:3001/uploadFile', {
+        await fetch(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/uploadFile`, {
             method: 'POST',
             headers: {
                 'Authorization': token
@@ -126,7 +126,7 @@ export default function Menu({ token, dataBranch }) {
             idBranch: idBranch
         }
 
-        await addData('http://localhost:3001/addEquipmentRental', data, token, setResult)
+        await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addEquipmentRental`, data, token, setResult)
         setCellInit('')
         setCellFinish('')
         setInitPeriod('')
@@ -145,7 +145,7 @@ export default function Menu({ token, dataBranch }) {
             idBranch: idBranch
         }
 
-        await fetch('http://localhost:3001/deleteAllEquipmentRental', {
+        await fetch(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/deleteAllEquipmentRental`, {
         method: 'DELETE',
         headers: {
             'content-type': 'application/json',
