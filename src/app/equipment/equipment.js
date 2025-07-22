@@ -4,7 +4,7 @@ import InputForm from "@/components/InputForm"
 import InputSelect from "@/components/InputSelect"
 import Table from "@/components/table"
 import Link from "next/link"
-import { useMemo, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 
 export default function Equipment({ tableEquipment, attribute }) {
 
@@ -15,7 +15,7 @@ export default function Equipment({ tableEquipment, attribute }) {
     const [type, setType] = useState('')
     const [branch, setBranch] = useState('')
     const [username, setUsername] = useState('')
-   
+
     const generation = async () => {
         sessionStorage.setItem('dataEquipment', JSON.stringify(dataEquipment))
         window.open(`/equipment/report`, '_blank')
@@ -34,22 +34,23 @@ export default function Equipment({ tableEquipment, attribute }) {
         })
     }
 
-    const getOptions = (field, ignore = '') => {
-        const dataFilter = tableEquipment.filter((item) => 
-            (codProd && ignore != 'Código' ? item['Código'] == codProd.toString : true) &&
+    const getOptions = useCallback((field, ignore = '') => {
+        const dataFilter = tableEquipment.filter((item) =>
+            (codProd && ignore != 'Código' ? item['Código'] == codProd.toString() : true) &&
             (equipment && ignore != 'Equipamento' ? item['Equipamento'] === equipment : true) &&
             (type && ignore != 'Tipo' ? item['Tipo'] === type : true) &&
-            (branch && ignore != 'Filial' ? item['Filial'] === branch: true) &&
+            (branch && ignore != 'Filial' ? item['Filial'] === branch : true) &&
             (username && ignore != 'Usuario' ? item['Usuario'] === username : true)
-    )
-       const options = dataFilter.map(item => item[field])
-        return [... new Set(options)]
-    }
-    
-    const optionsBranch = useMemo(() => getOptions('Filial', 'Filial'), [type, equipment, username])
-    const optionsType = useMemo(() => getOptions('Tipo', 'Tipo'), [branch, equipment, username])
-    const optionsEquipment = useMemo(() => getOptions('Equipamento', 'Equipamento'), [branch, type, username])
-    const optionsUsername = useMemo(() => getOptions('Usuario', 'Usuario'), [branch, type, equipment])
+        );
+        const options = dataFilter.map(item => item[field]);
+        return [...new Set(options)];
+    }, [codProd, equipment, type, branch, username, tableEquipment]);
+
+
+    const optionsBranch = useMemo(() => getOptions('Filial', 'Filial'), [getOptions])
+    const optionsType = useMemo(() => getOptions('Tipo', 'Tipo'), [getOptions])
+    const optionsEquipment = useMemo(() => getOptions('Equipamento', 'Equipamento'), [getOptions])
+    const optionsUsername = useMemo(() => getOptions('Usuario', 'Usuario'), [getOptions])
 
 
     const changeCodProd = (e) => {
@@ -94,7 +95,7 @@ export default function Equipment({ tableEquipment, attribute }) {
                 <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={generation}>Gerar Relatório</button>
             </div>
             <form className=" ml-8 flex relative" onSubmit={searchEquipment}>
-                <InputForm   classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-32 px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4 mr-4'} label={'Código'} type={'text'} name={'codProd'} value={codProd} onchange={changeCodProd} maxLength={'10'}></InputForm>
+                <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-32 px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4 mr-4'} label={'Código'} type={'text'} name={'codProd'} value={codProd} onchange={changeCodProd} maxLength={'10'}></InputForm>
                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-40 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4 mr-4'} label={'Equipamento'} name={'equipment'} datas={optionsEquipment} value={equipment} onchange={changeEquipment}></InputSelect>
                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-40 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4 mr-4'} label={'Tipo'} name={'type'} datas={optionsType} value={type} onchange={changeType}></InputSelect>
                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-40 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4 mr-4'} label={'Filial'} name={'branch'} datas={optionsBranch} value={branch} onchange={changeBranch}></InputSelect>

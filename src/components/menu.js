@@ -222,7 +222,7 @@ export default function Menu({ token, dataBranch }) {
                 </div>
             </div>
             {showImport && (
-                <FormModal children={
+                <FormModal setShow={setShowImport}>
                     <div>
                         <h2 className="text-lg font-bold mb-4">Importar</h2>
                         <p>Selecione o arquivo para importar.</p>
@@ -243,10 +243,10 @@ export default function Menu({ token, dataBranch }) {
                     )
                 }></MessageModal>
                     </div>
-                } setShow={setShowImport}></FormModal>
+                </FormModal>
             )}
             {showDelete && (
-                <FormModal children={
+                <FormModal setShow={setShowDelete}>
                     <div>
                         <h1>Deletar</h1>
                         <div className="mt-5 flex justify-items">
@@ -261,11 +261,10 @@ export default function Menu({ token, dataBranch }) {
                     )
                 }></MessageModal>
                     </div>
-                    
-                } setShow={setShowDelete}></FormModal>
+                </FormModal>
             )}
              
-        </div>
+        </div> 
     )
 }
 

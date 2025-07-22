@@ -4,7 +4,7 @@ import InputForm from "@/components/InputForm"
 import InputSelect from "@/components/InputSelect"
 import Table from "@/components/table"
 import Link from "next/link"
-import { useMemo, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 
 export default function Sector({ tableSector }) {
 
@@ -34,7 +34,7 @@ export default function Sector({ tableSector }) {
         })
     }
 
-    const getOptions = (field, ignore) => {
+    const getOptions = useCallback((field, ignore) => {
         const dataFilter = tableSector.filter((item) =>
             (sector && ignore != 'sector' ? item.sector === sector : true) &&
             (branch && ignore != 'branch' ? item.branch === branch : true)
@@ -42,10 +42,10 @@ export default function Sector({ tableSector }) {
 
         const options = dataFilter.map(item => item[field])
         return [... new Set(options)]
-    }
+    }, [branch, sector, tableSector]);
 
-    const optionsSector = useMemo(() => getOptions('sector', 'sector'), [branch])
-    const optionsBranch = useMemo(() => getOptions('branch', 'branch'), [sector])
+    const optionsSector = useMemo(() => getOptions('sector', 'sector'), [getOptions])
+    const optionsBranch = useMemo(() => getOptions('branch', 'branch'), [getOptions])
 
     const changeId = (e) => {setId(e.target.value)}
 

@@ -6,7 +6,7 @@ import Menu from "@/components/menu";
 import fetchData from "@/utils/fetchData";
 import { usePathname } from "next/navigation";
 import { getCookie } from "cookies-next";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -21,7 +21,9 @@ const geistMono = localFont({
 
 export default function RootLayout({ children }) {
   const pathname = usePathname(); 
-  const hideMenuRoutes = ["/login", '/reportComparative/comparativeEquipment', '/equipment/report', '/branch/report', '/sector/report', '/supplier/report', '/users/report'];
+  const hideMenuRoutes = useMemo(() => {
+    return ["/login", '/reportComparative/comparativeEquipment', '/equipment/report', '/branch/report', '/sector/report', '/supplier/report', '/users/report'];
+  }, [])
   const token = getCookie("token");
   const [branch, setBranch] = useState([]);
 
@@ -37,7 +39,7 @@ export default function RootLayout({ children }) {
     if (!hideMenuRoutes.includes(pathname)) {
       fetchBranches();
     }
-  }, [pathname]);
+  }, [pathname, hideMenuRoutes, token]);
 
   return (
     <html lang="pt-br">

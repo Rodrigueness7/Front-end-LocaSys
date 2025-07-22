@@ -3,7 +3,7 @@
 import InputSelect from "@/components/InputSelect"
 import Table from "@/components/table"
 import Link from "next/link"
-import { useMemo, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 
 
 export default function Users({ tableUsers, attribute }) {
@@ -26,7 +26,7 @@ export default function Users({ tableUsers, attribute }) {
         })
     }
 
-    const getOptions = (field, ignore = '') => {
+    const getOptions = useCallback((field, ignore = '') => {
         const dataFilter = tableUsers.filter((item) =>
             (firstName && ignore != 'Nome' ? item['Nome'] === firstName : true) &&
             (username && ignore != 'Usuario' ? item['Usuario'] === username : true) &&
@@ -36,12 +36,12 @@ export default function Users({ tableUsers, attribute }) {
 
         const options = dataFilter.map(item => item[field])
         return [... new Set(options)]
-    }
+    }, [firstName, username, sector, profile, tableUsers])
 
-    const optionsFirstName = useMemo(() => getOptions('Nome', 'Nome'), [username, sector, profile])
-    const optionsUsername = useMemo(() => getOptions('Usuario', 'Usuario'), [firstName, sector, profile])
-    const optionsSector = useMemo(() => getOptions('Setor', 'Setor'), [firstName, username, profile])
-    const optionsProfile = useMemo(() => getOptions('Perfil', 'Perfil'), [firstName, username, sector])
+    const optionsFirstName = useMemo(() => getOptions('Nome', 'Nome'), [getOptions])
+    const optionsUsername = useMemo(() => getOptions('Usuario', 'Usuario'), [getOptions])
+    const optionsSector = useMemo(() => getOptions('Setor', 'Setor'), [getOptions])
+    const optionsProfile = useMemo(() => getOptions('Perfil', 'Perfil'), [getOptions])
 
     const changeFirstName = (e) => {
         let newFirstName = e.target.value

@@ -15,11 +15,6 @@ export default async function PageEquipment() {
 
     const equipment = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllEquipment`, token)
    
-
-    if(equipment.message) {
-        return(<Message message={'Usuário sem permissão'}/>)
-    }
-
     
     let data = equipment.map(itens => {
         let result = {

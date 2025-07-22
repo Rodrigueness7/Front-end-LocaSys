@@ -16,10 +16,7 @@ export default async function logs() {
     }
 
     let log = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllLog`, token)
-    if (log.message) {
-        return <Message message={'Usuário sem permissão'} />
-    }
-
+    
     let data = []
 
     log.map(itens => {
