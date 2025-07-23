@@ -15,7 +15,7 @@ import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 export default function Menu({ token, dataBranch }) {
 
 
-    const listBranch = dataBranch.map(item => item.branch)
+    const listBranch = Array.isArray(dataBranch) ? dataBranch.map(item => item.branch) : [];
     const router = useRouter()
     const [show, setShow] = useState(false)
     const [file, setFile] = useState(null)
@@ -24,7 +24,7 @@ export default function Menu({ token, dataBranch }) {
     const [cellFinish, setCellFinish] = useState('')
     const [initPeriod, setInitPeriod] = useState('')
     const [finishPeriod, setFinishPeriod] = useState('')
-    const [branch, setBranch] = useState(listBranch[0])
+    const [branch, setBranch] = useState(listBranch[0] || '')
     const [showImport, setShowImport] = useState(false)
     const [showDelete, setShowDelete] = useState(false)
     const [isModalOpen, setIsModalOpen] = useState(false)
