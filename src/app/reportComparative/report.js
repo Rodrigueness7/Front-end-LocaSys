@@ -45,15 +45,13 @@ export default function Report({equipmentHistory, equipmentRental}) {
             )
         }
 
-        const newDataEquipment = equipmentRental.map((item) => {
+        const comparativeEquipment = equipmentRental.map((item) => {
             
             const findEquipment = equipmentHistory.find(items => items['Equipment'].codProd == item.codProd)
        
         if (findEquipment) {
            
-
             if (findEquipment.entryDate.slice(0,10) >= initPeriod && findEquipment.entryDate.slice(0,10) <= finishPeriod) {
-
                 const data = {
                     id: item.idEquipmentRental,
                     codProd: item.codProd,
@@ -80,17 +78,40 @@ export default function Report({equipmentHistory, equipmentRental}) {
             return data
         }
     })
-    
-     setDataReport(newDataEquipment) 
+     setDataReport(comparativeEquipment) 
      setShowTable(true)
     }
+
+    
+
+    const comparativeValue = equipmentRental.map((item) => {
+          const findValue = equipmentHistory.find(iten => iten.value == item.value && iten['Equipment'].codProd == item.codProd)
+
+       if(findValue) {
+            const data = {
+                    id: item.idEquipmentRental,
+                    codProd: item.codProd,
+                    equipment: item.description,
+                    valueKm: item.value,
+                    value: findValue.value,
+                    branch: findValue['Branch'].branch,
+                    user: findValue['User'].username,
+                    sector: findValue['Sector'].sector
+                }
+                return data
+       }   
+        
+    })
+
     
 
     const generation = async (e) => {
         e.preventDefault()
          sessionStorage.setItem('equipments', JSON.stringify(dataReport))
          if(report == listOption[0]) {
-            window.open('/reportComparative/comparativeEquipment')
+            window.open('/reportComparative/comparativeEquipment')   
+        } else if(report == listOption[1]) {
+            console.log(comparativeValue)
             
         }
     }
