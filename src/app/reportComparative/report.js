@@ -7,7 +7,7 @@ import { useState } from "react";
 
 export default function Report({equipmentHistory, equipmentRental}) {
 
-    const options = [{id: 0, option: 'Comparativo Equipamentos'}, {id: 1, option: 'Comparativo de valor'}]
+    const options = [{id: 0, option: 'Comparativo Equipamentos'}, {id: 1, option: 'Comparativo de valor'}, {id: 2, option: 'Divergênia de valor'}]
     const listOption = options.map(item => item.option)
     const router = useRouter()
     const [initPeriod, setInitPeriod] = useState('')
@@ -84,11 +84,12 @@ export default function Report({equipmentHistory, equipmentRental}) {
 
     
 
-    const comparativeValue = equipmentRental.map((item) => {
-          const findValue = equipmentHistory.find(iten => iten.value == item.value && iten['Equipment'].codProd == item.codProd)
+    const comparativeValue = equipmentRental.map(item => {
+        const findValue = equipmentHistory.find(itens => itens.value == item.value && itens['Equipment'].codProd == item.codProd)
 
        if(findValue) {
-            const data = {
+              if (findValue.entryDate.slice(0,10) >= initPeriod && findValue.entryDate.slice(0,10) <= finishPeriod) {
+                const data = {
                     id: item.idEquipmentRental,
                     codProd: item.codProd,
                     equipment: item.description,
@@ -99,10 +100,16 @@ export default function Report({equipmentHistory, equipmentRental}) {
                     sector: findValue['Sector'].sector
                 }
                 return data
-       }   
-        
-    })
+            }
+       }
+             
+    }).filter((item) => { return item != undefined})
 
+    const valueDivergence = equipmentRental.map(item => {
+        const findDivergenceValue = equipmentHistory.find(itens => itens.value !== item.value && itens['Equipment'].codProd == item.codProd)
+
+        return findDivergenceValue
+    }).filter(item => {return item != undefined})
     
 
     const generation = async (e) => {
@@ -111,8 +118,10 @@ export default function Report({equipmentHistory, equipmentRental}) {
          if(report == listOption[0]) {
             window.open('/reportComparative/comparativeEquipment')   
         } else if(report == listOption[1]) {
-            console.log(comparativeValue)
-            
+         sessionStorage.setItem('comparativeValue', JSON.stringify(comparativeValue))
+            window.open('/reportComparative/comparativeValue')  
+        } else if(report == listOption[2]) {
+            console.log(valueDivergence)
         }
     }
 

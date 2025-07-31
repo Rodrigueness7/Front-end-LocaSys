@@ -22,7 +22,7 @@ const geistMono = localFont({
 export default function RootLayout({ children }) {
   const pathname = usePathname(); 
   const hideMenuRoutes = useMemo(() => {
-    return ["/login", '/reportComparative/comparativeEquipment', '/equipment/report', '/branch/report', '/sector/report', '/supplier/report', '/users/report'];
+    return ["/login", '/reportComparative/comparativeEquipment', '/reportComparative/comparativeValue','/equipment/report', '/branch/report', '/sector/report', '/supplier/report', '/users/report'];
   }, [])
   const token = getCookie("token");
   const [branch, setBranch] = useState([]);
