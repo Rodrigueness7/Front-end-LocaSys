@@ -19,6 +19,7 @@ export default async function PageUpdateEquipment({ params }) {
     let sector = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllSector`, token)
     let supplier = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllSupplier`, token)
     let equipment = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findEquipmentId/${idEquipment}`, token)
+  
 
     if(branch.message) {
         redirect('../../login')

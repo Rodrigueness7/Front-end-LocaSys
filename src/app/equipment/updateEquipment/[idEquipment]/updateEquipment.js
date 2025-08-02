@@ -29,6 +29,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     const [sector, setSector] = useState(dataEquipment['Sector'].sector)
     const [supplier, setSupplier] = useState(dataEquipment['Supplier'].supplier)
     const [entryDate, setEntryDate] = useState(new Date(dataEquipment.entryDate).toISOString().split('T')[0])
+    const [entryDateEquipmentHistory, setDateEquipmentHistory] = useState('')
     const [returnDate, setReturnDate] = useState('')
     const [reason, setReason] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -96,6 +97,10 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         }
     }
 
+    const changeEntryDateEquipmentHistory = (e) => {
+        setDateEquipmentHistory(e.target.value)
+    }
+
     const updateEquipment = async () => {
 
         const idUser = dataUser.find(item => item.username === username).idUser
@@ -117,38 +122,55 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         }
         await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateEquipment/${idEquipment}`, data, token, setResult)
         setIsModalOpen(true)
+
+
+        let dataEquipmentHistory = {
+            idEquipmentHistory: 0,
+            idEquipment: idEquipment,
+            reason: null,
+            idUser: idUser,
+            idSector: idSector,
+            idBranch: idBranch,
+            value: value,
+            entryDate: entryDate,
+            returnDate: null,
+            entryDate: entryDate
+        }
+
+        await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addEquipmentHistory`, dataEquipmentHistory, token, setResult)
+        setIsModalOpen(true)
+
     }
 
     const returnEquipment = async () => {
-            const idUser = dataUser.find(item => item.username === username).idUser
-            const idSector = dataSector.find(item => item.sector === sector).idSector
-            const idBranch = dataBranch.find(item => item.branch === branch).idBranch
-            const idSupplier = dataSupplier.find(item => item.supplier === supplier).idSupplier
+        const idUser = dataUser.find(item => item.username === username).idUser
+        const idSector = dataSector.find(item => item.sector === sector).idSector
+        const idBranch = dataBranch.find(item => item.branch === branch).idBranch
+        const idSupplier = dataSupplier.find(item => item.supplier === supplier).idSupplier
 
-        setTimeout(async () => {
-            const data = {
-                idEquipment: 0,
-                codProd: codProd,
-                equipment: equipment,
-                type: type,
-                value: value,
-                idBranch: idBranch,
-                idUser: idUser,
-                idSector: idSector,
-                idSupplier: idSupplier,
-                returnDate: returnDate
-            }
 
-            await inactivateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/returnEquipment/${idEquipment}`, data, token, setResult)
-            setIsModalOpen(true)
-        }, 1000)
+        const data = {
+            idEquipment: 0,
+            codProd: codProd,
+            equipment: equipment,
+            type: type,
+            value: value,
+            idBranch: idBranch,
+            idUser: idUser,
+            idSector: idSector,
+            idSupplier: idSupplier,
+            returnDate: returnDate
+        }
+
+        await inactivateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/returnEquipment/${idEquipment}`, data, token, setResult)
+        setIsModalOpen(true)
 
 
         let dataEquipmentHistory = {
             idEquipmentHistory: 0,
             idEquipment: idEquipment,
             reason: reason,
-            idUsername: idUser,
+            idUser: idUser,
             idSector: idSector,
             idBranch: idBranch,
             value: value,
@@ -158,14 +180,56 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
 
         await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addEquipmentHistory`, dataEquipmentHistory, token, setResult)
         setIsModalOpen(true)
+
+
     }
 
     const reactivate = async () => {
+        const idUser = dataUser.find(item => item.username === username).idUser
+        const idSector = dataSector.find(item => item.sector === sector).idSector
+        const idBranch = dataBranch.find(item => item.branch === branch).idBranch
+        const idSupplier = dataSupplier.find(item => item.supplier === supplier).idSupplier
+
         let data = {
             returnDate: null
         }
         await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/returnEquipment/${idEquipment}`, data, token, setResult)
         setIsModalOpen(true)
+
+
+        let dataEquipmentHistory = {
+            idEquipmentHistory: 0,
+            idEquipment: idEquipment,
+            reason: 'Equipamento Reativado',
+            idUser: idUser,
+            idSector: idSector,
+            idBranch: idBranch,
+            value: value,
+            entryDate: entryDate,
+            returnDate: null
+        }
+
+        await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addEquipmentHistory`, dataEquipmentHistory, token, setResult)
+        setIsModalOpen(true)
+
+        let dataEquipment = {
+            idEquipment: 0,
+            codProd: codProd,
+            equipment: equipment,
+            type: type,
+            value: value,
+            idBranch: idBranch,
+            idUser: idUser,
+            idSector: idSector,
+            idSupplier: idSupplier,
+            returnDate: null,
+            entryDate: entryDate
+        }
+        
+         await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateEquipment/${idEquipment}`, dataEquipment, token, setResult)
+         setIsModalOpen(true)
+
+        
     }
 
     return (
@@ -186,7 +250,17 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
                         <button onClick={returnEquipment} className="p-2 mt-4 bg-indigo-500 rounded-lg text-white">Devolver</button>
                     </div>
                 }></Modal>
-                <button className="p-2 bg-indigo-500 rounded-lg text-white font-bold h-10" onClick={reactivate}>Reativar</button>
+                <Modal classFirstDivButton={'flex items-start mb-8 lg:px-2 sm:px-0'} classFirstButton={"p-2 bg-indigo-500 rounded-lg text-white"} FirstButton={'Reativar'} classCloseModal={'fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'} classDivChildren={'bg-white rounded-lg shadow-lg w-96 p-6'} classDivButton={'flex justify-end mt-6'} classSecondButton={'px-4 py-2 text-gray-600 bg-gray-200 rounded hover:bg-gray-300'} secondButton={'Fechar'} Children={
+                    <div>
+                        <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Data Reativação'} type={'date'} name={'entryDate'} value={entryDate} onchange={changeEntryDate}></InputForm>
+                        <MessageModal isOpen={isModalOpen} onClose={handleCloseModal} message={result.error ? result.error : result.success} icone={
+                            result?.error ? (<FaTimesCircle className="text-red-500 w-24 h-24 mx-auto mb-4 rounded-full" />) : (
+                                <FaCheckCircle className="text-green-500 w-24 h-24 mx-auto mb-4 rounded-full" />
+                            )
+                        }></MessageModal>
+                        <button onClick={reactivate} className="p-2 mt-4 bg-indigo-500 rounded-lg text-white">Reativar</button>
+                    </div>
+                }></Modal>
             </div>
             <div className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
                 <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">Atualizar Equipamento</h1>

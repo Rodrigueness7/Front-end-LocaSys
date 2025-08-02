@@ -47,8 +47,9 @@ export default function Report({equipmentHistory, equipmentRental}) {
 
         const comparativeEquipment = equipmentRental.map((item) => {
             
-            const findEquipment = equipmentHistory.find(items => items['Equipment'].codProd == item.codProd)
-       
+            const maxId = Math.max(...equipmentHistory.filter(items => items['Equipment'].codProd == item.codProd).map(itens => itens.idEquipmentHistory))
+            const findEquipment = equipmentHistory.find(item => item.idEquipmentHistory === maxId)
+            
         if (findEquipment) {
            
             if (findEquipment.entryDate.slice(0,10) >= initPeriod && findEquipment.entryDate.slice(0,10) <= finishPeriod) {
@@ -63,6 +64,7 @@ export default function Report({equipmentHistory, equipmentRental}) {
                     sector: findEquipment['Sector'].sector
                 }
                 return data
+                
             }
         } else {
             const data = {
@@ -106,10 +108,24 @@ export default function Report({equipmentHistory, equipmentRental}) {
     }).filter((item) => { return item != undefined})
 
     const valueDivergence = equipmentRental.map(item => {
-        const findDivergenceValue = equipmentHistory.find(itens => itens.value !== item.value && itens['Equipment'].codProd == item.codProd)
+            const findValue = equipmentHistory.find(itens => itens.value !== item.value && itens['Equipment'].codProd === item.codProd)
 
-        return findDivergenceValue
-    }).filter(item => {return item != undefined})
+          if(findValue) {
+              if (findValue.entryDate.slice(0,10) >= initPeriod && findValue.entryDate.slice(0,10) <= finishPeriod) {
+                const data = {
+                    id: item.idEquipmentRental,
+                    codProd: item.codProd,
+                    equipment: item.description,
+                    valueKm: item.value,
+                    value: findValue.value,
+                    branch: findValue['Branch'].branch,
+                    user: findValue['User'].username,
+                    sector: findValue['Sector'].sector
+                }
+                return data
+            }
+       }
+     }).filter((item) => item != undefined)
     
 
     const generation = async (e) => {
@@ -119,7 +135,8 @@ export default function Report({equipmentHistory, equipmentRental}) {
             window.open('/reportComparative/comparativeEquipment')   
         } else if(report == listOption[1]) {
          sessionStorage.setItem('comparativeValue', JSON.stringify(comparativeValue))
-            window.open('/reportComparative/comparativeValue')  
+            // window.open('/reportComparative/comparativeValue')  
+            console.log(comparativeValue)
         } else if(report == listOption[2]) {
             console.log(valueDivergence)
         }
