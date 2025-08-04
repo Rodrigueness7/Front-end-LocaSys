@@ -87,7 +87,9 @@ export default function Report({equipmentHistory, equipmentRental}) {
     
 
     const comparativeValue = equipmentRental.map(item => {
-        const findValue = equipmentHistory.find(itens => itens.value == item.value && itens['Equipment'].codProd == item.codProd)
+    
+         const maxId = Math.max(...equipmentHistory.filter(items => items['Equipment'].codProd == item.codProd).map(itens => itens.idEquipmentHistory))
+         const findValue = equipmentHistory.find(items => items.idEquipmentHistory === maxId && items.value == item.value)
 
        if(findValue) {
               if (findValue.entryDate.slice(0,10) >= initPeriod && findValue.entryDate.slice(0,10) <= finishPeriod) {
@@ -107,20 +109,20 @@ export default function Report({equipmentHistory, equipmentRental}) {
              
     }).filter((item) => { return item != undefined})
 
-    const valueDivergence = equipmentRental.map(item => {
-            const findValue = equipmentHistory.find(itens => itens.value !== item.value && itens['Equipment'].codProd === item.codProd)
-
-          if(findValue) {
-              if (findValue.entryDate.slice(0,10) >= initPeriod && findValue.entryDate.slice(0,10) <= finishPeriod) {
+    const divergetValue = equipmentRental.map(item => {
+            const maxId = Math.max(...equipmentHistory.filter(items => items['Equipment'].codProd == item.codProd).map(itens => itens.idEquipmentHistory))
+            const findDivergentValue = equipmentHistory.find(items => items.idEquipmentHistory === maxId && items.value != item.value)
+          if(findDivergentValue) {
+              if (findDivergentValue.entryDate.slice(0,10) >= initPeriod && findDivergentValue.entryDate.slice(0,10) <= finishPeriod) {
                 const data = {
                     id: item.idEquipmentRental,
                     codProd: item.codProd,
                     equipment: item.description,
                     valueKm: item.value,
-                    value: findValue.value,
-                    branch: findValue['Branch'].branch,
-                    user: findValue['User'].username,
-                    sector: findValue['Sector'].sector
+                    value: findDivergentValue.value,
+                    branch: findDivergentValue['Branch'].branch,
+                    user: findDivergentValue['User'].username,
+                    sector: findDivergentValue['Sector'].sector
                 }
                 return data
             }
@@ -132,13 +134,22 @@ export default function Report({equipmentHistory, equipmentRental}) {
         e.preventDefault()
          sessionStorage.setItem('equipments', JSON.stringify(dataReport))
          if(report == listOption[0]) {
+            if(dataReport.length <= 0) {
+                return alert('Não existe dados para gerar relatório')
+            }
             window.open('/reportComparative/comparativeEquipment')   
         } else if(report == listOption[1]) {
          sessionStorage.setItem('comparativeValue', JSON.stringify(comparativeValue))
-            // window.open('/reportComparative/comparativeValue')  
-            console.log(comparativeValue)
+            if(comparativeValue.length <= 0) {
+               return alert('Não existe valores iguais para gerar relatório')
+            }
+            window.open('/reportComparative/comparativeValue')  
         } else if(report == listOption[2]) {
-            console.log(valueDivergence)
+            sessionStorage.setItem('divergetValue', JSON.stringify(divergetValue))
+            if(divergetValue.length <= 0) {
+                return alert('Não existe valores divergente para gerar relatório')
+            }
+            window.open('/reportComparative/divergentValue')
         }
     }
 
@@ -150,8 +161,7 @@ export default function Report({equipmentHistory, equipmentRental}) {
                     <div className="mt-8 ml-4">
                         <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={generation}>Gerar Relatório</button>
                     </div>
-                </form>
-                
+                </form>  
             </div>
              <form className="ml-8 flex relative">
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Data inicial'} type={'date'} name={'initPeriod'} value={initPeriod} onchange={changeInitPeriod}></InputForm>
