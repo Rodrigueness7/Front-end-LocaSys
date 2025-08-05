@@ -3,6 +3,7 @@ import { useState } from "react";
 import InputForm from "../../components/InputForm";
 import { setCookie } from "cookies-next";
 import { useRouter } from 'next/navigation';
+import { jwtDecode } from "jwt-decode";
 
 
 export default function Login() {
@@ -43,6 +44,7 @@ export default function Login() {
 
     let value = await data.json()
     setCookie('token', value.token, { maxAge: 8600000 })
+    sessionStorage.setItem('permission', jwtDecode(value.token).permission)
     if (value.successMessage) {
       route.push('./')
       localStorage.setItem('username', username)
@@ -58,6 +60,8 @@ export default function Login() {
       setTimeout(() => { setResult('') }, 1000)
     }
   }
+
+   
 
   return (
     <section className="bg-gray-100 h-screen flex justify-center items-center w-full">
