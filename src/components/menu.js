@@ -7,7 +7,7 @@ import MessageModal from "@/components/messageModal";
 import addData from "@/utils/addData";
 import Link from "next/link";
 import { useRouter } from "next/navigation"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 
@@ -29,8 +29,14 @@ export default function Menu({ token, dataBranch }) {
     const [showDelete, setShowDelete] = useState(false)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [showReport, setShowReport] = useState(false)
-    
+    const [permission, setPermission] = useState('')
 
+
+    useEffect(() => {
+        let data = localStorage.getItem('permission')
+        setPermission(data)
+        
+    }, [])
 
     const changeCellInit = (e) => {
         setCellInit(e.target.value)
@@ -169,7 +175,6 @@ export default function Menu({ token, dataBranch }) {
 
     }
 
-   
 
     return (
         <div className="flex bg-slate-800">

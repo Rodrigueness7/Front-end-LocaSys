@@ -41,19 +41,19 @@ export default function Login() {
     })
 
     
-
     let value = await data.json()
     setCookie('token', value.token, { maxAge: 8600000 })
-    sessionStorage.setItem('permission', jwtDecode(value.token).permission)
+    
     if (value.successMessage) {
       route.push('./')
       localStorage.setItem('username', username)
-
+      localStorage.setItem('permission', jwtDecode(value.token).permission)
+     
       setTimeout(() => {
         localStorage.clear()
       }, 8600000)
 
-    }
+     }
     
     if (value.errorMessage) {
       setResult('Usuário ou Senha inválido')
@@ -61,7 +61,7 @@ export default function Login() {
     }
   }
 
-   
+  
 
   return (
     <section className="bg-gray-100 h-screen flex justify-center items-center w-full">
