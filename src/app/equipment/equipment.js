@@ -4,7 +4,7 @@ import InputForm from "@/components/InputForm"
 import InputSelect from "@/components/InputSelect"
 import Table from "@/components/table"
 import Link from "next/link"
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 
 export default function Equipment({ tableEquipment, attribute }) {
 
@@ -15,6 +15,15 @@ export default function Equipment({ tableEquipment, attribute }) {
     const [type, setType] = useState('')
     const [branch, setBranch] = useState('')
     const [username, setUsername] = useState('')
+    const [permission, setPermission] = useState([])
+
+      useEffect(() => {
+            let data = localStorage.getItem('permission')
+            let number = data.split(',').map(number => number)
+            console.log(number)
+            setPermission(number)
+            
+        }, [])
 
     const generation = async () => {
         sessionStorage.setItem('dataEquipment', JSON.stringify(dataEquipment))
@@ -91,7 +100,9 @@ export default function Equipment({ tableEquipment, attribute }) {
     return (
         <div className='bg-gray-100 py-8 overflow-x-auto h-screen w-full'>
             <div className="flex justify-between mb-8 lg:px-8 sm:px-8 xl:w-1/2">
-                <Link href={'../equipment/registerEquipment'}><button className='p-2 bg-indigo-500 rounded-lg text-white'>Novo Equipamento</button></Link>
+              {permission.find(number => number == '2') && (
+                  <Link href={'../equipment/registerEquipment'}><button className='p-2 bg-indigo-500 rounded-lg text-white'>Novo Equipamento</button></Link>
+              )}
                 <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={generation}>Gerar Relatório</button>
             </div>
             <form className=" ml-8 flex relative" onSubmit={searchEquipment}>
@@ -105,7 +116,7 @@ export default function Equipment({ tableEquipment, attribute }) {
                 </div>
             </form>
             <div className='ml-8 flex-1'>
-                <Table Table={'table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={attribute} data={dataEquipment} attributos={attribute} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./equipment/updateEquipment'} bt={'...'}></Table>
+                <Table Table={'table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={attribute} data={dataEquipment} attributos={attribute} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./equipment/updateEquipment'} bt={'...'} permission={permission.find(number => number == '3')}></Table>
             </div>
         </div>
     )

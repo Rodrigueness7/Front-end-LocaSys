@@ -2,7 +2,7 @@
 
 import Table from "@/components/table"
 import Link from "next/link"
-import React from "react"
+import React, { useEffect, useState } from "react"
 
 export default function Branch({ tableBranch }) {
     
@@ -16,6 +16,16 @@ export default function Branch({ tableBranch }) {
        return dataTable
      })
 
+         const [permission, setPermission] = useState([])
+     
+     
+         useEffect(() => {
+             let data = localStorage.getItem('permission')
+             let number = data.split(',').map(number => number)
+             setPermission(number)
+             
+         }, [])
+
 
      const generation = async () => {
             sessionStorage.setItem('dataBranch', JSON.stringify(data))
@@ -25,11 +35,13 @@ export default function Branch({ tableBranch }) {
     return (
         <div className="bg-gray-100 py-8 overflow-x-auto h-screen px-12 w-full">
             <div className="flex justify-between mb-8 lg:px-8 sm:px-8 xl:w-1/2">
-                <Link href={'../branch/registerBranch'}><button className='p-2 bg-indigo-500 rounded-lg text-white'>Nova Filial</button></Link>
+               {permission.find(number => number == '7') && (
+                 <Link href={'../branch/registerBranch'}><button className='p-2 bg-indigo-500 rounded-lg text-white'>Nova Filial</button></Link>
+               )}
                 <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={generation}>Gerar Relatório</button>
             </div>
             <div className="ml-8 flex-1">
-                <Table Table={'table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={['Código Filial', 'Filial', 'CNPJ', 'Razão Social']} data={tableBranch} attributos={['uniqueIdentifier', 'branch', 'CNPJ', 'corporateName']} id={'idBranch'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./branch/updateBranch'} bt={'...'}></Table>
+                <Table Table={'table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={['Código Filial', 'Filial', 'CNPJ', 'Razão Social']} data={tableBranch} attributos={['uniqueIdentifier', 'branch', 'CNPJ', 'corporateName']} id={'idBranch'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./branch/updateBranch'} bt={'...'} permission={permission.find(number => number == '8')}></Table>
             </div>
         </div>
 

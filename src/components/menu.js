@@ -29,13 +29,13 @@ export default function Menu({ token, dataBranch }) {
     const [showDelete, setShowDelete] = useState(false)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [showReport, setShowReport] = useState(false)
-    const [permission, setPermission] = useState('')
+    const [permission, setPermission] = useState([])
 
 
     useEffect(() => {
         let data = localStorage.getItem('permission')
-        setPermission(data)
-        
+        let number = data.split(',').map(number => number)
+        setPermission(number)
     }, [])
 
     const changeCellInit = (e) => {
@@ -172,35 +172,47 @@ export default function Menu({ token, dataBranch }) {
     setInitPeriod('')
     setFinishPeriod('')
     setIsModalOpen(true)
-
     }
 
+   
 
     return (
         <div className="flex bg-slate-800">
             <div className={`text-white w-64 h-screen p-8 space-y-4 md:block`}>
                 <h1 className="font-bold text-2xl">Locasys</h1>
+                {permission.find(number => number == '10') && (
                 <div >
                     <Link href={'/users'} className="hover:text-blue-500 transition duration-300">Usuário</Link>
                 </div>
+                )}
+                {permission.find(number => number == '1') && (
                 <div>
                     <Link href={'/equipment'} className="hover:text-blue-500 transition duration-300">Equipamento</Link>
                 </div>
+                )}
+                {permission.find(number => number == '6') && (
                 <div>
                     <Link href={'/branch'} className="hover:text-blue-500 transition duration-300">Filial</Link>
                 </div>
+                )}
+                {permission.find(number => number == '19') && (
                 <div>
                     <Link href={'/sector'} className="hover:text-blue-500 transition duration-300">Setor</Link>
                 </div>
+                )}
+                {permission.find(number => number == '44') && (
                 <div>
                     <Link href={'/supplier'} className="hover:text-blue-500 transition duration-300">Fornecedor</Link>
                 </div>
+                )}
                 <div>
                     <Link href={'/profile'} className="hover:text-blue-500 transition duration-300">Perfil</Link>
                 </div>
-                <div>
+                {permission.find(item => item == '35') && (
+                    <div>
                     <Link href={'/logs'} className="hover:text-blue-500 transition duration-300">Log</Link>
                 </div>
+                )}
                 <div>
                     <button onClick={handleShow} className="hover:text-blue-500 transition duration-300">Arquivo</button>
                     {show == true ? (

@@ -1,5 +1,5 @@
 'use client'
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import InputForm from "../../../../components/InputForm"
 import updateData from "../../../../utils/updateData"
 import inactivateData from "../../../../utils/inactivateData"
@@ -17,6 +17,14 @@ export default function UpdateBranch({ dataBranch, idBranch, token }) {
     const [result, setResult] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)
     const router = useRouter()
+    const [permission, setPermission] = useState([])
+    
+    
+        useEffect(() => {
+            let data = localStorage.getItem('permission')
+            let number = data.split(',').map(number => number)
+            setPermission(number)
+        }, [])
 
     const changeBranch = (e) => {
         let fieldBranch = e.target.value
@@ -76,7 +84,9 @@ export default function UpdateBranch({ dataBranch, idBranch, token }) {
     return (
         <section className="bg-gray-100 py-3 h-screen w-full">
             <div className="flex items-start mb-8 lg:px-2 sm:px-0">
-                <button onClick={deleteBranch} className="p-2 bg-indigo-500 rounded-lg text-white">Deletar</button>
+               {permission.find(number => number == '9') && (
+                 <button onClick={deleteBranch} className="p-2 bg-indigo-500 rounded-lg text-white">Deletar</button>
+               )}
             </div>
             <div className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
                 <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">Atualizar Filial</h1>

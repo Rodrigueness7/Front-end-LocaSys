@@ -1,5 +1,5 @@
 'use client'
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import InputForm from "../../../../components/InputForm"
 import InputSelect from "../../../../components/InputSelect"
 import Modal from "../../../../components/modal"
@@ -29,11 +29,11 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     const [sector, setSector] = useState(dataEquipment['Sector'].sector)
     const [supplier, setSupplier] = useState(dataEquipment['Supplier'].supplier)
     const [entryDate, setEntryDate] = useState(new Date(dataEquipment.entryDate).toISOString().split('T')[0])
-    const [entryDateEquipmentHistory, setDateEquipmentHistory] = useState('')
     const [returnDate, setReturnDate] = useState('')
     const [reason, setReason] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [result, setResult] = useState('')
+   
 
     const changeCodProd = (e) => {
         const newValue = e.target.value
@@ -97,9 +97,6 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         }
     }
 
-    const changeEntryDateEquipmentHistory = (e) => {
-        setDateEquipmentHistory(e.target.value)
-    }
 
     const updateEquipment = async () => {
 

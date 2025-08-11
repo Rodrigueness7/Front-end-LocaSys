@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 
-export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, attributos, id, href, classButton, bt, positionTd }) {
+export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, attributos, id, href, classButton, bt, positionTd, permission }) {
 
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 10;
@@ -60,7 +60,7 @@ export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, 
                         {attributos.map(item => (
                             <td key={item} className={Td}>{row[item]}</td>
                         ))}
-                        <td className={positionTd}><Link href={href + `/${row[id]}`}><button className={classButton}>{bt}</button></Link></td>
+                        {permission && (<td className={positionTd}><Link href={href + `/${row[id]}`}><button className={classButton}>{bt}</button></Link></td>)}
                     </tr>
                 ))}
             </tbody>

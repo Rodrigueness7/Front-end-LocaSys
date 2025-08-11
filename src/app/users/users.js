@@ -3,7 +3,7 @@
 import InputSelect from "@/components/InputSelect"
 import Table from "@/components/table"
 import Link from "next/link"
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 
 
 export default function Users({ tableUsers, attribute }) {
@@ -13,6 +13,13 @@ export default function Users({ tableUsers, attribute }) {
     const [username, setUsername] = useState('')
     const [sector, setSector] = useState('')
     const [profile, setProfile] = useState('')
+    const [permission, setPermission] = useState([])
+
+    useEffect(() => {
+            let data = localStorage.getItem('permission')
+            let number = data.split(',').map(number => number)
+            setPermission(number)
+        }, [])
 
    
     const filter = () => {
@@ -76,7 +83,9 @@ export default function Users({ tableUsers, attribute }) {
     return (
         <div className='bg-gray-100 py-8 overflow-x-auto h-screen w-full'>
             <div className="flex justify-between mb-8 lg:px-8 sm:px-8 xl:w-1/2">
-                <Link href={'../users/registerUser'}><button className='p-2 bg-indigo-500 rounded-lg text-white w-full '>Novo Usuário</button></Link>
+                {permission.find(number => number == '11') && (
+                    <Link href={'../users/registerUser'}><button className='p-2 bg-indigo-500 rounded-lg text-white w-full '>Novo Usuário</button></Link>
+                )}
                 <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={generation}>Gerar Relatório</button>
             </div>
             <form className=" ml-8 flex relative" onSubmit={searchUser}>
@@ -89,7 +98,7 @@ export default function Users({ tableUsers, attribute }) {
                 </div>
             </form>
             <div className='ml-8 flex-1'>
-                <Table Table={'table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={attribute} data={dataUsers} attributos={attribute} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./users/updateUser'} bt={'...'}></Table>
+                <Table Table={'table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={attribute} data={dataUsers} attributos={attribute} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./users/updateUser'} bt={'...'} permission={permission.find(number => number == '12')}></Table>
             </div>
         </div>
 
