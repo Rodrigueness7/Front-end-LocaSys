@@ -17,6 +17,8 @@ export default function PageRegisterBranch({ token }) {
     const [result, setResult] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)
     const router = useRouter()
+    
+    
 
     const changeBranch = (e) => {
         let fieldBranch = e.target.value

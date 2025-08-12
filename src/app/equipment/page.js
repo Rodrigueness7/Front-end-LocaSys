@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { cookies } from "next/headers"
 import fetchData from '../../utils/fetchData'
 import Equipment from './equipment'
+import { jwtDecode } from 'jwt-decode'
 
 
 export default async function PageEquipment() {
@@ -9,8 +10,15 @@ export default async function PageEquipment() {
     const cookieStore = cookies()
     const token = (await cookieStore).get('token')?.value
 
+      let permission = jwtDecode(token).permission
+      const number = permission.find(number => number == 1)
+
     if (!token) {
         redirect('./login')
+    }
+
+    if(number == undefined) {
+        redirect('../')
     }
 
     const equipment = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllEquipment`, token)

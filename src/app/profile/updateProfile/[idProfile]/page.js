@@ -2,6 +2,7 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import UpdateProfile from "./updateProfile"
 import fetchData from "../../../../utils/fetchData"
+import { jwtDecode } from "jwt-decode"
 
 
 export default async function PageUpdateProfile({ params }) {
@@ -10,8 +11,15 @@ export default async function PageUpdateProfile({ params }) {
     const cookieStore = cookies()
     const token = (await cookieStore).get('token')?.value
 
+    let permissionUser = jwtDecode(token).permission
+    const number = permissionUser.find(number => number == 17)
+
     if (!token) {
         redirect('../../login')
+    }
+
+    if(number == undefined) {
+        redirect('../')
     }
 
     const profile = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findProfile/${idProfile}`, token)

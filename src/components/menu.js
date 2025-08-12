@@ -11,7 +11,6 @@ import { useEffect, useState } from "react";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 
-
 export default function Menu({ token, dataBranch }) {
 
 

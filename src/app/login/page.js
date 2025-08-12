@@ -48,6 +48,7 @@ export default function Login() {
       route.push('./')
       localStorage.setItem('username', username)
       localStorage.setItem('permission', jwtDecode(value.token).permission)
+      
      
       setTimeout(() => {
         localStorage.clear()
