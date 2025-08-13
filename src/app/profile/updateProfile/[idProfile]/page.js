@@ -19,7 +19,7 @@ export default async function PageUpdateProfile({ params }) {
     }
 
     if(number == undefined) {
-        redirect('../')
+        redirect('../../')
     }
 
     const profile = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findProfile/${idProfile}`, token)

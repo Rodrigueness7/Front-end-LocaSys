@@ -213,7 +213,7 @@ export default function Menu({ token, dataBranch }) {
                 </div>
                 )}
                 <div>
-                    <button onClick={handleShow} className="hover:text-blue-500 transition duration-300">Arquivo</button>
+                    {permission.find(number => number == 31) && (<button onClick={handleShow} className="hover:text-blue-500 transition duration-300">Arquivo</button>)}
                     {show == true ? (
                         <div className="flex flex-col bg-slate-600 ">
                             <div className="ml-5">
@@ -226,7 +226,7 @@ export default function Menu({ token, dataBranch }) {
                     ) : null}
                 </div>
                 <div>
-                    <button onClick={handleReport} className="hover:text-blue-500 transition duration-300" >Relatório</button>
+                   {permission.find(number => number == 31) && ( <button onClick={handleReport} className="hover:text-blue-500 transition duration-300" >Relatório</button>)}
                     {showReport == true ? (
                         <ul className="ml-5">
                             <Link className="hover:text-blue-500 transition duration-300" href={'/reportComparative'}><li>Comparativo Equipamentos</li></Link>

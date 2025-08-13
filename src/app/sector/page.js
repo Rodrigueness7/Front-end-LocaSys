@@ -3,11 +3,15 @@ import { redirect } from "next/navigation"
 import changeProperty from "../../utils/changeProperty"
 import fetchData from "../../utils/fetchData"
 import Sector from "./sector"
+import { jwtDecode } from "jwt-decode"
 
 
 export default async function PageSector() {
     const cookieStore = cookies()
     const token = (await cookieStore).get('token')?.value
+
+    let permission = jwtDecode(token).permission
+    const number = permission.find(number => number == 19)
 
     if (!token) {
         redirect('../login')
@@ -17,6 +21,10 @@ export default async function PageSector() {
 
     if (sector.message) {
         redirect('../login')
+    }
+
+    if(number == undefined) {
+        redirect('../')
     }
 
     let data = []
