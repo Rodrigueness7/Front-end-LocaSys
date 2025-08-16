@@ -98,7 +98,7 @@ export default function Users({ tableUsers, attribute }) {
                 </div>
             </form>
             <div className='ml-8 flex-1'>
-                <Table Table={'table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4'} headers={attribute} data={dataUsers} attributos={attribute} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./users/updateUser'} bt={'...'} permission={permission.find(number => number == '12')}></Table>
+                <Table Table={'table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black'} headers={attribute} data={dataUsers} attributos={attribute} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./users/updateUser'} bt={'...'} permission={permission.find(number => number == '12')}></Table>
             </div>
         </div>
 

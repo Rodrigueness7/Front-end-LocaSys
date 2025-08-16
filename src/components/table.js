@@ -81,7 +81,7 @@ export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, 
                 ))}
 
                 <button onClick={() => changePage(currentPage + 1)}
-                    className="px-4 py-2 border rounded-md bg-gray-200 hover:bg-gray-300 disabled:gray-100" disabled={currentPage === totalPages}>
+                    className="px-4 py-2 border rounded-md bg-gray-200 hover:bg-gray-300 disabled:gray-100 " disabled={currentPage === totalPages}>
                     Próxima
                 </button>
             </div>

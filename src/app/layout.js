@@ -1,12 +1,7 @@
-"use client";
 
 import localFont from "next/font/local";
 import "./globals.css";
-import Menu from "@/components/menu";
-import fetchData from "@/utils/fetchData";
-import { usePathname } from "next/navigation";
-import { getCookie } from "cookies-next";
-import { useEffect, useMemo, useState } from "react";
+import AppWrapper from "@/components/appWrapper";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -20,36 +15,15 @@ const geistMono = localFont({
 });
 
 export default function RootLayout({ children }) {
-  const pathname = usePathname(); 
-  const hideMenuRoutes = useMemo(() => {
-    return ["/login", '/reportComparative/comparativeEquipment', '/reportComparative/comparativeValue','/equipment/report', '/branch/report', '/sector/report', '/supplier/report', '/users/report', '/reportComparative/divergentValue'];
-  }, [])
-  const token = getCookie("token");
-  const [branch, setBranch] = useState([]);
-
-  useEffect(() => {
-    async function fetchBranches() {
-      try {
-        const data = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllBranch`, token);
-        setBranch(data);
-      } catch (error) {
-        console.error("Erro ao buscar branches:", error);
-      }
-    }
-    if (!hideMenuRoutes.includes(pathname)) {
-      fetchBranches();
-    }
-  }, [pathname, hideMenuRoutes, token]);
 
   return (
     <html lang="pt-br">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`} 
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-       <div className="flex">
-           {!hideMenuRoutes.includes(pathname) && <Menu token={token} dataBranch={branch} />}
+        <AppWrapper>
           {children}
-       </div>
+        </AppWrapper>
       </body>
     </html>
   );

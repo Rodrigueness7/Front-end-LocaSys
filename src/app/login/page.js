@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { jwtDecode } from "jwt-decode";
 
 
+
 export default function Login() {
 
   const route = useRouter()
@@ -62,17 +63,16 @@ export default function Login() {
     }
   }
 
-  
 
   return (
     <section className="bg-gray-100 h-screen flex justify-center items-center w-full">
       <div className="flex justify-center items-center flex-col bg-white shadow hover:shadow-lg h-96 w-96 rounded-lg relative">
         <form onSubmit={submit}>
           <div>
-            <h1 className="font-sans pb-8 text-2xl">Acesse a sua conta</h1>
+            <h1 className="font-sans pb-8 text-2xl text-black">Acesse a sua conta</h1>
           </div>
-          <InputForm classNameInput={"w-full font-sans pt-2 border-solid border-2 border-current rounded"} classNameLabe={" mb-2 text-sm font-medium text-gray-900"} label={'Username'} type={'text'} value={username} onchange={changeUsername}></InputForm>
-          <InputForm classNameInput={"w-full font-sans pt-2 border-solid border-2 border-current rounded"} classNameLabe={" mb-2 text-sm font-medium text-gray-900"} label={'Password'} type={'password'} value={password} onchange={changePassword}></InputForm>
+          <InputForm classNameInput={"w-full font-sans pt-2 border-solid border-2 border-current rounded text-black"} classNameLabe={" mb-2 text-sm font-medium text-gray-900"} label={'Username'} type={'text'} value={username} onchange={changeUsername}></InputForm>
+          <InputForm classNameInput={"w-full font-sans pt-2 border-solid border-2 border-current rounded text-black"} classNameLabe={" mb-2 text-sm font-medium text-gray-900"} label={'Password'} type={'password'} value={password} onchange={changePassword}></InputForm>
           <button type="submit" className="w-64 mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" >Acesse</button>
         </form>
         <div className="absolute bottom-8">{result}</div>
