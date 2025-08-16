@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import InputForm from "../../../../components/InputForm"
 import InputSelect from "../../../../components/InputSelect"
 import updateData from "../../../../utils/updateData"
@@ -21,8 +21,8 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
     const [lastName, setLastName] = useState(dataUserId.lastName)
     const [cpf, setCpf] = useState((dataUserId.cpf == null) ? "" : dataUserId.cpf)
     const [username, setUsername] = useState(dataUserId.username)
-    const [password, setPassword] = useState(dataUserId.password)
-    const [confirmationPassword, setConfirmationPassword] = useState(dataUserId.password)
+    const [password, setPassword] = useState((dataUserId.password == null) ? "" : dataUserId.password)
+    const [confirmationPassword, setConfirmationPassword] = useState((dataUserId.password == null) ? "" : dataUserId.password)
     const [email, setEmail] = useState((dataUserId.email == null) ? "" : dataUserId.email)
     const [confirmationEmail, setConfirmationEmail] = useState((dataUserId.email == null) ? "" : dataUserId.email)
     const [sector, setSector] = useState(dataUserId['Sector'].sector)
@@ -30,7 +30,15 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
     const [result, setResult] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)
     const router = useRouter()
+    const [permission, setPermission] = useState([])
 
+
+    useEffect(() => {
+        let data = localStorage.getItem('permission')
+        let number = data.split(',').map(number => number)
+        setPermission(number)
+
+    }, [])
 
 
 
@@ -119,8 +127,8 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
             lastName: lastName,
             cpf: cpf,
             username: username,
-            password: password,
-            confirmationPassword: confirmationPassword,
+            password: password == '' ? null : password,
+            confirmationPassword: confirmationPassword == '' ? null : confirmationPassword,
             email: email,
             confirmationEmail: confirmationEmail,
             idSector: idSector,
@@ -156,12 +164,12 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
                     <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={"Usuário"} name={"username"} type={'text'} value={username} onchange={changeUsername}></InputForm>
                     <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={"Email"} name={"email"} type={'email'} value={email} onchange={changeEmail}></InputForm>
                     <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={"Confirmação do Email"} name={"email"} type={'email'} value={confirmationEmail} onchange={changeConfirmationEmail}></InputForm>
-                    {password && confirmationPassword !== undefined ? (
+                    {permission.find(number => number == 14) && (
                         <>
                             <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={"Senha"} name={"password"} type={'password'} value={password} onchange={changePassword}></InputForm>
                             <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={"Confirmação da Senha"} name={"password"} type={'password'} value={confirmationPassword} onchange={changeConfirmationPassword}></InputForm>
                         </>
-                    ) : null}
+                    )}
                     <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Setor'} name={'sector'} datas={listSector} value={sector} onchange={changeSector}></InputSelect>
                     <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Perfil'} name={'profile'} datas={listProfile} value={profile} onchange={changeProfile}></InputSelect>
                 </form>
