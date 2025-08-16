@@ -43,7 +43,7 @@ export default function UpdateBranch({ dataBranch, idBranch, token }) {
 
     const changeCoporateName = (e) => {
         let fieldCoporateName = e.target.value
-        if (fieldCoporateName === '' || fieldCoporateName.length <= 25) {
+        if (fieldCoporateName === '' || fieldCoporateName.length <= 50) {
             setCoporateName(fieldCoporateName)
         }
     }

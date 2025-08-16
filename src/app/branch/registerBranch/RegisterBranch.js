@@ -22,7 +22,7 @@ export default function PageRegisterBranch({ token }) {
 
     const changeBranch = (e) => {
         let fieldBranch = e.target.value
-        if (fieldBranch === '' || fieldBranch.length <= 25) {
+        if (fieldBranch === '' || fieldBranch.length <= 50) {
             setBranch(fieldBranch)
         }
     }
@@ -36,7 +36,7 @@ export default function PageRegisterBranch({ token }) {
 
     const changeCoporateName = (e) => {
         let fieldCoporateName = e.target.value
-        if (fieldCoporateName === '' || fieldCoporateName.length <= 25) {
+        if (fieldCoporateName === '' || fieldCoporateName.length <= 50) {
             setCoporateName(fieldCoporateName)
         }
     }

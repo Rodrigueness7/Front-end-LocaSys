@@ -23,7 +23,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     const [codProd, setCodProd] = useState(dataEquipment.codProd)
     const [equipment, setEquipment] = useState(dataEquipment.equipment)
     const [type, setType] = useState(dataEquipment.type)
-    const [value, setValue] = useState(dataEquipment.value)
+    const [value, setValue] = useState(dataEquipment.value.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2}))
     const [branch, setBranch] = useState(dataEquipment['Branch'].branch)
     const [username, setUsername] = useState(dataEquipment['User'].username)
     const [sector, setSector] = useState(dataEquipment['Sector'].sector)
@@ -54,10 +54,19 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         const newValue = e.target.value
 
         if (newValue === '' || newValue.length <= 13) {
-            setValue(newValue)
+            const part = newValue.split(',')
+            if(part.length > 2) return ;
         }
+
+        setValue(newValue)
     }
 
+    const pointLockValue  = (e) => {
+        if(e.key === ".") {
+            e.preventDefault()
+        }
+    }
+    
     const changeBranch = (e) => {
         setBranch(e.target.value)
     }
@@ -110,13 +119,14 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             codProd: codProd,
             equipment: equipment,
             type: type,
-            value: value,
+            value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
             idBranch: idBranch,
             idUser: idUser,
             idSector: idSector,
             idSupplier: idSupplier,
             entryDate: entryDate
         }
+
         await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateEquipment/${idEquipment}`, data, token, setResult)
         setIsModalOpen(true)
 
@@ -128,7 +138,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             idUser: idUser,
             idSector: idSector,
             idBranch: idBranch,
-            value: value,
+            value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
             entryDate: entryDate,
             returnDate: null,
             entryDate: entryDate
@@ -151,7 +161,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             codProd: codProd,
             equipment: equipment,
             type: type,
-            value: value,
+            value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
             idBranch: idBranch,
             idUser: idUser,
             idSector: idSector,
@@ -170,7 +180,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             idUser: idUser,
             idSector: idSector,
             idBranch: idBranch,
-            value: value,
+            value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
             entryDate: entryDate,
             returnDate: returnDate
         }
@@ -266,7 +276,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Equipamento'} type={'text'} name={'equipment'} value={equipment} onchange={changeEquipment}></InputForm>
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Tipo'} type={'text'} name={'type'} value={type} onchange={changeType}></InputForm>
                     {value !== undefined ? (
-                        <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Valor'} type={'decimal'} name={'value'} value={value} onchange={changeValue} maxLength={'10'}></InputForm>
+                        <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Valor'} type={'decimal'} name={'value'} value={value} onchange={changeValue} maxLength={'10'} onKeyDown={pointLockValue}></InputForm>
                     ) : null}
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Data Entrada'} type={'date'} name={'entryDate'} value={entryDate} onchange={changeEntryDate} maxLength={'10'}></InputForm>
                     <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Filial'} name={'branch'} datas={listBranch} value={branch} onchange={changeBranch}></InputSelect>

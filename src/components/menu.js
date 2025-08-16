@@ -69,7 +69,7 @@ export default function Menu({ token, dataBranch }) {
 
         clearCookie('token');
         localStorage.clear()
-        router.push('./login')
+        router.push('/login')
     }
 
     const handleFileUpload = (event) => {
@@ -81,7 +81,7 @@ export default function Menu({ token, dataBranch }) {
     const handleCloseModal = () => {
         setIsModalOpen(false)
         if (result.success) {
-            router.push('./')
+            router.push('/')
         }
     }
 
