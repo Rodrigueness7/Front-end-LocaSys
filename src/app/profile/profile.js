@@ -23,7 +23,7 @@ export default function Profile({tableProfile}) {
            )}
         </div>
         <div className="ml-8 flex-1">
-            <Table Table={'w-96 table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b '} Td={'py-2 px-4'} positionTd={'flex justify-end'} headers={['id', 'Perfil']} data={tableProfile} attributos={['idProfile', 'profile']} id={'idProfile'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./profile/updateProfile'} bt={'...'} permission={permission.find(number => number == '17')}></Table>
+            <Table Table={'w-96 table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b '} Td={'py-2 px-4 text-black'} positionTd={'flex justify-end'} headers={['id', 'Perfil']} data={tableProfile} attributos={['idProfile', 'profile']} id={'idProfile'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./profile/updateProfile'} bt={'...'} permission={permission.find(number => number == '17')}></Table>
         </div>
     </div>
     )

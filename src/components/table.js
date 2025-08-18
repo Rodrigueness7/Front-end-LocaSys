@@ -66,14 +66,14 @@ export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, 
             </tbody>
         </table>
          <div className="flex justify-center items-center items-center mt-4 space-x-2">
-                <button onClick={() => changePage(currentPage - 1)} className="px-4 py-2 border rounded-md bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100" >
+                <button onClick={() => changePage(currentPage - 1)} className="px-4 py-2 border rounded-md bg-gray-500 hover:bg-gray-400 disabled:bg-gray-300 text-white" >
                     Anterior
                 </button>
               {generatePageList().map((page, index) => (
                     <button 
                         key={index} 
                         onClick={() => page !== '...' && changePage(page)} 
-                        className={`px-4 py-2 border-md ${currentPage === page ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'}`}
+                        className={`px-4 py-2 border-md rounded-md ${currentPage === page ? 'bg-blue-500 text-white' : 'bg-gray-500 hover:bg-gray-400'}`}
                         disabled={page === '...'}
                     >
                         {page}
@@ -81,7 +81,7 @@ export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, 
                 ))}
 
                 <button onClick={() => changePage(currentPage + 1)}
-                    className="px-4 py-2 border rounded-md bg-gray-200 hover:bg-gray-300 disabled:gray-100 " disabled={currentPage === totalPages}>
+                    className="px-4 py-2 border rounded-md bg-gray-500 hover:bg-gray-400 disabled:gray-300 text-white" disabled={currentPage === totalPages}>
                     Próxima
                 </button>
             </div>
