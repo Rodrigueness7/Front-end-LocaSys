@@ -1,7 +1,6 @@
 
 export default function PageHome() {
-
-    return(
-        <></>
+    return (
+        <div className="bg-white w-full"></div>
     )
 }

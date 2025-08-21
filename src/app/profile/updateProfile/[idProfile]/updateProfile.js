@@ -73,12 +73,12 @@ export default function UpdateProfile({ data, idProfile, dataPermission, token }
             <div className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
                 <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">Atualizar Perfil </h1>
                 <form className="grid grid-cols-1 gap-x-8 gap-y-4">
-                    <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={"Perfil"} name={"Profile"} type={'text'} value={profile} onchange={changeProfile}></InputForm>
+                    <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Perfil"} name={"Profile"} type={'text'} value={profile} onchange={changeProfile}></InputForm>
                     <div className="grid grid-cols-2 gap-4 max-h-60 overflow-y-auto">
                         {selectPermission.map((itens) => (
                             <label className="flex items-center" key={itens.id}>
                                 <input id={itens.id} type="checkbox" value={itens.section + ' - ' + itens.permission} checked={itens.checked} onChange={handleChange}></input>
-                                <span className="ml-2"> {itens.section + ' - ' + itens.permission}</span>
+                                <span className="ml-2 text-black"> {itens.section + ' - ' + itens.permission}</span>
                             </label>
                         ))}
                     </div>

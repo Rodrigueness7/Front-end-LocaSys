@@ -61,10 +61,18 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         setValue(newValue)
     }
 
-    const pointLockValue  = (e) => {
-        if(e.key === ".") {
-            e.preventDefault()
+   const pointLockValue  = (e) => {
+        const regex = /[a-zA-Z]/
+        const allowedKeys = ['Backspace', 'Delete', 'ArrowRigth', 'arrowLeft','Tab', 'Home', 'End']
+
+        if(allowedKeys.includes(e.key)) {
+            return;
         }
+
+         if(e.key === "." || regex.test(e.key) ) {
+            e.preventDefault();
+        }
+        
     }
     
     const changeBranch = (e) => {
