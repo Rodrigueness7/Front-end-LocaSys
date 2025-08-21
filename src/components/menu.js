@@ -5,6 +5,7 @@ import InputForm from "@/components/InputForm";
 import InputSelect from "@/components/InputSelect";
 import MessageModal from "@/components/messageModal";
 import addData from "@/utils/addData";
+import deleteData from "@/utils/deleteData";
 import Link from "next/link";
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react";

@@ -42,7 +42,7 @@ export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, 
 
 
     return ( 
-        <div>
+    <div className="relative h-full pb-10 ">
         <table className={Table}>
             <thead>
                 <tr className={TrThead}>
@@ -65,7 +65,8 @@ export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, 
                 ))}
             </tbody>
         </table>
-         <div className="flex justify-center items-center items-center mt-4 space-x-2">
+        <div className="pagination-container fixed bottom-0 left-0 w-full z-50">
+             <div className="flex justify-center items-center py-2 space-x-2">
                 <button onClick={() => changePage(currentPage - 1)} className="px-4 py-2 border rounded-md bg-gray-500 hover:bg-gray-400 disabled:bg-gray-300 text-white" >
                     Anterior
                 </button>
@@ -85,6 +86,7 @@ export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, 
                     Próxima
                 </button>
             </div>
+        </div>
         </div>
        
     )
