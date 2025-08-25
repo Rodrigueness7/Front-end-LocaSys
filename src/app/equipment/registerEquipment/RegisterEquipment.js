@@ -9,18 +9,19 @@ import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
 import { useRouter } from "next/navigation"
 
 
-export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector, dataSupplier, token }) {
+export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector, dataSupplier, dataType, token }) {
 
     const listBranch = dataBranch.map(item => item.branch)
     const listUsername = dataUser.map(item => item.username)
     const listSector = dataSector.map(item => item.sector)
     const listSupplier = dataSupplier.map(item => item.supplier)
+    const listType = dataType.map(item => item.type)
 
 
     const router = useRouter()
     const [codProd, setCodProd] = useState('')
     const [equipment, setEquipment] = useState('')
-    const [type, setType] = useState('')
+    const [type, setType] = useState(listType[0])
     const [value, setValue] = useState('')
     const [branch, setBranch] = useState(listBranch[0])
     const [username, setUsername] = useState(listUsername[0])
@@ -105,12 +106,13 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
         const idSector = dataSector.find(item => item.sector === sector).idSector
         const idBranch = dataBranch.find(item => item.branch === branch).idBranch
         const idSupplier = dataSupplier.find(item => item.supplier === supplier).idSupplier
+        const idType = dataType.find(item => item.type === type).idType
 
         const data = {
             idEquipment: 0,
             codProd: codProd,
             equipment: equipment,
-            type: type,
+            idType: idType,
             value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
             idBranch: idBranch,
             idUser: idUser,
@@ -128,7 +130,7 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
             let fetchIdEquipment = fetchEquipment.find(item => item.codProd == codProd)
 
             if(fetchIdEquipment != undefined) {
-                 let dataEquipmentHistory = {
+                let dataEquipmentHistory = {
                 idEquipmentHistory: 0,
                 idEquipment: fetchIdEquipment.idEquipment,
                 reason: null,
@@ -152,7 +154,7 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
                 <form className="grid grid-cols-1 gap-x-8 gap-y-4">
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Código'} type={'text'} name={'codProd'} value={codProd} onchange={changeCodProd} maxLength={'10'}></InputForm>
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Equipamento'} type={'text'} name={'equipment'} value={equipment} onchange={changeEquipment}></InputForm>
-                    <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Tipo'} type={'text'} name={'type'} value={type} onchange={changeType}></InputForm>
+                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Tipo'} name={'type'} datas={listType} value={type} onchange={changeType}></InputSelect>
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Valor'} type={'decimal'} name={'value'} value={value} onchange={changeValue} maxLength={'10'} onKeyDown={pointLockValue}></InputForm>
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Data entrada'} type={'date'} name={'entryDate'} value={entryDate} onchange={changeEntryDate}></InputForm>
                     <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Filial'} name={'branch'} datas={listBranch} value={branch} onchange={changeBranch}></InputSelect>
