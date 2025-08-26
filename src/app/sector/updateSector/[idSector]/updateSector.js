@@ -45,7 +45,7 @@ export default function UpdateSector({ idSector, dataSector, dataBranch, token }
             uniqueIdentifier: uniqueIdentifier
         }
 
-        await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateSector/${idSector}`, data, token, setResult, 'Atualizado com sucesso')
+        await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateSector/${idSector}`, data, token, setResult)
         setIsModalOpen(true)
     }
 
@@ -54,7 +54,7 @@ export default function UpdateSector({ idSector, dataSector, dataBranch, token }
             deletionDate: new Date().toLocaleDateString('pt-BR')
         }
 
-        await inactivateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/inactivateSector/${idSector}`, data, token, setResult, 'Deletado com sucesso')
+        await inactivateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/inactivateSector/${idSector}`, data, token, setResult)
         setIsModalOpen(true)
     }
 

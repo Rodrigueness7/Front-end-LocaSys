@@ -205,9 +205,16 @@ export default function Menu({ token, dataBranch }) {
                     <Link href={'/supplier'} className="hover:text-blue-500 transition duration-300">Fornecedor</Link>
                 </div>
                 )}
+                {permission.find(number => number == '48') && (
+                <div>
+                    <Link href={'/typeEquipment'} className="hover:text-blue-500 transition duration-300">Tipo de Equipmento</Link>
+                </div>
+                )}
+                {permission.find(number => number == '15') && (
                 <div>
                     <Link href={'/profile'} className="hover:text-blue-500 transition duration-300">Perfil</Link>
                 </div>
+                )}
                 {permission.find(item => item == '35') && (
                     <div>
                     <Link href={'/logs'} className="hover:text-blue-500 transition duration-300">Log</Link>

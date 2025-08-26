@@ -50,7 +50,6 @@ export default function RegisterUser({ dataSector, dataProfile, token }) {
     }
 
     const allowOnlyNumbers  = (e) => {
-        const regex = /[a-zA-Z]/
         const allowedKeys = ['Backspace', 'Delete', 'ArrowRigth', 'arrowLeft','Tab', 'Home', 'End']
 
         if(allowedKeys.includes(e.key)) {

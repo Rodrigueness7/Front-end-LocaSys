@@ -11,19 +11,19 @@ import MessageModal from "@/components/messageModal"
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
 
 
-export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, dataSector, dataSupplier, token, idEquipment, dataType }) {
+export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, dataSector, dataSupplier, token, idEquipment, dataTypeEquipment }) {
 
     const router = useRouter()
     const listBranch = dataBranch.map(item => item.branch)
     const listUsername = dataUser.map(item => item.username)
     const listSector = dataSector.map(item => item.sector)
     const listSupplier = dataSupplier.map(item => item.supplier)
-    const listType = dataType.map(item => item.type)
+    const listTypeEquipment = dataTypeEquipment.map(item => item.typeEquipment)
 
 
     const [codProd, setCodProd] = useState(dataEquipment.codProd)
     const [equipment, setEquipment] = useState(dataEquipment.equipment)
-    const [type, setType] = useState(dataEquipment['Type'].type)
+    const [type, setType] = useState(dataEquipment['TypeEquipment'].typeEquipment)
     const [value, setValue] = useState(dataEquipment.value.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2}))
     const [branch, setBranch] = useState(dataEquipment['Branch'].branch)
     const [username, setUsername] = useState(dataEquipment['User'].username)
@@ -122,13 +122,13 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         const idSector = dataSector.find(item => item.sector === sector).idSector
         const idBranch = dataBranch.find(item => item.branch === branch).idBranch
         const idSupplier = dataSupplier.find(item => item.supplier === supplier).idSupplier
-        const idType = dataType.find(item => item.type === type).idType
+        const idTypeEquipment = dataType.find(item => item.typeEquipment === type).idTypeEquipment
 
         const data = {
             idEquipment: 0,
             codProd: codProd,
             equipment: equipment,
-            idType: idType,
+            idTypeEquipment: idTypeEquipment,
             value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
             idBranch: idBranch,
             idUser: idUser,
@@ -164,13 +164,13 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         const idSector = dataSector.find(item => item.sector === sector).idSector
         const idBranch = dataBranch.find(item => item.branch === branch).idBranch
         const idSupplier = dataSupplier.find(item => item.supplier === supplier).idSupplier
-        const idType = dataType.find(item => item.type === type).idType
+        const idTypeEquipment = dataType.find(item => item.typeEquipment === type).idTypeEquipment
 
         const data = {
             idEquipment: 0,
             codProd: codProd,
             equipment: equipment,
-            idType: idType,
+            idTypeEquipment: idTypeEquipment,
             value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
             idBranch: idBranch,
             idUser: idUser,
@@ -206,7 +206,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         const idSector = dataSector.find(item => item.sector === sector).idSector
         const idBranch = dataBranch.find(item => item.branch === branch).idBranch
         const idSupplier = dataSupplier.find(item => item.supplier === supplier).idSupplier
-        const idType = dataType.find(item => item.type === type).idType
+        const idTypeEquipment = dataType.find(item => item.typeEquipment === type).idTypeEquipment
 
         let data = {
             returnDate: null
@@ -234,7 +234,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             idEquipment: 0,
             codProd: codProd,
             equipment: equipment,
-            idType: idType,
+            idTypeEquipment: idTypeEquipment,
             value: value,
             idBranch: idBranch,
             idUser: idUser,
@@ -285,7 +285,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
                 <form className="grid grid-cols-1 gap-x-8 gap-y-4">
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Código'} type={'text'} name={'codProd'} value={codProd} onchange={changeCodProd} min={0} maxLength={'10'}></InputForm>
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Equipamento'} type={'text'} name={'equipment'} value={equipment} onchange={changeEquipment}></InputForm>
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Tipo'} name={'type'} datas={listType} value={type} onchange={changeType}></InputSelect>
+                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Tipo'} name={'typeEquipment'} datas={listTypeEquipment} value={type} onchange={changeType}></InputSelect>
                     {value !== undefined ? (
                         <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"} div={'mb-4'} label={'Valor'} type={'decimal'} name={'value'} value={value} onchange={changeValue} maxLength={'10'} onKeyDown={pointLockValue}></InputForm>
                     ) : null}

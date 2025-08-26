@@ -28,14 +28,14 @@ export default async function PageUpdateEquipment({ params }) {
     let sector = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllSector`, token)
     let supplier = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllSupplier`, token)
     let equipment = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findEquipmentId/${idEquipment}`, token)
-    let type = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllType`, token)
+    let typeEquipment = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllTypeEquipment`, token)
 
     if(branch.message) {
         redirect('../../login')
     }
 
     return (
-        <UpdateEquipment dataEquipment={equipment} dataUser={user} dataBranch={branch} dataSector={sector} dataSupplier={supplier} token={token} idEquipment={idEquipment} dataType={type}></UpdateEquipment>
+        <UpdateEquipment dataEquipment={equipment} dataUser={user} dataBranch={branch} dataSector={sector} dataSupplier={supplier} token={token} idEquipment={idEquipment} dataTypeEquipment={typeEquipment}></UpdateEquipment>
 
     )
 }
