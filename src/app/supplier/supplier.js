@@ -54,6 +54,9 @@ export default function Supplier({ tableSupplier }) {
 
     const generation = async () => {
         sessionStorage.setItem('dataSupplier', JSON.stringify(data))
+        if(data.length <= 0) {
+            return alert('Não há dados para gerar relatório')
+        }
        window.open(`/supplier/report`, '_blank') 
  }
 

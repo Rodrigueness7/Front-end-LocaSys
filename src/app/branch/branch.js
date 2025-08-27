@@ -29,7 +29,7 @@ export default function Branch({ tableBranch }) {
 
      const generation = async () => {
             sessionStorage.setItem('dataBranch', JSON.stringify(data))
-           window.open(`/branch/report`, '_blank') 
+            window.open(`/branch/report`, '_blank') 
      }
 
     return (

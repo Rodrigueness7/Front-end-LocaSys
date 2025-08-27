@@ -52,16 +52,16 @@ export default function UpdateProfile({ data, idProfile, dataPermission, token }
             allow: itens.checked
         }))
 
-        await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateProfile/${idProfile}`, dataProfile, token, setResult, 'Atualizado com sucesso')
-        await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateProfile_permission`, dataProfile_permission, token, setResult, 'Atualizado com sucesso')
+        await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateProfile/${idProfile}`, dataProfile, token, setResult)
+        await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateProfile_permission`, dataProfile_permission, token, setResult)
         setIsModalOpen(true)
 
 
     }
 
     const deleteProfile = async () => {
-        await deleteData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/deleteProfile_permission/${idProfile}`, token, setResult, 'Deletado com sucesso')
-        await deleteData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/deleteProfile/${idProfile}`, token, setResult, 'Deletado com sucesso')
+        await deleteData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/deleteProfile_permission/${idProfile}`, token, setResult)
+        await deleteData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/deleteProfile/${idProfile}`, token, setResult)
         setIsModalOpen(true)
     }
 

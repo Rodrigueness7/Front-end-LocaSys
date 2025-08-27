@@ -106,7 +106,7 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
         const idSector = dataSector.find(item => item.sector === sector).idSector
         const idBranch = dataBranch.find(item => item.branch === branch).idBranch
         const idSupplier = dataSupplier.find(item => item.supplier === supplier).idSupplier
-        const idTypeEquipment = dataType.find(item => item.typeEquipment === type).idTypeEquipment
+        const idTypeEquipment = dataTypeEquipment.find(item => item.typeEquipment === type).idTypeEquipment
 
         const data = {
             idEquipment: 0,
