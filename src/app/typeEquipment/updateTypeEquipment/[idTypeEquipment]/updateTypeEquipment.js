@@ -1,6 +1,7 @@
 'use client'
 import InputForm from "@/components/InputForm";
 import MessageModal from "@/components/messageModal";
+import deleteData from "@/utils/deleteData";
 import updateData from "@/utils/updateData";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -36,8 +37,16 @@ export default function UpdateTypeEquipment({dataTypeEquipment, idTypeEquipment,
         setIsModalOpen(true)
     }
 
+    const deleteTypeEquipment = async () => {
+        await deleteData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/deleteTypeEquipment/${idTypeEquipment}`, token, setResult)
+        setIsModalOpen(true)
+    }
+
     return (
         <section className="bg-gray-100 py-3 w-full">
+            <div className="flex items-start mb-8 lg:px-2 sm:px-0">
+                <button onClick={deleteTypeEquipment} className="p-2 bg-indigo-500 rounded-lg text-white">Deletar</button>
+            </div>
             <div className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg" >
                 <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">Atualizar Tipo de Equipamento </h1>
                 <form className="grid grid-cols-1 gap-x-8 gap-y-4">

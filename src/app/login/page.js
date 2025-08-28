@@ -75,7 +75,7 @@ export default function Login() {
           <InputForm classNameInput={"w-full font-sans pt-2 border-solid border-2 border-current rounded text-black"} classNameLabe={" mb-2 text-sm font-medium text-gray-900"} label={'Password'} type={'password'} value={password} onchange={changePassword}></InputForm>
           <button type="submit" className="w-64 mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" >Acesse</button>
         </form>
-        <div className="absolute bottom-8">{result}</div>
+        <div className="absolute bottom-8 text-black">{result}</div>
       </div>
     </section>
   );

@@ -5,10 +5,12 @@ import addData from "../../../utils/addData";
 import fetchData from "../../../utils/fetchData";
 import MessageModal from "@/components/messageModal";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 
 export default function RegisterProfile({ token, dataPermission }) {
 
+    const router = useRouter()
     const [profile, setProfile] = useState('')
     const [selectedPermissions, setSelectPermissions] = useState(
         dataPermission.map(permission => ({
