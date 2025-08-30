@@ -41,7 +41,8 @@ export default function UpdateProfile({ data, idProfile, dataPermission, token }
         }
     }
 
-    const updateProfile = async () => {
+    const updateProfile = async (e) => {
+        e.preventDefault()
         const dataProfile = {
             profile: profile
         }
@@ -53,9 +54,11 @@ export default function UpdateProfile({ data, idProfile, dataPermission, token }
         }))
 
         await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateProfile/${idProfile}`, dataProfile, token, setResult)
-        await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateProfile_permission`, dataProfile_permission, token, setResult)
         setIsModalOpen(true)
-
+        setTimeout(async () => {
+            await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateProfile_permission`, dataProfile_permission, token, setResult)
+            setIsModalOpen(true)
+        }, 2000)
 
     }
 
@@ -64,16 +67,18 @@ export default function UpdateProfile({ data, idProfile, dataPermission, token }
         await deleteData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/deleteProfile/${idProfile}`, token, setResult)
         setIsModalOpen(true)
     }
-
+console.log(idProfile)
     return (
         <section className="bg-gray-100 py-3 h-screen w-full">
             <div className="flex items-start mb-8 lg:px-2 sm:px-0">
-                <button onClick={deleteProfile} className="p-2 bg-indigo-500 rounded-lg text-white">Deletar</button>
+              { idProfile != 1 && idProfile !=2 && (
+                  <button onClick={deleteProfile} className="p-2 bg-indigo-500 rounded-lg text-white">Deletar</button>
+              )}
             </div>
             <div className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
                 <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">Atualizar Perfil </h1>
-                <form className="grid grid-cols-1 gap-x-8 gap-y-4">
-                    <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Perfil"} name={"Profile"} type={'text'} value={profile} onchange={changeProfile}></InputForm>
+                <form className="grid grid-cols-1 gap-x-8 gap-y-4" onSubmit={updateProfile}>
+                    <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Perfil"} name={"Profile"} type={'text'} value={profile} onchange={changeProfile} required={true}></InputForm>
                     <div className="grid grid-cols-2 gap-4 max-h-60 overflow-y-auto">
                         {selectPermission.map((itens) => (
                             <label className="flex items-center" key={itens.id}>
@@ -82,10 +87,10 @@ export default function UpdateProfile({ data, idProfile, dataPermission, token }
                             </label>
                         ))}
                     </div>
-                </form>
                 <div className="mb-6">
-                    <button onClick={updateProfile} className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ">Atualizar</button>
+                    <button type="submit" className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ">Atualizar</button>
                 </div>
+                </form>
                 <MessageModal isOpen={isModalOpen} onClose={handleCloseModal} message={result.error ? result.error : result.success} icone={
                     result?.error ? (<FaTimesCircle className="text-red-500 w-24 h-24 mx-auto mb-4 rounded-full" />) : (
                         <FaCheckCircle className="text-green-500 w-24 h-24 mx-auto mb-4 rounded-full" />

@@ -27,11 +27,11 @@ export default function PageRegisterBranch({ token }) {
         }
     }
 
-    const changeCNPJ = (e) => {
-        let fieldCNPJ = e.target.value
-        if (fieldCNPJ === '' || fieldCNPJ.length <= 14) {
-            setCNPJ(fieldCNPJ)
-        }
+     const changeCNPJ = (e) => {
+        const newCNPJ = e.target.value
+        if (/^[0-9]*$/.test(newCNPJ) && newCNPJ.length <= 14) {
+            setCNPJ(newCNPJ)
+        }   
     }
 
     const changeCoporateName = (e) => {
@@ -42,11 +42,12 @@ export default function PageRegisterBranch({ token }) {
     }
 
     const changeUniqueIdentifier = (e) => {
-        let fieldUniqueIdentifier = e.target.value
-        if (/^[0-9]*$/.test(fieldUniqueIdentifier) && fieldUniqueIdentifier.length <= 11) {
-            setUniqueIdentifier(fieldUniqueIdentifier)
-        }
+        const newUniqueIdentifier = e.target.value
+        if (/^[0-9]*$/.test(newUniqueIdentifier) && newUniqueIdentifier.length <= 10) {
+            setUniqueIdentifier(newUniqueIdentifier)
+        }   
     }
+
     const handleCloseModal = () => {
         setIsModalOpen(false)
         if (result.success) {

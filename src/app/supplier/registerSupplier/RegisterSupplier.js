@@ -38,16 +38,16 @@ export default function RegisterSupplier({ token }) {
 
     const changeContact = (e) => {
         let newContact = e.target.value
-        if (newContact === '' || newContact.length <= 11) {
+        if (newContact === '' || /^[0-9]*$/.test(newContact) && newContact.length <= 11) {
             setContact(newContact)
         }
     }
 
     const changeCNPJ = (e) => {
-        let newCNPJ = e.target.value
-        if (newCNPJ === '' || newCNPJ.length <= 14) {
+        const newCNPJ = e.target.value
+        if (/^[0-9]*$/.test(newCNPJ) && newCNPJ.length <= 14) {
             setCNPJ(newCNPJ)
-        }
+        }   
     }
 
     const changeAdress = (e) => {
@@ -58,10 +58,10 @@ export default function RegisterSupplier({ token }) {
     }
 
     const changeZipCode = (e) => {
-        let newZipCode = e.target.value
-        if (newZipCode === '' || newZipCode.length <= 8) {
+       const newZipCode = e.target.value
+        if (/^[0-9]*$/.test(newZipCode) && newZipCode.length <= 8) {
             setZipCode(newZipCode)
-        }
+        }   
     }
 
     const changeState = (e) => {

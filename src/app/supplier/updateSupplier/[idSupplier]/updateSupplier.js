@@ -12,10 +12,10 @@ export default function UpdateSupplier({ idSupplier, data, token }) {
 
     const router = useRouter()
     const [supplier, setSupplier] = useState(data.supplier)
-    const [email, setEmail] = useState(data.email)
-    const [contact, setContact] = useState(data.contact)
+    const [email, setEmail] = useState(data.email == null? '' : data.email)
+    const [contact, setContact] = useState(data.contact == null? '' : data.contact)
     const [CNPJ, setCNPJ] = useState(data.CNPJ)
-    const [address, setAddress] = useState(data.address)
+    const [address, setAddress] = useState(data.address == null? '' : data.address)
     const [zipCode, setZipCode] = useState(data.zipCode)
     const [state, setState] = useState(data.state)
     const [city, setCity] = useState(data.city)
@@ -38,16 +38,17 @@ export default function UpdateSupplier({ idSupplier, data, token }) {
 
     const changeContact = (e) => {
         let newContact = e.target.value
-        if (newContact === '' || newContact.length <= 11) {
+        if (newContact === '' || /^[0-9]*$/.test(newContact) && newContact.length <= 11) {
             setContact(newContact)
         }
     }
 
     const changeCNPJ = (e) => {
-        let newCNPJ = e.target.value
-        if (newCNPJ === '' || newCNPJ.length <= 14) {
+        const newCNPJ = e.target.value
+        if (/^[0-9]*$/.test(newCNPJ) && newCNPJ.length <= 14) {
             setCNPJ(newCNPJ)
         }
+        
     }
 
     const changeAdress = (e) => {
@@ -58,10 +59,10 @@ export default function UpdateSupplier({ idSupplier, data, token }) {
     }
 
     const changeZipCode = (e) => {
-        let newZipCode = e.target.value
-        if (newZipCode === '' || newZipCode.length <= 8) {
+       const newZipCode = e.target.value
+        if (/^[0-9]*$/.test(newZipCode) && newZipCode.length <= 8) {
             setZipCode(newZipCode)
-        }
+        }   
     }
 
     const changeState = (e) => {
