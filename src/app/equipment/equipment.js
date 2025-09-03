@@ -27,6 +27,9 @@ export default function Equipment({ tableEquipment, attribute }) {
 
     const generation = async () => {
         sessionStorage.setItem('dataEquipment', JSON.stringify(dataEquipment))
+        if(dataEquipment.length <= 0) {
+            return alert('Não existe dados para gerar relatório')
+        }
         window.open(`/equipment/report`, '_blank')
     }
 

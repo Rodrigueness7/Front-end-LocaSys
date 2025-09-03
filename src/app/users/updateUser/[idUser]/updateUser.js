@@ -150,7 +150,7 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
             idProfile: idProfile
         }
 
-        await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateUser/${idUser}`, data, token, setResult, 'Atualizado com sucesso')
+        await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateUser/${idUser}`, data, token, setResult)
         setIsModalOpen(true)
     }
 
@@ -159,7 +159,7 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
             deletionDate: new Date().toLocaleDateString('pt-BR')
         }
 
-        await inactivateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/inactivateUser/${idUser}`, data, token, setResult, 'Deletado com sucesso')
+        await inactivateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/inactivateUser/${idUser}`, data, token, setResult)
         setIsModalOpen(true)
 
     }

@@ -36,9 +36,17 @@ export default function Report({equipmentHistory, equipmentRental}) {
     const search = (e) => {
         e.preventDefault()
         
+        if(equipmentRental.length == 0) {
+            return (
+                alert('Não há dados para comparar')
+            )
+        }
+    
         let findInitPeriod = equipmentRental.find(item => item.initPeriod).initPeriod.slice(0,10)
         let findFinishPeriod = equipmentRental.find(item => item.finishPeriod).finishPeriod.slice(0,10)
-    
+        
+       
+
         if(findInitPeriod != initPeriod && findFinishPeriod != finishPeriod ) {
             return(
                 alert('Não há dados para esse periodo')

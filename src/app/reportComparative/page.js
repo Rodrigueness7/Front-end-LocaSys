@@ -18,7 +18,7 @@ export default async function PageReport() {
 
     return(
         <Report equipmentHistory={dataEquipmentHistory} equipmentRental={dataEquipmentRental}></Report>
-      
+           
     )
 
 

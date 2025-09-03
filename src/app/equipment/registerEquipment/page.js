@@ -26,6 +26,7 @@ export default async function RegisterEquipment() {
     let branch = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllBranch`, token)
     let sector = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllSector`, token)
     let supplier = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllSupplier`, token)
+    let typeEquipment = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllTypeEquipment`, token)
 
     if(branch.message) {
         redirect('../login')
@@ -33,6 +34,6 @@ export default async function RegisterEquipment() {
 
 
     return (
-        <PageRegisterEquipment dataUser={user} dataBranch={branch} dataSector={sector} dataSupplier={supplier} token={token}></PageRegisterEquipment>
+        <PageRegisterEquipment dataUser={user} dataBranch={branch} dataSector={sector} dataSupplier={supplier} dataTypeEquipment={typeEquipment} token={token}></PageRegisterEquipment>
     )
 }

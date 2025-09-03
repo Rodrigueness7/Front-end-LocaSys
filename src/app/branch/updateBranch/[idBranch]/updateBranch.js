@@ -34,12 +34,12 @@ export default function UpdateBranch({ dataBranch, idBranch, token }) {
     }
 
     const changeCNPJ = (e) => {
-        let fieldCNPJ = e.target.value
-        if (fieldCNPJ === '' || fieldCNPJ.length <= 14) {
-            setCNPJ(fieldCNPJ)
-        }
-
+        const newCNPJ = e.target.value
+        if (/^[0-9]*$/.test(newCNPJ) && newCNPJ.length <= 14) {
+            setCNPJ(newCNPJ)
+        }   
     }
+
 
     const changeCoporateName = (e) => {
         let fieldCoporateName = e.target.value
@@ -49,7 +49,10 @@ export default function UpdateBranch({ dataBranch, idBranch, token }) {
     }
 
     const changeUniqueIdentifier = (e) => {
-        setUniqueIdentifier(e.target.value)
+        const newUniqueIdentifier = e.target.value
+        if (/^[0-9]*$/.test(newUniqueIdentifier) && newUniqueIdentifier.length <= 10) {
+            setUniqueIdentifier(newUniqueIdentifier)
+        }   
     }
 
     const handleCloseModal = () => {
@@ -84,14 +87,14 @@ export default function UpdateBranch({ dataBranch, idBranch, token }) {
     return (
         <section className="bg-gray-100 py-3 h-screen w-full">
             <div className="flex items-start mb-8 lg:px-2 sm:px-0">
-               {permission.find(number => number == '9') && (
+               {permission.find(number => number == '9') && idBranch != 1 ? (
                  <button onClick={deleteBranch} className="p-2 bg-indigo-500 rounded-lg text-white">Deletar</button>
-               )}
+               ): null}
             </div>
             <div className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
                 <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">Atualizar Filial</h1>
                 <form className="grid grid-cols-1 gap-x-8 gap-y-4">
-                    <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Código Filial"} name={"uniqueIdentifier"} type={'number'} value={uniqueIdentifier} onchange={changeUniqueIdentifier}></InputForm>
+                    <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Código Filial"} name={"uniqueIdentifier"} type={'text'} value={uniqueIdentifier} onchange={changeUniqueIdentifier}></InputForm>
                     <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Filial"} name={"branch"} type={'text'} value={branch} onchange={changeBranch}></InputForm>
                     <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"CNPJ"} name={"CNPJ"} type={'text'} value={CNPJ} onchange={changeCNPJ}></InputForm>
                     <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Razão Social"} name={"corporateName"} type={'text'} value={corporateName} onchange={changeCoporateName}></InputForm>

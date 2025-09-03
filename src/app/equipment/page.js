@@ -29,7 +29,7 @@ export default async function PageEquipment() {
             id: itens.idEquipment,
             ['Código']: itens.codProd,
             ['Equipamento']: itens.equipment,
-            ['Tipo']: itens.type,
+            ['Tipo']: itens['TypeEquipment'].typeEquipment,
             ['Data Entrada']: new Date(itens.entryDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
             ['Data Retorno']: itens.returnDate ? new Date(itens.returnDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }) : '',
             ['Usuario']: itens['User'].username,

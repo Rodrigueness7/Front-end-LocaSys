@@ -5,6 +5,7 @@ import InputForm from "@/components/InputForm";
 import InputSelect from "@/components/InputSelect";
 import MessageModal from "@/components/messageModal";
 import addData from "@/utils/addData";
+import deleteData from "@/utils/deleteData";
 import Link from "next/link";
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react";
@@ -204,9 +205,16 @@ export default function Menu({ token, dataBranch }) {
                     <Link href={'/supplier'} className="hover:text-blue-500 transition duration-300">Fornecedor</Link>
                 </div>
                 )}
+                {permission.find(number => number == '48') && (
+                <div>
+                    <Link href={'/typeEquipment'} className="hover:text-blue-500 transition duration-300">Tipo de Equipmento</Link>
+                </div>
+                )}
+                {permission.find(number => number == '15') && (
                 <div>
                     <Link href={'/profile'} className="hover:text-blue-500 transition duration-300">Perfil</Link>
                 </div>
+                )}
                 {permission.find(item => item == '35') && (
                     <div>
                     <Link href={'/logs'} className="hover:text-blue-500 transition duration-300">Log</Link>
@@ -242,16 +250,16 @@ export default function Menu({ token, dataBranch }) {
                     <div>
                         <h2 className="text-lg text-black font-bold mb-4">Importar</h2>
                         <p className="text-black">Selecione o arquivo para importar.</p>
-                        <form encType="multipart/form-data">
+                        <form encType="multipart/form-data" onSubmit={handleSubmit}>
                             <input type="file" accept=".xlsx" required onChange={handleFileUpload} className="text-black" />
                             <div className="mt-5 flex justify-items">
-                                <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Celula Inicial"} name={"cell1"} type={'text'} value={cellInit} onchange={changeCellInit}></InputForm>
-                                <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Celula Final"} name={"cell2"} type={'text'} value={cellFinish} onchange={changeCellFinish}></InputForm>
-                                <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Período Inicial"} name={"initPeriod"} type={'date'} value={initPeriod} onchange={changeInitPeriod}></InputForm>
-                                <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Período Final"} name={"finishPeriod"} type={'date'} value={finishPeriod} onchange={changeFinishPeriod}></InputForm>
+                                <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Celula Inicial"} name={"cell1"} type={'text'} value={cellInit} onchange={changeCellInit} required={true} placeholder={"D16"}></InputForm>
+                                <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Celula Final"} name={"cell2"} type={'text'} value={cellFinish} onchange={changeCellFinish} required={true} placeholder={"AS243"}></InputForm>
+                                <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Período Inicial"} name={"initPeriod"} type={'date'} value={initPeriod} onchange={changeInitPeriod} required={true}></InputForm>
+                                <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Período Final"} name={"finishPeriod"} type={'date'} value={finishPeriod} onchange={changeFinishPeriod} required={true}></InputForm>
                                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Filial'} name={'branch'} datas={listBranch} value={branch} onchange={changeBranch}></InputSelect>
                             </div>
-                            <button onClick={handleSubmit} className=" w-full mt-4 bg-blue-500 text-white px-4 py-2 rounded">Enviar</button>
+                            <button type="submit" className=" w-full mt-4 bg-blue-500 text-white px-4 py-2 rounded">Enviar</button>
                         </form>  
                          <MessageModal isOpen={isModalOpen} onClose={handleCloseModal} message={result.error ? result.error : result.success} icone={
                     result?.error ? (<FaTimesCircle className="text-red-500 w-24 h-24 mx-auto mb-4 rounded-full" />) : (
