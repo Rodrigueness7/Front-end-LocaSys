@@ -62,7 +62,9 @@ export default function UpdateSector({ idSector, dataSector, dataBranch, token }
     return (
         <section className="bg-gray-100 py-3 h-screen w-full">
             <div className="flex items-start mb-8 lg:px-2 sm:px-0">
-                <button onClick={deleteSector} className="p-2 bg-indigo-500 rounded-lg text-white">Deletar</button>
+                {idSector != 1 && (
+                    <button onClick={deleteSector} className="p-2 bg-indigo-500 rounded-lg text-white">Deletar</button>
+                )}
             </div>
             <div className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
                 <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">Atualizar Setor</h1>

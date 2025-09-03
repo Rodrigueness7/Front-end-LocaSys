@@ -11,7 +11,7 @@ import MessageModal from "@/components/messageModal"
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
 
 
-export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, dataSector, dataSupplier, token, idEquipment, dataTypeEquipment }) {
+export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, dataSector, dataSupplier, token, idEquipment, dataTypeEquipment, dataAllEquipment }) {
 
     const router = useRouter()
     const listBranch = dataBranch.map(item => item.branch)
@@ -19,8 +19,6 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     const listSector = dataSector.map(item => item.sector)
     const listSupplier = dataSupplier.map(item => item.supplier)
     const listTypeEquipment = dataTypeEquipment.map(item => item.typeEquipment)
-
-    console.log(dataEquipment.returnDate)
 
 
     const [codProd, setCodProd] = useState(dataEquipment.codProd)
@@ -142,8 +140,10 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateEquipment/${idEquipment}`, data, token, setResult)
         setIsModalOpen(true)
 
+        let existEquipment = dataAllEquipment.find(item => item.codProd == codProd)
 
-        let dataEquipmentHistory = {
+        if(existEquipment == undefined) {
+            let dataEquipmentHistory = {
             idEquipmentHistory: 0,
             idEquipment: idEquipment,
             reason: null,
@@ -158,6 +158,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
 
         await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addEquipmentHistory`, dataEquipmentHistory, token, setResult)
         setIsModalOpen(true)
+        }
 
     }
 
