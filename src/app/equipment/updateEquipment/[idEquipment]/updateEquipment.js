@@ -136,7 +136,6 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             idSupplier: idSupplier,
             entryDate: entryDate
         }
-
         await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateEquipment/${idEquipment}`, data, token, setResult)
         setIsModalOpen(true)
 
