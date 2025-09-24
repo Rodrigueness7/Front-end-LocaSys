@@ -120,7 +120,7 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
             idSupplier: idSupplier,
             entryDate: entryDate
         }
-
+        
         await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addEquipment`, data, token, setResult)
         setIsModalOpen(true)
        
