@@ -9,17 +9,17 @@ export default async function PageRegisterUser() {
 
     const cookieStore = cookies()
     const token = (await cookieStore).get('token')?.value
+    
+    if (!token) {
+        redirect('/login')
+    }
 
     let permission = jwtDecode(token).permission
     const number = permission.find(number => number == 11)
 
-    if (!token) {
-        redirect('../login')
-
-    }
 
     if(number == undefined) {
-        redirect('../')
+        redirect('/')
     }
 
 
@@ -28,7 +28,7 @@ export default async function PageRegisterUser() {
     const dataUser = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllUser`, token)
 
     if(dataUser.message) {
-        redirect('../login')
+        redirect('/login')
     }
 
     return (

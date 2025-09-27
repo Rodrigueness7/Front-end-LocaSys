@@ -8,15 +8,16 @@ export default async function PageRegisterTypeEquipment() {
     const cookieStore = cookies()
     const token = (await cookieStore).get('token')?.value
 
+    if (!token) {
+        redirect('/login')
+    }
+
     let permissionUser = jwtDecode(token).permission
     const number = permissionUser.find(number => number == 49)
 
-    if (!token) {
-        redirect('../login')
-    }
 
     if(number == undefined) {
-        redirect('../')
+        redirect('/')
     }
 
     return (

@@ -9,21 +9,22 @@ export default async function RegisterSector() {
     const cookieStore = cookies()
     const token = (await cookieStore).get('token')?.value
 
+    if (!token) {
+        redirect('/login')
+    }
+
     let permission = jwtDecode(token).permission
     const number = permission.find(number => number == 20)
 
-    if (!token) {
-        redirect('../login')
-    }
 
-     if(number == undefined) {
-        redirect('../')
+    if(number == undefined) {
+        redirect('/')
     }
 
     const branch = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllBranch`, token)
 
     if(branch.message) {
-        redirect('../login')
+        redirect('/login')
     }
 
     return (

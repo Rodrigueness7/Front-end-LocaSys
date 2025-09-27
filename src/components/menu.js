@@ -5,9 +5,8 @@ import InputForm from "@/components/InputForm";
 import InputSelect from "@/components/InputSelect";
 import MessageModal from "@/components/messageModal";
 import addData from "@/utils/addData";
-import deleteData from "@/utils/deleteData";
 import Link from "next/link";
-import { useRouter } from "next/navigation"
+import { redirect, useRouter } from "next/navigation"
 import { useEffect, useState } from "react";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
@@ -34,9 +33,13 @@ export default function Menu({ token, dataBranch }) {
 
     useEffect(() => {
         let data = localStorage.getItem('permission')
-        let number = data.split(',').map(number => number)
-        setPermission(number)
-    }, [])
+        if(!data) {
+            return router.push('/login')
+        }
+          let number = data.split(',').map(number => number)
+            setPermission(number)
+        
+    }, [router])
 
     const changeCellInit = (e) => {
         setCellInit(e.target.value)
@@ -59,7 +62,7 @@ export default function Menu({ token, dataBranch }) {
     }
 
     if(dataBranch.message) {
-        redirect('../login')
+        redirect('/login')
     }
 
 

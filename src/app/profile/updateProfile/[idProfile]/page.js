@@ -11,22 +11,23 @@ export default async function PageUpdateProfile({ params }) {
     const cookieStore = cookies()
     const token = (await cookieStore).get('token')?.value
 
+    if (!token) {
+        redirect('/login')
+    }
+
     let permissionUser = jwtDecode(token).permission
     const number = permissionUser.find(number => number == 17)
 
-    if (!token) {
-        redirect('../../login')
-    }
 
     if(number == undefined) {
-        redirect('../../')
+        redirect('/')
     }
 
     const profile = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findProfile/${idProfile}`, token)
     const permission = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findPermissionIdProfile_permission/${idProfile}`, token)
 
     if(permission.message) {
-        redirect('../../login')
+        redirect('/login')
     }
 
     return (

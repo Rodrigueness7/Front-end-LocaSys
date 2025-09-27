@@ -3,10 +3,11 @@
 import InputForm from "@/components/InputForm"
 import Table from "@/components/table"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
 export default function Supplier({ tableSupplier }) {
-
+    const router = useRouter()
     const [dataSupplier, setDataSupplier] = useState(tableSupplier)
     const [supplier, setSupplier] = useState('')
     const [permission, setPermission] = useState([])
@@ -14,9 +15,12 @@ export default function Supplier({ tableSupplier }) {
     
         useEffect(() => {
             let data = localStorage.getItem('permission')
+            if (!data) {
+                return router.push('/login')
+            }
             let number = data.split(',').map(number => number)
             setPermission(number)
-        }, [])
+        }, [router])
 
     const data = dataSupplier.map((item) => {
         let dataTable = {

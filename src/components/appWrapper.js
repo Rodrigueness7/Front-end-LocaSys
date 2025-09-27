@@ -15,24 +15,31 @@ export default function AppWrapper({ children }) {
     }, [])
     const token = getCookie("token");
     const [branch, setBranch] = useState([]);
+    const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
-        async function fetchBranches() {
-            try {
-                const data = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllBranch`, token);
-                setBranch(data);
-            } catch (error) {
-                console.error("Erro ao buscar branches:", error);
+        setIsClient(true);
+    }, [])
+
+   useEffect(() => {
+        if (isClient && !hideMenuRoutes.includes(pathname) && token) {
+            async function fetchBranches() {
+                try {
+                    const data = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllBranch`, token);
+                    setBranch(data);
+                } catch (error) {
+                    console.error("Erro ao buscar branches:", error);
+                }
             }
-        }
-        if (!hideMenuRoutes.includes(pathname)) {
             fetchBranches();
         }
-    }, [pathname, hideMenuRoutes, token]);
+    }, [pathname, hideMenuRoutes, token, isClient]);
 
+    const shouldHideMenu = hideMenuRoutes.includes(pathname);
+    
     return (
         <div className="flex">
-            {!hideMenuRoutes.includes(pathname) && <Menu token={token} dataBranch={branch} />}
+            {!shouldHideMenu && <Menu token={token} dataBranch={branch} />}
             {children}
         </div>
     )

@@ -10,21 +10,22 @@ export default async function PageProfile() {
     const cookieStore = cookies()
     const token = (await cookieStore).get('token')?.value
 
+     if (!token) {
+        redirect('/login')
+    }
+
     let permissionUser = jwtDecode(token).permission
     const number = permissionUser.find(number => number == 15)
 
-    if (!token) {
-        redirect('../login')
-    }
-
+   
     const dataProfile = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllProfile`, token)
     
     if(dataProfile.message) {
-       redirect('../login')
+       redirect('/login')
     }
 
     if(number == undefined) {
-        redirect('../')
+        redirect('/')
     }
 
     return (

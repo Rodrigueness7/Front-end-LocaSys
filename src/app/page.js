@@ -15,13 +15,13 @@ export default async function Home() {
    
    
     if (!token) {
-        redirect('./login')   
+        redirect('/login')   
     }
 
     const branch = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllBranch`, token)
 
     if(branch.message) {
-        redirect('./login')
+        redirect('/login')
     }
 
     return (

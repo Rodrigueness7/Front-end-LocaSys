@@ -2,6 +2,7 @@
 
 import Table from "@/components/table"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import React, { useEffect, useState } from "react"
 
 export default function Branch({ tableBranch }) {
@@ -15,16 +16,19 @@ export default function Branch({ tableBranch }) {
        }
        return dataTable
      })
-
+         const router = useRouter()
          const [permission, setPermission] = useState([])
      
      
          useEffect(() => {
              let data = localStorage.getItem('permission')
+             if (!data) {
+                return router.push('/login')
+             }
              let number = data.split(',').map(number => number)
              setPermission(number)
              
-         }, [])
+         }, [router])
 
 
      const generation = async () => {
