@@ -67,7 +67,7 @@ export default function UpdateProfile({ data, idProfile, dataPermission, token }
         await deleteData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/deleteProfile/${idProfile}`, token, setResult)
         setIsModalOpen(true)
     }
-console.log(idProfile)
+
     return (
         <section className="bg-gray-100 py-3 h-screen w-full">
             <div className="flex items-start mb-8 lg:px-2 sm:px-0">

@@ -4,10 +4,12 @@ import InputForm from "@/components/InputForm"
 import InputSelect from "@/components/InputSelect"
 import Table from "@/components/table"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useCallback, useEffect, useMemo, useState } from "react"
 
 export default function Sector({ tableSector }) {
 
+    const router = useRouter()
     const [dataSector, setDataSector] = useState(tableSector)
     const [id, setId] = useState('')
     const [sector, setSector] = useState('')
@@ -17,10 +19,13 @@ export default function Sector({ tableSector }) {
     
         useEffect(() => {
             let data = localStorage.getItem('permission')
+            if (!data) {
+                return router.push('/login')
+            }
             let number = data.split(',').map(number => number)
             setPermission(number)
             
-        }, [])
+        }, [router])
 
     let data = dataSector.map((item) => {
         let dataTable = {

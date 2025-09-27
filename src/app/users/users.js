@@ -3,11 +3,13 @@
 import InputSelect from "@/components/InputSelect"
 import Table from "@/components/table"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useCallback, useEffect, useMemo, useState } from "react"
 
 
 export default function Users({ tableUsers, attribute }) {
 
+    const router = useRouter()
     const [dataUsers, setDataUsers] = useState(tableUsers)
     const [firstName, setFirstName] = useState('')
     const [username, setUsername] = useState('')
@@ -17,9 +19,12 @@ export default function Users({ tableUsers, attribute }) {
 
     useEffect(() => {
             let data = localStorage.getItem('permission')
+            if (!data) {
+                return router.push('/login')
+            }
             let number = data.split(',').map(number => number)
             setPermission(number)
-        }, [])
+        }, [router])
 
    
     const filter = () => {

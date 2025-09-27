@@ -4,11 +4,12 @@ import InputForm from "@/components/InputForm"
 import InputSelect from "@/components/InputSelect"
 import Table from "@/components/table"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useCallback, useEffect, useMemo, useState } from "react"
 
 export default function Equipment({ tableEquipment, attribute }) {
 
-
+    const router = useRouter()
     const [dataEquipment, setDataEquipment] = useState(tableEquipment)
     const [codProd, setCodProd] = useState('')
     const [equipment, setEquipment] = useState('')
@@ -19,14 +20,17 @@ export default function Equipment({ tableEquipment, attribute }) {
 
       useEffect(() => {
             let data = localStorage.getItem('permission')
+            if(!data) {
+                return router.push('/login')
+            }
             let number = data.split(',').map(number => number)
-            console.log(number)
             setPermission(number)
             
-        }, [])
+        }, [router])
 
     const generation = async () => {
         sessionStorage.setItem('dataEquipment', JSON.stringify(dataEquipment))
+
         if(dataEquipment.length <= 0) {
             return alert('Não existe dados para gerar relatório')
         }

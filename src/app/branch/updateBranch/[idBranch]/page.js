@@ -11,21 +11,22 @@ export default async function PageUpdateBranch({ params }) {
     const cookieStore = cookies()
     const token = (await cookieStore).get('token')?.value
 
+    if (!token) {
+        redirect('/login')
+    }
+
      let permission = jwtDecode(token).permission
      const number = permission.find(number => number == 8)
 
-    if (!token) {
-        redirect('../../login')
-    }
 
       if(number == undefined) {
-        redirect('../../')
+        redirect('/')
     }
 
     let branch = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findBranch/${idBranch}`, token)
 
     if(branch.message) {
-        redirect('../../login')
+        redirect('/login')
     }
 
     return (

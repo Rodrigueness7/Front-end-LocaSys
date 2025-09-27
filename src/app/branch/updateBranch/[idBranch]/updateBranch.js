@@ -22,9 +22,12 @@ export default function UpdateBranch({ dataBranch, idBranch, token }) {
     
         useEffect(() => {
             let data = localStorage.getItem('permission')
+            if (!data) {
+                router.push('/login')
+            }
             let number = data.split(',').map(number => number)
             setPermission(number)
-        }, [])
+        }, [router])
 
     const changeBranch = (e) => {
         let fieldBranch = e.target.value

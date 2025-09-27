@@ -10,21 +10,21 @@ export default async function PageSector() {
     const cookieStore = cookies()
     const token = (await cookieStore).get('token')?.value
 
+    if (!token) {
+        redirect('/login')
+    }
+
     let permission = jwtDecode(token).permission
     const number = permission.find(number => number == 19)
-
-    if (!token) {
-        redirect('../login')
-    }
 
     const sector = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllSector`, token)
 
     if (sector.message) {
-        redirect('../login')
+        redirect('/login')
     }
 
     if(number == undefined) {
-        redirect('../')
+        redirect('/')
     }
 
     let data = []

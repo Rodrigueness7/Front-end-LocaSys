@@ -35,10 +35,13 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
 
     useEffect(() => {
         let data = localStorage.getItem('permission')
+        if(!data) {
+            return router.push('/login')
+        }
         let number = data.split(',').map(number => number)
         setPermission(number)
 
-    }, [])
+    }, [router])
 
 
 

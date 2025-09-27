@@ -10,21 +10,21 @@ export default async function PageTypeEquipment() {
     const cookieStore = cookies()
     const token = (await cookieStore).get('token')?.value
 
+     if (!token) {
+        redirect('/login')
+    }
+
     let permissionUser = jwtDecode(token).permission
     const number = permissionUser.find(number => number == 48)
-
-    if (!token) {
-        redirect('../login')
-    }
 
     const dataTypeEquipmet = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllTypeEquipment`, token)
     
     if(dataTypeEquipmet.message) {
-       redirect('../login')
+       redirect('/login')
     }
 
     if(number == undefined) {
-        redirect('../')
+        redirect('/')
     }
 
 

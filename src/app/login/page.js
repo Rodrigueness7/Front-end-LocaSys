@@ -46,13 +46,14 @@ export default function Login() {
     setCookie('token', value.token, { maxAge: 8600000 })
     
     if (value.successMessage) {
-      route.push('./')
+      route.push('/')
       localStorage.setItem('username', username)
       localStorage.setItem('permission', jwtDecode(value.token).permission)
       
      
       setTimeout(() => {
         localStorage.clear()
+        route.push('/login')
       }, 8600000)
 
      }

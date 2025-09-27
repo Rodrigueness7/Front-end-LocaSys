@@ -10,15 +10,16 @@ export default async function PageEquipment() {
     const cookieStore = cookies()
     const token = (await cookieStore).get('token')?.value
 
+    if (!token) {
+        redirect('/login')
+    }
+
       let permission = jwtDecode(token).permission
       const number = permission.find(number => number == 1)
 
-    if (!token) {
-        redirect('./login')
-    }
 
     if(number == undefined) {
-        redirect('../')
+        redirect('/')
     }
 
     const equipment = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllEquipment`, token)

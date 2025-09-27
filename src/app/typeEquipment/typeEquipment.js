@@ -1,18 +1,22 @@
 'use client'
 import Table from "@/components/table"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
 export default function TypeEquipmet({tableTypeEquipment}) {
-
+   const router = useRouter()
    const [permission, setPermission] = useState([])
     
     
         useEffect(() => {
             let data = localStorage.getItem('permission')
+            if(!data) {
+            return router.push('/login')
+        }
             let number = data.split(',').map(number => number)
             setPermission(number)
-        }, [])
+        }, [router])
 
     return(
         <div className="bg-gray-100 py-8 overflow-x-auto h-screen px-12 w-full">

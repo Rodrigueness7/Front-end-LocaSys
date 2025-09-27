@@ -12,15 +12,17 @@ export default async function PageUpdateSupplier({ params }) {
     const cookieStore = cookies()
     const token = (await cookieStore).get('token')?.value
 
+    if (!token) {
+        redirect('/login')
+    }
+
+
     let permission = jwtDecode(token).permission
     const number = permission.find(number => number == 46)
 
-    if (!token) {
-        redirect('../../login')
-    }
-
+  
     if(number == undefined) {
-        redirect('../../')
+        redirect('/')
     }
 
     
