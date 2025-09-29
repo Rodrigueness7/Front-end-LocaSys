@@ -131,6 +131,8 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
             let fetchIdEquipment = fetchEquipment.find(item => item.codProd == codProd)
             let existEquipmentHistory = fetchEquipmentHistory.find(item => item['Equipment'].idEquipment === fetchIdEquipment.idEquipment)
 
+            console.log(fetchIdEquipment)
+
             if(existEquipmentHistory == undefined) {
                 let dataEquipmentHistory = {
                 idEquipmentHistory: 0,
