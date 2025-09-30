@@ -65,7 +65,7 @@ export default function Supplier({ tableSupplier }) {
  }
 
     return (
-        <div className="bg-gray-100 py-8 overflow-x-auto h-screen px-8 w-full">
+        <div className="bg-gray-100 py-8 overflow-x-auto h-screen w-full">
             <div className="flex justify-between mb-8 lg:px-8 sm:px-8 items-center xl:w-1/2">
                 {permission.find(number => number == '45') && (
                     <Link href={'../supplier/registerSupplier'}><button className='p-2 bg-indigo-500 rounded-lg text-white'>Novo Fonercedor</button></Link>
@@ -79,7 +79,7 @@ export default function Supplier({ tableSupplier }) {
                 </div>
             </form>
             <div className="flex-1 ml-8">
-                <Table Table={'table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black'} headers={['id', 'Fornecedor', 'Email', 'Contato', 'CNPJ', 'Endereço', 'Cep', 'Estado', 'Cidade']} data={dataSupplier} attributos={['idSupplier', 'supplier', 'email', 'contact', 'CNPJ', 'address', 'zipCode', 'state', 'city']} id={'idSupplier'} href={'./supplier/updateSupplier'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} bt={'...'} permission={permission.find(number => number == '46')}></Table>
+                <Table Table={'table-auto bg-white shadow-md rounded-lg overflow-hidden w-full'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black'} headers={['id', 'Fornecedor', 'Email', 'Contato', 'CNPJ', 'Endereço', 'Cep', 'Estado', 'Cidade']} data={dataSupplier} attributos={['idSupplier', 'supplier', 'email', 'contact', 'CNPJ', 'address', 'zipCode', 'state', 'city']} id={'idSupplier'} href={'./supplier/updateSupplier'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} bt={'...'} permission={permission.find(number => number == '46')}></Table>
             </div>
         </div>
     )
