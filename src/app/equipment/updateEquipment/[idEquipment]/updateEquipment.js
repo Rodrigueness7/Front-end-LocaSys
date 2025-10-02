@@ -20,8 +20,9 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     const listSupplier = dataSupplier.map(item => item.supplier)
     const listTypeEquipment = dataTypeEquipment.map(item => item.typeEquipment)
 
+    
 
-    const [codProd, setCodProd] = useState(dataEquipment.codProd)
+    const [codProd, setCodProd] = useState(dataEquipment.codProd == null ? '' : dataEquipment.codProd)
     const [equipment, setEquipment] = useState(dataEquipment.equipment)
     const [type, setType] = useState(dataEquipment['TypeEquipment'].typeEquipment)
     const [value, setValue] = useState(dataEquipment.value.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2}))
@@ -34,11 +35,13 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     const [reason, setReason] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [result, setResult] = useState('')
+    const [checked, setChecked] = useState(dataEquipment.codProd == null ? true : false)
+
    
 
     const changeCodProd = (e) => {
         const newValue = e.target.value
-        if (/^[0-9]*$/.test(newValue) && newValue.length <= 20) {
+        if (/^[0-9]*$/.test(newValue) && newValue.length <= 20 && !checked) {
             setCodProd(newValue)
         }
     }
@@ -101,6 +104,16 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         setReturnDate(e.target.value)
     }
 
+     const handleEquipmentWithoutCode = (e) => {
+        const {checked} = e.target  
+        setChecked(checked)
+
+        if(checked) {
+            setCodProd('')
+        }
+    }  
+
+
     const handleCloseModal = () => {
         setIsModalOpen(false)
         if (result.success) {
@@ -126,7 +139,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
 
         const data = {
             idEquipment: 0,
-            codProd: codProd,
+            codProd: checked ? null : codProd,
             equipment: equipment,
             idTypeEquipment: idTypeEquipment,
             value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
@@ -136,6 +149,8 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             idSupplier: idSupplier,
             entryDate: entryDate
         }
+
+        
         await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateEquipment/${idEquipment}`, data, token, setResult)
         setIsModalOpen(true)
 
@@ -158,7 +173,6 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addEquipmentHistory`, dataEquipmentHistory, token, setResult)
         setIsModalOpen(true)
         }
-
     }
 
     const returnEquipment = async () => {
@@ -170,7 +184,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
 
         const data = {
             idEquipment: 0,
-            codProd: codProd,
+            codProd: checked ? null : codProd,
             equipment: equipment,
             idTypeEquipment: idTypeEquipment,
             value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
@@ -234,7 +248,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
 
         let dataEquipment = {
             idEquipment: 0,
-            codProd: codProd,
+            codProd: checked ? null : codProd,
             equipment: equipment,
             idTypeEquipment: idTypeEquipment,
             value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
@@ -247,9 +261,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         }
         
          await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateEquipment/${idEquipment}`, dataEquipment, token, setResult)
-         setIsModalOpen(true)
-
-        
+         setIsModalOpen(true)    
     }
 
     return (
@@ -287,7 +299,11 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             <div className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
                 <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">Atualizar Equipamento</h1>
                 <form className="grid grid-cols-1 gap-x-8 gap-y-4" onSubmit={updateEquipment}>
-                    <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Código'} type={'text'} name={'codProd'} value={codProd} onchange={changeCodProd} min={0} maxLength={'10'} required={true}></InputForm>
+                    <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-0'} label={'Código'} type={'text'} name={'codProd'} value={codProd} onchange={changeCodProd} maxLength={'10'}></InputForm>
+                    <div className="flex items-center mb-4">
+                        <input type="checkbox" checked={checked} onChange={handleEquipmentWithoutCode}></input>
+                        <label className="ml-2 text-sm text-gray-700">Equipamento sem código</label>
+                    </div>
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Equipamento'} type={'text'} name={'equipment'} value={equipment} onchange={changeEquipment} required={true}></InputForm>
                     <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Tipo'} name={'typeEquipment'} datas={listTypeEquipment} value={type} onchange={changeType}></InputSelect>
                     {value !== undefined ? (

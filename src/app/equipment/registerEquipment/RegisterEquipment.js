@@ -9,6 +9,7 @@ import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
 import { useRouter } from "next/navigation"
 
 
+
 export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector, dataSupplier, dataTypeEquipment, token }) {
 
     const listBranch = dataBranch.map(item => item.branch)
@@ -30,13 +31,14 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
     const [supplier, setSupplier] = useState(listSupplier[0])
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [result, setResult] = useState('')
-
+    const [checked, setChecked] = useState(false)
    
     const changeCodProd = (e) => {
         const newValue = e.target.value
-        if (/^[0-9]*$/.test(newValue) && newValue.length <= 10) {
+        if (/^[0-9]*$/.test(newValue) && newValue.length <= 10 && !checked) {
             setCodProd(newValue)
         }
+       
     }
 
     const changeEquipment = (e) => {
@@ -93,6 +95,16 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
         setEntryDate(e.target.value)
     }
 
+    const handleEquipmentWithoutCode = (e) => {
+        const { checked } = e.target  
+        setChecked(checked)
+
+        if(checked) {
+            setCodProd('')
+        }
+    }  
+
+
     const handleCloseModal = () => {
         setIsModalOpen(false)
         if (result.success) {
@@ -110,7 +122,7 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
 
         const data = {
             idEquipment: 0,
-            codProd: codProd,
+            codProd: checked ? null : codProd,
             equipment: equipment,
             idTypeEquipment: idTypeEquipment,
             value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
@@ -120,7 +132,7 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
             idSupplier: idSupplier,
             entryDate: entryDate
         }
-        
+        console.log(data)
         await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addEquipment`, data, token, setResult)
         setIsModalOpen(true)
        
@@ -157,7 +169,11 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
             <div className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
                 <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">Adicionar Equipamento</h1>
                 <form className="grid grid-cols-1 gap-x-8 gap-y-4" onSubmit={addEquipment}>
-                    <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Código'} type={'text'} name={'codProd'} value={codProd} onchange={changeCodProd} maxLength={'10'}></InputForm>
+                    <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-0'} label={'Código'} type={'text'} name={'codProd'} value={codProd} onchange={changeCodProd} maxLength={'10'}></InputForm>
+                    <div className="flex items-center mb-4">
+                        <input type="checkbox" name="Equipamento sem Código" checked={checked} onChange={handleEquipmentWithoutCode}></input>
+                        <label className="ml-2 text-sm text-gray-700">Equipamento sem código</label>
+                    </div>
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Equipamento'} type={'text'} name={'equipment'} value={equipment} onchange={changeEquipment}></InputForm>
                     <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Tipo'} name={'type'} datas={listTypeEquipment} value={type} onchange={changeType}></InputSelect>
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Valor'} type={'decimal'} name={'value'} value={value} onchange={changeValue} maxLength={'10'} onKeyDown={pointLockValue}></InputForm>
