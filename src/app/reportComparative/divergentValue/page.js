@@ -23,7 +23,7 @@ export default function Report() {
    
     return(
         <>
-         <LargePdfTable data={data} size={'A4'} user={user} title={'Relatório de divergência de valor'} width={'25%'}></LargePdfTable>
+         <LargePdfTable data={data} size={'A4'} user={user} title={'Relatório de divergência de valor'} width={'25%'} row={5}></LargePdfTable>
         </>
     )
 }

@@ -155,8 +155,9 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         setIsModalOpen(true)
 
         let existEquipment = dataAllEquipment.find(item => item.codProd == codProd)
+        
 
-        if(existEquipment == undefined) {
+        if(existEquipment == undefined || codProd) {
             let dataEquipmentHistory = {
             idEquipmentHistory: 0,
             idEquipment: idEquipment,
@@ -169,7 +170,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             returnDate: null,
             entryDate: entryDate
         }
-
+       
         await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addEquipmentHistory`, dataEquipmentHistory, token, setResult)
         setIsModalOpen(true)
         }

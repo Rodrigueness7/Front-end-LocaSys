@@ -29,13 +29,14 @@ export default function Report({equipmentHistory, equipmentRental}) {
     }
 
     if(equipmentRental.message) {
-        router.push('./login')
+        router.push('/login')
     }
 
 
     const search = (e) => {
         e.preventDefault()
         
+
         if(equipmentRental.length == 0) {
             return (
                 alert('Não há dados para comparar')
@@ -53,46 +54,51 @@ export default function Report({equipmentHistory, equipmentRental}) {
             )
         }
 
-        const comparativeEquipment = equipmentRental.map((item) => {
-            
+        const comparativeEquipment = equipmentRental.filter(item => item.initPeriod.slice(0,10) == initPeriod && item.finishPeriod.slice(0,10) == finishPeriod).map( item => {
             const maxId = Math.max(...equipmentHistory.filter(items => items['Equipment'].codProd == item.codProd).map(itens => itens.idEquipmentHistory))
-            const findEquipment = equipmentHistory.find(item => item.idEquipmentHistory === maxId)
-            
-        if (findEquipment) {
-           
-            if (findEquipment.entryDate.slice(0,10) >= initPeriod && findEquipment.entryDate.slice(0,10) <= finishPeriod) {
-                const data = {
+            let filterEquipment = equipmentHistory.filter(items => items['Equipment'].codProd == item.codProd && items.idEquipmentHistory === maxId)
+            let data
+
+               
+           if(filterEquipment.length > 0 && filterEquipment[0].entryDate <= finishPeriod && (filterEquipment[0].returnDate == null || filterEquipment[0].returnDate <= finishPeriod)) {
+                
+            return data = {
                     id: item.idEquipmentRental,
                     codProd: item.codProd,
                     equipment: item.description,
                     valueKm: item.value,
-                    value: findEquipment.value,
-                    branch: findEquipment['Branch'].branch,
-                    user: findEquipment['User'].username,
-                    sector: findEquipment['Sector'].sector
+                    value: filterEquipment[0].value,
+                    branch: filterEquipment[0]['Branch'].branch,
+                    entryDateKM: item.init == null ? '' : new Date(item.init).toLocaleDateString('pt-BR', {timeZone: 'UTC'}),
+                    entryDate: filterEquipment[0].entryDate == null ? '' : new Date(filterEquipment[0].entryDate).toLocaleDateString('pt-BR', {timeZone: 'UTC'}),
+                    returnDateKM: item.finish == null ? "" : new Date(item.finish).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                    returnDate: filterEquipment[0].returnDate == null ? "" : new Date(filterEquipment[0].returnDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                    user: filterEquipment[0]['User'].username,
+                    sector: filterEquipment[0]['Sector'].sector
+
                 }
-                return data
-                
-            }
-        } else {
-            const data = {
-                id: item.idEquipmentRental,
-                codProd: item.codProd,
-                equipment: item.description,
-                valueKm: item.value,
-                branch: '',
-                user: '',
-                sector: ''
-            }
-
-            return data
-        }
-    })
-     setDataReport(comparativeEquipment) 
-     setShowTable(true)
-    }
-
+           } else {
+               return  data = {
+                        id: item.idEquipmentRental,    
+                        codProd: item.codProd,
+                        equipment: item.description, 
+                        valueKM: item.value,
+                        value: '',
+                        branch: '',
+                        entryDateKM: item.init == null ? "" : new Date(item.init).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                        entryDate: '',
+                        returnDateKM: item.finish == null ? "" : new Date(item.finish).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                        returnDate: '',
+                        user: '',
+                        sector: ''
+               }
+           }
+        })
+        
+    setDataReport(comparativeEquipment)
+    setShowTable(true)
     
+    }
 
     const comparativeValue = equipmentRental.map(item => {
     
@@ -180,11 +186,11 @@ export default function Report({equipmentHistory, equipmentRental}) {
             </form>
             {showTable && (
                 <div className="ml-8 flex-1">
-                    <Table Table={'table w-5/6 bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b '} Td={'py-2 px-4 text-black'} headers={['Código', 'Equipamento', 'Valor K&M', 'Valor', 'Filial', 'Usuário', 'Setor']} data={dataReport} attributos={['codProd', 'equipment', 'valueKm', 'value', 'branch', 'user', 'sector']} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'#'} bt={'...'}></Table>
+                    <Table Table={'table bg-white shadow-md rounded-lg overflow-hidden w-full'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black'} headers={['Código', 'Equipamento', 'Valor K&M', 'Valor', 'Filial', 'Entrada K&M', 'Entrada', 'Retorno K&M', 'Retorno', 'Usuário', 'Setor']} data={dataReport} attributos={['codProd', 'equipment', 'valueKm', 'value', 'branch', 'entryDateKm', 'entryDate', 'returnDateKm', 'returnDate', 'user', 'sector']} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'#'} bt={'...'}></Table>
                 </div>
-            )}   
+            )}    
         </div>
 
-    )
+    ) 
     
 }

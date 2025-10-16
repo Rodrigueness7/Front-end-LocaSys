@@ -17,7 +17,7 @@ const chunkArray = (array, size) => {
   return result;
 };
 
-export default function LargePdfTable({ data, size = "A4", user, title, width = 150 }) {
+export default function LargePdfTable({ data, size = "A4", user, title, width = 150, row }) {
   const styles = StyleSheet.create({
     page: {
       padding: 20,
@@ -80,7 +80,7 @@ export default function LargePdfTable({ data, size = "A4", user, title, width = 
   });
 
   const date = new Date();
-  const paginatedData = paginateData(data, 7); 
+  const paginatedData = paginateData(data, row); 
 
   return (
     <PDFViewer style={{ width: '100%', height: '100vh' }}>
