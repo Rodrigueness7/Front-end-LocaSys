@@ -54,6 +54,7 @@ export default function Report({equipmentHistory, equipmentRental}) {
             )
         }
 
+        
         const comparativeEquipment = equipmentRental.filter(item => item.initPeriod.slice(0,10) == initPeriod && item.finishPeriod.slice(0,10) == finishPeriod).map( item => {
             const maxId = Math.max(...equipmentHistory.filter(items => items['Equipment'].codProd == item.codProd).map(itens => itens.idEquipmentHistory))
             let filterEquipment = equipmentHistory.filter(items => items['Equipment'].codProd == item.codProd && items.idEquipmentHistory === maxId)
