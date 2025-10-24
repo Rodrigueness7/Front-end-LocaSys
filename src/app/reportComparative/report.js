@@ -5,9 +5,9 @@ import Table from "@/components/table";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function Report({equipmentHistory, equipmentRental}) {
+export default function Report({ equipmentHistory, equipmentRental }) {
 
-    const options = [{id: 0, option: 'Comparativo Equipamentos'}, {id: 1, option: 'Comparativo de valor'}, {id: 2, option: 'Divergênia de valor'}]
+    const options = [{ id: 0, option: 'Comparativo Equipamentos' }, { id: 1, option: 'Comparativo de valor' }, { id: 2, option: 'Divergênia de valor' }, { id: 3, option: 'Equipamentos Divergentes' }]
     const listOption = options.map(item => item.option)
     const router = useRouter()
     const [initPeriod, setInitPeriod] = useState('')
@@ -28,159 +28,211 @@ export default function Report({equipmentHistory, equipmentRental}) {
         setReport(e.target.value)
     }
 
-    if(equipmentRental.message) {
+    if (equipmentRental.message) {
         router.push('/login')
     }
 
+    const equipmentDiverget = equipmentHistory.filter(items => !equipmentRental.some(itens => items['Equipment'].codProd == itens.codProd) && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate <= finishPeriod)).map(items => {
+        const maxIdEquip = Math.max(...equipmentHistory.filter(itens => itens['Equipment'].codProd == items['Equipment'].codProd && items['Equipment'].codProd != null).map(i => i.idEquipmentHistory))
+        let data
+
+        if (items.idEquipmentHistory === maxIdEquip) {
+
+            return data = {
+                id: items.idEquipmentHistory,
+                codProd: items['Equipment'].codProd,
+                equipment: items['Equipment'].equipment,
+                valueKm: '',
+                value: items.value,
+                branch: items['Branch'].branch,
+                entryDateKM: '',
+                entryDate: items.entryDate == null ? '' : new Date(items.entryDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                returnDateKM: '',
+                returnDate: items.returnDate == null ? '' : new Date(items.returnDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                user: items['User'].username,
+                sector: items['Sector'].sector
+            }
+        }
+    })
+    const equipment = equipmentDiverget.filter(item => item != undefined)
+
+
+    const comparativeEquipment = equipmentRental.filter(item => item.initPeriod.slice(0, 10) == initPeriod && item.finishPeriod.slice(0, 10) == finishPeriod).map(item => {
+        const maxId = Math.max(...equipmentHistory.filter(items => items['Equipment'].codProd == item.codProd).map(itens => itens.idEquipmentHistory))
+        let filterEquipment = equipmentHistory.filter(items => items['Equipment'].codProd == item.codProd && items.idEquipmentHistory === maxId)
+        let data
+
+        if (filterEquipment.length > 0 && filterEquipment[0].entryDate <= finishPeriod && (filterEquipment[0].returnDate == null || filterEquipment[0].returnDate <= finishPeriod)) {
+
+            return data = {
+                id: item.idEquipmentRental,
+                codProd: item.codProd,
+                equipment: item.description,
+                valueKm: item.value,
+                value: filterEquipment[0].value,
+                branch: filterEquipment[0]['Branch'].branch,
+                entryDateKM: item.init == null ? '' : new Date(item.init).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                entryDate: filterEquipment[0].entryDate == null ? '' : new Date(filterEquipment[0].entryDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                returnDateKM: item.finish == null ? "" : new Date(item.finish).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                returnDate: filterEquipment[0].returnDate == null ? "" : new Date(filterEquipment[0].returnDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                user: filterEquipment[0]['User'].username,
+                sector: filterEquipment[0]['Sector'].sector
+
+            }
+        } else {
+            return data = {
+                id: item.idEquipmentRental,
+                codProd: item.codProd,
+                equipment: item.description,
+                valueKm: item.value,
+                value: '',
+                branch: '',
+                entryDateKM: item.init == null ? "" : new Date(item.init).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                entryDate: '',
+                returnDateKM: item.finish == null ? "" : new Date(item.finish).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                returnDate: '',
+                user: '',
+                sector: ''
+            }
+        }
+    }).sort((a,b) => {
+        if(a.value && !b.value) {
+            return -1
+        }
+        if(!a.value && b.value) {
+            return 1
+        }
+    })
+
+
+     const comparativeValue = equipmentHistory.filter( items => equipmentRental.some( itens => itens.value == items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate <= finishPeriod))).map( items => {
+        const maxId = Math.max(...equipmentHistory.filter(itens => itens['Equipment'].codProd == items['Equipment'].codProd).map(i => i.idEquipmentHistory))
+        let data
+
+        if (items.idEquipmentHistory === maxId) {
+            return data = {
+                id: items.idEquipmentHistory,
+                codigo: items['Equipment'].codProd,
+                equipment: items['Equipment'].equipment,
+                valueKm: equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value == items.value).value,
+                value: items.value,
+                branch: items['Branch'].branch,
+                entryDateKM: equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value == items.value).init == null ? '' : new Date(equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value == items.value).init).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                entryDate: items.entryDate == null ? '' : new Date(items.entryDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                returnDateKM: equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value == items.value).finish == null ? "" : new Date(equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value == items.value).finish).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),  
+                returnDate: items.returnDate == null ? "" : new Date(items.returnDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                user: items['User'].username,
+                sector: items['Sector'].sector
+        }
+     }})
+
+     const comparativeValueFiltered = comparativeValue.filter( item => item != undefined)
+
+
+
+    const divergetValue = equipmentHistory.filter( items => equipmentRental.some( itens => itens.value != items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate <= finishPeriod))).map( items => {
+        const maxId = Math.max(...equipmentHistory.filter(itens => itens['Equipment'].codProd == items['Equipment'].codProd).map(i => i.idEquipmentHistory))
+        let data
+        if (items.idEquipmentHistory === maxId) {
+            return data = {
+                id: items.idEquipmentHistory,
+                codProd: items['Equipment'].codProd,
+                equipment: items['Equipment'].equipment,
+                valueKm: equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value != items.value).value,
+                value: items.value,
+                branch: items['Branch'].branch,
+                entryDateKM: equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value != items.value).init == null ? '' : new Date(equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value != items.value).init).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                entryDate: items.entryDate == null ? '' : new Date(items.entryDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                returnDateKM: equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value != items.value).finish == null ? "" : new Date(equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value != items.value).finish).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                returnDate: items.returnDate == null ? "" : new Date(items.returnDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                user: items['User'].username,
+                sector: items['Sector'].sector
+                
+        }
+    }})
+    const divergetValueFiltered = divergetValue.filter( item => item != undefined)
+
+    
 
     const search = (e) => {
         e.preventDefault()
-        
 
-        if(equipmentRental.length == 0) {
+
+        if (equipmentRental.length == 0) {
             return (
                 alert('Não há dados para comparar')
             )
         }
-    
-        let findInitPeriod = equipmentRental.find(item => item.initPeriod).initPeriod.slice(0,10)
-        let findFinishPeriod = equipmentRental.find(item => item.finishPeriod).finishPeriod.slice(0,10)
-        
-       
 
-        if(findInitPeriod != initPeriod && findFinishPeriod != finishPeriod ) {
-            return(
+        let findInitPeriod = equipmentRental.find(item => item.initPeriod).initPeriod.slice(0, 10)
+        let findFinishPeriod = equipmentRental.find(item => item.finishPeriod).finishPeriod.slice(0, 10)
+
+
+
+        if (findInitPeriod != initPeriod && findFinishPeriod != finishPeriod) {
+            return (
                 alert('Não há dados para esse periodo')
             )
         }
 
-        
-        const comparativeEquipment = equipmentRental.filter(item => item.initPeriod.slice(0,10) == initPeriod && item.finishPeriod.slice(0,10) == finishPeriod).map( item => {
-            const maxId = Math.max(...equipmentHistory.filter(items => items['Equipment'].codProd == item.codProd).map(itens => itens.idEquipmentHistory))
-            let filterEquipment = equipmentHistory.filter(items => items['Equipment'].codProd == item.codProd && items.idEquipmentHistory === maxId)
-            let data
+      
 
-               
-           if(filterEquipment.length > 0 && filterEquipment[0].entryDate <= finishPeriod && (filterEquipment[0].returnDate == null || filterEquipment[0].returnDate <= finishPeriod)) {
-                
-            return data = {
-                    id: item.idEquipmentRental,
-                    codProd: item.codProd,
-                    equipment: item.description,
-                    valueKm: item.value,
-                    value: filterEquipment[0].value,
-                    branch: filterEquipment[0]['Branch'].branch,
-                    entryDateKM: item.init == null ? '' : new Date(item.init).toLocaleDateString('pt-BR', {timeZone: 'UTC'}),
-                    entryDate: filterEquipment[0].entryDate == null ? '' : new Date(filterEquipment[0].entryDate).toLocaleDateString('pt-BR', {timeZone: 'UTC'}),
-                    returnDateKM: item.finish == null ? "" : new Date(item.finish).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
-                    returnDate: filterEquipment[0].returnDate == null ? "" : new Date(filterEquipment[0].returnDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
-                    user: filterEquipment[0]['User'].username,
-                    sector: filterEquipment[0]['Sector'].sector
+        if (report == listOption[0]) {
+            setDataReport(comparativeEquipment)
+            setShowTable(true)
+        }
 
-                }
-           } else {
-               return  data = {
-                        id: item.idEquipmentRental,    
-                        codProd: item.codProd,
-                        equipment: item.description, 
-                        valueKM: item.value,
-                        value: '',
-                        branch: '',
-                        entryDateKM: item.init == null ? "" : new Date(item.init).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
-                        entryDate: '',
-                        returnDateKM: item.finish == null ? "" : new Date(item.finish).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
-                        returnDate: '',
-                        user: '',
-                        sector: ''
-               }
-           }
-        })
-        
-    setDataReport(comparativeEquipment)
-    setShowTable(true)
-    
+        if (report == listOption[1]) {
+            setDataReport(comparativeValueFiltered)
+            setShowTable(true)
+        }
+
+        if (report == listOption[2]) {
+            setDataReport(divergetValueFiltered)
+            setShowTable(true)
+        }
+
+          if (report == listOption[3]) {
+            setDataReport(equipment)
+            setShowTable(true)
+        }
     }
 
-    const comparativeValue = equipmentRental.map(item => {
     
-         const maxId = Math.max(...equipmentHistory.filter(items => items['Equipment'].codProd == item.codProd).map(itens => itens.idEquipmentHistory))
-         const findValue = equipmentHistory.find(items => items.idEquipmentHistory === maxId && items.value == item.value)
-
-       if(findValue) {
-              if (findValue.entryDate.slice(0,10) >= initPeriod && findValue.entryDate.slice(0,10) <= finishPeriod) {
-                const data = {
-                    id: item.idEquipmentRental,
-                    codProd: item.codProd,
-                    equipment: item.description,
-                    valueKm: item.value,
-                    value: findValue.value,
-                    branch: findValue['Branch'].branch,
-                    user: findValue['User'].username,
-                    sector: findValue['Sector'].sector
-                }
-                return data
-            }
-       }
-             
-    }).filter((item) => { return item != undefined})
-
-    const divergetValue = equipmentRental.map(item => {
-            const maxId = Math.max(...equipmentHistory.filter(items => items['Equipment'].codProd == item.codProd).map(itens => itens.idEquipmentHistory))
-            const findDivergentValue = equipmentHistory.find(items => items.idEquipmentHistory === maxId && items.value != item.value)
-          if(findDivergentValue) {
-              if (findDivergentValue.entryDate.slice(0,10) >= initPeriod && findDivergentValue.entryDate.slice(0,10) <= finishPeriod) {
-                const data = {
-                    id: item.idEquipmentRental,
-                    codProd: item.codProd,
-                    equipment: item.description,
-                    valueKm: item.value,
-                    value: findDivergentValue.value,
-                    branch: findDivergentValue['Branch'].branch,
-                    user: findDivergentValue['User'].username,
-                    sector: findDivergentValue['Sector'].sector
-                }
-                return data
-            }
-       }
-     }).filter((item) => item != undefined)
-    
-
     const generation = async (e) => {
         e.preventDefault()
-         sessionStorage.setItem('equipments', JSON.stringify(dataReport))
-         if(report == listOption[0]) {
-            if(dataReport.length <= 0) {
+        sessionStorage.setItem('equipments', JSON.stringify(dataReport))
+        if (report == listOption[0]) {
+            if (dataReport.length <= 0) {
                 return alert('Não existe dados para gerar relatório')
             }
-            window.open('/reportComparative/comparativeEquipment')   
-        } else if(report == listOption[1]) {
-         sessionStorage.setItem('comparativeValue', JSON.stringify(comparativeValue))
-            if(comparativeValue.length <= 0) {
-               return alert('Não existe valores iguais para gerar relatório')
+            window.open('/reportComparative/comparativeEquipment')
+        } else if (report == listOption[1]) {
+            sessionStorage.setItem('comparativeValue', JSON.stringify(comparativeValue))
+            if (comparativeValue.length <= 0) {
+                return alert('Não existe valores iguais para gerar relatório')
             }
-            window.open('/reportComparative/comparativeValue')  
-        } else if(report == listOption[2]) {
+            window.open('/reportComparative/comparativeValue')
+        } else if (report == listOption[2]) {
             sessionStorage.setItem('divergetValue', JSON.stringify(divergetValue))
-            if(divergetValue.length <= 0) {
+            if (divergetValue.length <= 0) {
                 return alert('Não existe valores divergente para gerar relatório')
             }
             window.open('/reportComparative/divergentValue')
         }
     }
 
-    return(
+    return (
         <div className="bg-gray-100 py-8 overflow-x-auto h-screen px-12 w-full">
             <div className="flex justify-between mb-8 lg:px-8 sm:px-8 xl:w-1/2">
-                <form className="flex">
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Relatório'} name={'report'} datas={listOption} value={report} onchange={changeReport}></InputSelect>
-                    <div className="mt-8 ml-4">
-                        <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={generation}>Gerar Relatório</button>
-                    </div>
-                </form>  
+                <div className="mt-8">
+                    <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={generation}>Gerar Relatório</button>
+                </div>
             </div>
-             <form className="ml-8 flex relative">
-                    <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Data inicial'} type={'date'} name={'initPeriod'} value={initPeriod} onchange={changeInitPeriod}></InputForm>
-                    <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Data final'} type={'date'} name={'finshPeriod'} value={finishPeriod} onchange={changeFinishPeriod}></InputForm>
+            <form className="ml-8 flex relative">
+                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Relatório'} name={'report'} datas={listOption} value={report} onchange={changeReport}></InputSelect>
+                <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Data inicial'} type={'date'} name={'initPeriod'} value={initPeriod} onchange={changeInitPeriod}></InputForm>
+                <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Data final'} type={'date'} name={'finshPeriod'} value={finishPeriod} onchange={changeFinishPeriod}></InputForm>
                 <div className="mt-2 ml-4">
                     <button onClick={search} className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ">Buscar</button>
                 </div>
@@ -189,9 +241,9 @@ export default function Report({equipmentHistory, equipmentRental}) {
                 <div className="ml-8 flex-1">
                     <Table Table={'table bg-white shadow-md rounded-lg overflow-hidden w-full'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black'} headers={['Código', 'Equipamento', 'Valor K&M', 'Valor', 'Filial', 'Entrada K&M', 'Entrada', 'Retorno K&M', 'Retorno', 'Usuário', 'Setor']} data={dataReport} attributos={['codProd', 'equipment', 'valueKm', 'value', 'branch', 'entryDateKm', 'entryDate', 'returnDateKm', 'returnDate', 'user', 'sector']} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'#'} bt={'...'}></Table>
                 </div>
-            )}    
+            )}
         </div>
 
-    ) 
-    
+    )
+
 }
