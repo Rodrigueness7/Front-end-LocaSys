@@ -11,7 +11,7 @@ export default function AppWrapper({ children }) {
 
     const pathname = usePathname();
     const hideMenuRoutes = useMemo(() => {
-        return ["/login", '/reportComparative/comparativeEquipment', '/reportComparative/comparativeValue', '/equipment/report', '/branch/report', '/sector/report', '/supplier/report', '/users/report', '/reportComparative/divergentValue'];
+        return ["/login", '/reportComparative/comparativeEquipment', '/reportComparative/comparativeValue', '/reportComparative/divergentEquipment' ,'/equipment/report', '/branch/report', '/sector/report', '/supplier/report', '/users/report', '/reportComparative/divergentValue'];
     }, [])
     const token = getCookie("token");
     const [branch, setBranch] = useState([]);

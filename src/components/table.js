@@ -5,7 +5,7 @@ import { useState } from "react";
 export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, attributos, id, href, classButton, bt, positionTd, permission }) {
 
     const [currentPage, setCurrentPage] = useState(1)
-    const itemsPerPage = 10;
+    const itemsPerPage = 20;
 
     const startIndex = (currentPage - 1) * itemsPerPage
     const endIndex = startIndex + itemsPerPage
@@ -29,7 +29,7 @@ export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, 
             }
         } else {
             if (currentPage <= 3) {
-                pages.push(1, 2, 3, 4, '...');
+                pages.push(1, 2, 3, 4, '...', totalPages);
             } else if (currentPage >= totalPages - 2) {
                 pages.push(1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
             } else {
@@ -65,7 +65,7 @@ export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, 
                 ))}
             </tbody>
         </table>
-        <div className="pagination-container fixed bottom-0 left-0 w-full z-50">
+        <div className="pagination-container fixed bottom-10 left-0 w-full z-50">
              <div className="flex justify-center items-center py-2 space-x-2">
                 <button onClick={() => changePage(currentPage - 1)} className="px-4 py-2 border rounded-md bg-gray-500 hover:bg-gray-400 disabled:bg-gray-300 text-white" >
                     Anterior
@@ -76,6 +76,8 @@ export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, 
                         onClick={() => page !== '...' && changePage(page)} 
                         className={`px-4 py-2 border-md rounded-md ${currentPage === page ? 'bg-blue-500 text-white' : 'bg-gray-500 hover:bg-gray-400'}`}
                         disabled={page === '...'}
+                            
+
                     >
                         {page}
                     </button>

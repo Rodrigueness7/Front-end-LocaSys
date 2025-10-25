@@ -54,7 +54,7 @@ export default function Report({ equipmentHistory, equipmentRental }) {
             }
         }
     })
-    const equipment = equipmentDiverget.filter(item => item != undefined)
+    const equipmentDivergetFiltered = equipmentDiverget.filter(item => item != undefined)
 
 
     const comparativeEquipment = equipmentRental.filter(item => item.initPeriod.slice(0, 10) == initPeriod && item.finishPeriod.slice(0, 10) == finishPeriod).map(item => {
@@ -95,14 +95,14 @@ export default function Report({ equipmentHistory, equipmentRental }) {
                 sector: ''
             }
         }
-    }).sort((a,b) => {
-        if(a.value && !b.value) {
-            return -1
-        }
-        if(!a.value && b.value) {
-            return 1
-        }
-    })
+    }).sort((a, b) => {
+    const hasValueA = a.value !== null && a.value !== '' && a.value !== undefined
+    const hasValueB = b.value !== null && b.value !== '' && b.value !== undefined
+
+    if (hasValueA && !hasValueB) return 1
+    if (!hasValueA && hasValueB) return -1
+    return 0
+})
 
 
      const comparativeValue = equipmentHistory.filter( items => equipmentRental.some( itens => itens.value == items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate <= finishPeriod))).map( items => {
@@ -112,7 +112,7 @@ export default function Report({ equipmentHistory, equipmentRental }) {
         if (items.idEquipmentHistory === maxId) {
             return data = {
                 id: items.idEquipmentHistory,
-                codigo: items['Equipment'].codProd,
+                codProd: items['Equipment'].codProd,
                 equipment: items['Equipment'].equipment,
                 valueKm: equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value == items.value).value,
                 value: items.value,
@@ -152,7 +152,7 @@ export default function Report({ equipmentHistory, equipmentRental }) {
     }})
     const divergetValueFiltered = divergetValue.filter( item => item != undefined)
 
-    
+    console.log(divergetValueFiltered)
 
     const search = (e) => {
         e.preventDefault()
@@ -175,7 +175,6 @@ export default function Report({ equipmentHistory, equipmentRental }) {
             )
         }
 
-      
 
         if (report == listOption[0]) {
             setDataReport(comparativeEquipment)
@@ -193,7 +192,7 @@ export default function Report({ equipmentHistory, equipmentRental }) {
         }
 
           if (report == listOption[3]) {
-            setDataReport(equipment)
+            setDataReport(equipmentDivergetFiltered)
             setShowTable(true)
         }
     }
@@ -208,17 +207,23 @@ export default function Report({ equipmentHistory, equipmentRental }) {
             }
             window.open('/reportComparative/comparativeEquipment')
         } else if (report == listOption[1]) {
-            sessionStorage.setItem('comparativeValue', JSON.stringify(comparativeValue))
-            if (comparativeValue.length <= 0) {
+            sessionStorage.setItem('comparativeValue', JSON.stringify(comparativeValueFiltered))
+            if (comparativeValueFiltered.length <= 0) {
                 return alert('Não existe valores iguais para gerar relatório')
             }
             window.open('/reportComparative/comparativeValue')
         } else if (report == listOption[2]) {
-            sessionStorage.setItem('divergetValue', JSON.stringify(divergetValue))
-            if (divergetValue.length <= 0) {
+            sessionStorage.setItem('divergetValue', JSON.stringify(divergetValueFiltered))
+            if (divergetValueFiltered.length <= 0) {
                 return alert('Não existe valores divergente para gerar relatório')
             }
             window.open('/reportComparative/divergentValue')
+        } else if (report == listOption[3]) {
+            sessionStorage.setItem('divergentEquipment', JSON.stringify(equipmentDivergetFiltered))
+            if (equipmentDivergetFiltered.length <= 0) {
+                return alert('Não existe equipamentos divergentes para gerar relatório')
+            }
+            window.open('/reportComparative/divergentEquipment')
         }
     }
 
@@ -238,8 +243,8 @@ export default function Report({ equipmentHistory, equipmentRental }) {
                 </div>
             </form>
             {showTable && (
-                <div className="ml-8 flex-1">
-                    <Table Table={'table bg-white shadow-md rounded-lg overflow-hidden w-full'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black'} headers={['Código', 'Equipamento', 'Valor K&M', 'Valor', 'Filial', 'Entrada K&M', 'Entrada', 'Retorno K&M', 'Retorno', 'Usuário', 'Setor']} data={dataReport} attributos={['codProd', 'equipment', 'valueKm', 'value', 'branch', 'entryDateKm', 'entryDate', 'returnDateKm', 'returnDate', 'user', 'sector']} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'#'} bt={'...'}></Table>
+                <div className="ml-8 flex-1 h-96 overflow-x-auto">
+                    <Table Table={'table-auto bg-white shadow-md rounded-lg overflow-hidden w-full'} TrThead={'bg-gray-800 text-white text-nowrap sticky top-0 bg-gray-200 z-10'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={['Código', 'Equipamento', 'Valor K&M', 'Valor', 'Filial', 'Entrada K&M', 'Entrada', 'Retorno K&M', 'Retorno', 'Usuário', 'Setor']} data={dataReport} attributos={['codProd', 'equipment', 'valueKm', 'value', 'branch', 'entryDateKm', 'entryDate', 'returnDateKm', 'returnDate', 'user', 'sector']} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'#'} bt={'...'}></Table>
                 </div>
             )}
         </div>

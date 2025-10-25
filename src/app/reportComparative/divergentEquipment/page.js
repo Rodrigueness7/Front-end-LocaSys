@@ -16,14 +16,14 @@ export default function Report() {
  
 
   useEffect(() => {
-        setData(JSON.parse(sessionStorage.getItem('comparativeValue')))
+        setData(JSON.parse(sessionStorage.getItem('divergentEquipment')))
         setUser(localStorage.getItem('username'))
   }, [])
         
    
     return(
         <>
-         <LargePdfTable data={data} size={'A4'} user={user} title={'Relatório de Comparativo de Valor'} width={'25%'} row={5}></LargePdfTable>
+         <LargePdfTable data={data} size={'A4'} user={user} title={'Relatório de Equipamento Divergente'} width={'25%'} row={5}></LargePdfTable>
         </>
     )
 }

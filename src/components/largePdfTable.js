@@ -42,18 +42,18 @@ export default function LargePdfTable({ data, size = "A4", user, title, width = 
       width,
       fontSize: 10,
       fontWeight: 'bold',
-      padding: 4,
-      backgroundColor: '#f0f0f0',
+      padding: 2,
+      backgroundColor: '#d6d6d6ff',
       borderRightWidth: 1,
-      borderRightColor: '#000',
+      borderRightColor: 'gray',
       borderRightStyle: 'solid',
     },
     cellValue: {
       width,
       fontSize: 10,
-      padding: 4,
+      padding: 3,
       borderRightWidth: 1,
-      borderRightColor: '#000',
+      borderRightColor: 'gray',
       borderRightStyle: 'solid',
     },
     subHeader: {
@@ -123,7 +123,7 @@ export default function LargePdfTable({ data, size = "A4", user, title, width = 
             })}
 
             <Text style={styles.total}>
-              Página {pageIndex + 1} - Total acumulado: {pageIndex * 20 + pageData.length}
+              Página {pageIndex + 1} - Total acumulado: {pageIndex * row + pageData.length}
             </Text>
             <Text style={styles.footer} fixed render={({ pageNumber }) => `Página ${pageNumber}`} />
           </Page>
