@@ -152,7 +152,6 @@ export default function Report({ equipmentHistory, equipmentRental }) {
     }})
     const divergetValueFiltered = divergetValue.filter( item => item != undefined)
 
-    console.log(divergetValueFiltered)
 
     const search = (e) => {
         e.preventDefault()
@@ -167,7 +166,7 @@ export default function Report({ equipmentHistory, equipmentRental }) {
         let findInitPeriod = equipmentRental.find(item => item.initPeriod).initPeriod.slice(0, 10)
         let findFinishPeriod = equipmentRental.find(item => item.finishPeriod).finishPeriod.slice(0, 10)
 
-
+        
 
         if (findInitPeriod != initPeriod && findFinishPeriod != finishPeriod) {
             return (
@@ -244,7 +243,7 @@ export default function Report({ equipmentHistory, equipmentRental }) {
             </form>
             {showTable && (
                 <div className="ml-8 flex-1 h-96 overflow-x-auto">
-                    <Table Table={'table-auto bg-white shadow-md rounded-lg overflow-hidden w-full'} TrThead={'bg-gray-800 text-white text-nowrap sticky top-0 bg-gray-200 z-10'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={['Código', 'Equipamento', 'Valor K&M', 'Valor', 'Filial', 'Entrada K&M', 'Entrada', 'Retorno K&M', 'Retorno', 'Usuário', 'Setor']} data={dataReport} attributos={['codProd', 'equipment', 'valueKm', 'value', 'branch', 'entryDateKm', 'entryDate', 'returnDateKm', 'returnDate', 'user', 'sector']} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'#'} bt={'...'}></Table>
+                    <Table Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white sticky top-0 z-10 text-nowrap rounded-lg'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={['Código', 'Equipamento', 'Valor K&M', 'Valor', 'Filial', 'Entrada K&M', 'Entrada', 'Retorno K&M', 'Retorno', 'Usuário', 'Setor']} data={dataReport} attributos={['codProd', 'equipment', 'valueKm', 'value', 'branch', 'entryDateKm', 'entryDate', 'returnDateKm', 'returnDate', 'user', 'sector']} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'#'} bt={'...'}></Table>
                 </div>
             )}
         </div>

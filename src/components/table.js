@@ -42,21 +42,26 @@ export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, 
 
 
     return ( 
-    <div className="relative h-full pb-10 ">
-        <table className={Table}>
-            <thead>
-                <tr className={TrThead}>
-                    {headers.map((header, index) => (
-                        <th className={Th} key={index}>
-                            {header}
-                        </th>    
-                    ))}
-                    <th></th>
-                </tr>
-            </thead>
+    <div className="rounded-lg">
+        <table  className={`${Table}`}>
+             <thead>
+                    <tr className={`${TrThead} sticky top-0 bg-gray-100 z-10`}>
+                        {headers.map((header, index) => (
+                            <th
+                                key={index}
+                                className={`${Th} py-3 px-4 text-left 
+                                ${index === 0 ? "rounded-tl-lg" : ""} `}
+                            >
+                                {header}
+                            </th>
+                        ))}
+                        <th className="rounded-tr-xl"></th>
+                    </tr>
+                </thead>
+
             <tbody>
                 {currentData.map((row) => (
-                    <tr key={row[id]} className={TrTbody}>
+                    <tr key={row[id]} className='border-b hover:bg-blue-100' >
                         {attributos.map(item => (
                             <td key={item} className={Td}>{row[item]}</td>
                         ))}
