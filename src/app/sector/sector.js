@@ -93,8 +93,8 @@ export default function Sector({ tableSector }) {
                     <button className='p-3 bg-indigo-500 rounded-lg text-white' type="submit">Buscar</button>
                 </div>
             </form>
-            <div className='flex-1 ml-8'>
-                <Table Table={' table-auto bg-white shadow-md rounded-lg overflow-hidden'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black'} headers={['id', 'Setor', 'Filial']} data={dataSector} attributos={['idSector', 'sector', 'branch']} id={'idSector'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./sector/updateSector'} bt={'...'} permission={permission.find(number => number == '21')}></Table>
+            <div className='ml-8 flex-1 h-96 overflow-x-auto w-1/3'>
+                <Table Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black'} headers={['id', 'Setor', 'Filial']} data={dataSector} attributos={['idSector', 'sector', 'branch']} id={'idSector'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./sector/updateSector'} bt={'...'} permission={permission.find(number => number == '21')}></Table>
             </div>
         </div>
     )

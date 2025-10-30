@@ -50,12 +50,13 @@ export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, 
                             <th
                                 key={index}
                                 className={`${Th} py-3 px-4 text-left 
-                                ${index === 0 ? "rounded-tl-lg" : ""} `}
+                                ${index === 0 ? "rounded-tl-lg" : ""} 
+                                ${index === headers.length - 1 && !permission ? "rounded-tr-xl" : ""}`}
                             >
                                 {header}
                             </th>
                         ))}
-                        <th className="rounded-tr-xl"></th>
+                        {permission && (<th className={`${Th} py-3 px-4 text-left rounded-tr-lg`}></th>)}
                     </tr>
                 </thead>
 
