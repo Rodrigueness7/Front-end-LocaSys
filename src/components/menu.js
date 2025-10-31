@@ -226,7 +226,7 @@ export default function Menu({ token, dataBranch }) {
                 <div>
                     {permission.find(number => number == 31) && (<button onClick={handleShow} className="hover:text-blue-500 transition duration-300">Arquivo</button>)}
                     {show == true ? (
-                        <div className="flex flex-col bg-slate-600 ">
+                        <div className="flex flex-col">
                             <div className="ml-5">
                                 <button onClick={() => setShowImport(true)} className="hover:text-blue-500 transition duration-300">Importar</button>
                             </div>

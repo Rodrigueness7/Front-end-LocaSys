@@ -105,7 +105,7 @@ export default function Equipment({ tableEquipment, attribute }) {
 
 
     return (
-        <div className='bg-gray-100 py-8 overflow-x-auto h-screen w-full'>
+        <div className='bg-gray-100 py-8 overflow-x-auto h-screen px-12 w-full'>
             <div className="flex justify-between mb-8 lg:px-8 sm:px-8 xl:w-1/2">
               {permission.find(number => number == '2') && (
                   <Link href={'../equipment/registerEquipment'}><button className='p-2 bg-indigo-500 rounded-lg text-white'>Novo Equipamento</button></Link>
@@ -122,8 +122,8 @@ export default function Equipment({ tableEquipment, attribute }) {
                     <button className='p-3 bg-indigo-500 rounded-lg text-white' type="submit">Buscar</button>
                 </div>
             </form>
-            <div className='ml-8 flex-1'>
-                <Table Table={'table-auto bg-white shadow-md rounded-lg overflow-hidden w-full'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black'} headers={attribute} data={dataEquipment} attributos={attribute} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./equipment/updateEquipment'} bt={'...'} permission={permission.find(number => number == '3')}></Table>
+            <div className='ml-8 flex-1 h-[67%] overflow-x-auto'> 
+                <Table Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white text-nowrap rounded-lg'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={attribute} data={dataEquipment} attributos={attribute} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./equipment/updateEquipment'} bt={'...'} permission={permission.find(number => number == '3')}></Table>
             </div>
         </div>
     )
