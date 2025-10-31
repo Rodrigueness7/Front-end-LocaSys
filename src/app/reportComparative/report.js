@@ -163,11 +163,12 @@ export default function Report({ equipmentHistory, equipmentRental }) {
             )
         }
 
-        let findInitPeriod = equipmentRental.find(item => item.initPeriod.slice(0,10) === initPeriod).initPeriod
-        let findFinishPeriod = equipmentRental.find(item => item.finishPeriod.slice(0,10) === finishPeriod).finishPeriod
+        let findInitPeriod = equipmentRental.filter(item => item.initPeriod.slice(0,10) === initPeriod)
+        let findFinishPeriod = equipmentRental.filter(item => item.finishPeriod.slice(0,10) === finishPeriod)
 
+     
 
-        if (!findInitPeriod && !findFinishPeriod) {
+        if (findInitPeriod.length == 0 || findFinishPeriod.length == 0) {
             return (
                 alert('Não há dados para esse periodo')
             )
@@ -241,7 +242,7 @@ export default function Report({ equipmentHistory, equipmentRental }) {
                 </div>
             </form>
             {showTable && (
-                <div className="ml-8 flex-1 h-96 overflow-x-auto">
+                <div className="ml-8 flex-1 h-[65%] overflow-x-auto">
                     <Table Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white sticky top-0 z-10 text-nowrap rounded-lg'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={['Código', 'Equipamento', 'Valor K&M', 'Valor', 'Filial', 'Entrada K&M', 'Entrada', 'Retorno K&M', 'Retorno', 'Usuário', 'Setor']} data={dataReport} attributos={['codProd', 'equipment', 'valueKm', 'value', 'branch', 'entryDateKm', 'entryDate', 'returnDateKm', 'returnDate', 'user', 'sector']} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'#'} bt={'...'}></Table>
                 </div>
             )}

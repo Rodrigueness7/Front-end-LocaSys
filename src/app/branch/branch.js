@@ -44,7 +44,7 @@ export default function Branch({ tableBranch }) {
                )}
                 <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={generation}>Gerar Relatório</button>
             </div>
-            <div className="ml-8 flex-1 h-96 overflow-x-auto w-3/5">
+            <div className="ml-8 flex-1 h-[78%] overflow-x-auto w-3/5">
                 <Table Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black'} headers={['Código Filial', 'Filial', 'CNPJ', 'Razão Social']} data={tableBranch} attributos={['uniqueIdentifier', 'branch', 'CNPJ', 'corporateName']} id={'idBranch'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./branch/updateBranch'} bt={'...'} permission={permission.find(number => number == '8')}></Table>
             </div>
         </div>

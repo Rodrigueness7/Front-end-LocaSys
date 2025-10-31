@@ -27,7 +27,7 @@ export default function Report() {
     return(
         <>
          {data !== null && (
-            <LargePdfTable data={data} size={'A4'} user={user} title={'Relátorio de Usuário'} width={'25%'} row={7}></LargePdfTable>
+            <LargePdfTable data={data} size={'A4'} user={user} title={'Relátorio de Usuário'} width={'25%'} row={8}></LargePdfTable>
          )}
         </>
     )

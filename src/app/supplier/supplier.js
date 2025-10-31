@@ -78,7 +78,7 @@ export default function Supplier({ tableSupplier }) {
                     <button className='p-3 bg-indigo-500 rounded-lg text-white' type="submit">Buscar</button>
                 </div>
             </form>
-            <div className="ml-8 flex-1 overflow-x-auto">
+            <div className="ml-8 flex-1 h-[67%] overflow-x-auto">
                 <Table Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white sticky top-0 z-10 text-nowrap rounded-lg'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={['id', 'Fornecedor', 'Email', 'Contato', 'CNPJ', 'Endereço', 'Cep', 'Estado', 'Cidade']} data={dataSupplier} attributos={['idSupplier', 'supplier', 'email', 'contact', 'CNPJ', 'address', 'zipCode', 'state', 'city']} id={'idSupplier'} href={'./supplier/updateSupplier'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} bt={'...'} permission={permission.find(number => number == '46')}></Table>
             </div>
         </div>

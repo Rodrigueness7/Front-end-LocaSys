@@ -42,7 +42,7 @@ export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, 
 
 
     return ( 
-    <div className="rounded-lg">
+    <div className="relative rounded-lg">
         <table  className={`${Table}`}>
              <thead>
                     <tr className={`${TrThead} sticky top-0 bg-gray-100 z-10`}>
@@ -71,7 +71,7 @@ export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, 
                 ))}
             </tbody>
         </table>
-        <div className="pagination-container fixed bottom-10 left-0 w-full z-50">
+        <div className="pagination-container fixed bottom-0 left-0 w-full z-50 ">
              <div className="flex justify-center items-center py-2 space-x-2">
                 <button onClick={() => changePage(currentPage - 1)} className="px-4 py-2 border rounded-md bg-gray-500 hover:bg-gray-400 disabled:bg-gray-300 text-white" >
                     Anterior
