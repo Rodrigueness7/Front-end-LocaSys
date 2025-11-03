@@ -34,6 +34,9 @@ export default async function Logs() {
         data.push(itens)
     })
 
+    data.sort((a, b) => {
+        return new Date(b.actionDate) - new Date(a.actionDate)})
+
     return (
         <div className="bg-gray-100 py-8 overflow-x-auto h-screen px-12 w-full">
             <div className="ml-8 flex-1 h-[93%] overflow-x-auto w-3/5">

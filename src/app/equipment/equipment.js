@@ -63,10 +63,49 @@ export default function Equipment({ tableEquipment, attribute }) {
     }, [codProd, equipment, type, branch, username, tableEquipment]);
 
 
-    const optionsBranch = useMemo(() => getOptions('Filial', 'Filial'), [getOptions])
-    const optionsType = useMemo(() => getOptions('Tipo', 'Tipo'), [getOptions])
-    const optionsEquipment = useMemo(() => getOptions('Equipamento', 'Equipamento'), [getOptions])
-    const optionsUsername = useMemo(() => getOptions('Usuario', 'Usuario'), [getOptions])
+    const optionsBranch = useMemo(() => getOptions('Filial', 'Filial'), [getOptions]).sort((a,b) => {
+        const nameA = a.toUpperCase();
+        const nameB = b.toUpperCase();
+        if (nameA < nameB) {
+            return -1;
+        }
+        if (nameA > nameB) {
+            return 1;
+        }   
+    });
+
+    const optionsType = useMemo(() => getOptions('Tipo', 'Tipo'), [getOptions]).sort((a,b) => {
+        const nameA = a.toUpperCase();
+        const nameB = b.toUpperCase();      
+        if (nameA < nameB) {
+            return -1;
+        }
+        if (nameA > nameB) {
+            return 1;
+        }       
+    });
+
+    const optionsEquipment = useMemo(() => getOptions('Equipamento', 'Equipamento'), [getOptions]).sort((a,b) => {
+        const nameA = a.toUpperCase();
+        const nameB = b.toUpperCase();
+        if (nameA < nameB) {
+            return -1;
+        }
+        if (nameA > nameB) {
+            return 1;       
+        }
+    });
+
+    const optionsUsername = useMemo(() => getOptions('Usuario', 'Usuario'), [getOptions]).sort((a,b) => {
+        const nameA = a.toUpperCase();
+        const nameB = b.toUpperCase();      
+        if (nameA < nameB) {
+            return -1;
+        }
+        if (nameA > nameB) {
+            return 1;
+        }
+    });
 
 
     const changeCodProd = (e) => {

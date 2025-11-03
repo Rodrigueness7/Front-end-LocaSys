@@ -58,8 +58,27 @@ export default function Sector({ tableSector }) {
         return [... new Set(options)]
     }, [branch, sector, tableSector]);
 
-    const optionsSector = useMemo(() => getOptions('sector', 'sector'), [getOptions])
-    const optionsBranch = useMemo(() => getOptions('branch', 'branch'), [getOptions])
+    const optionsSector = useMemo(() => getOptions('sector', 'sector'), [getOptions]).sort((a, b) => {
+        const nameA = a.toUpperCase();
+        const nameB = b.toUpperCase();  
+        if (nameA < nameB) {
+            return -1;
+        }   
+        if (nameA > nameB) {
+            return 1;
+        }
+    });
+
+    const optionsBranch = useMemo(() => getOptions('branch', 'branch'), [getOptions]).sort((a, b) => {
+        const nameA = a.toUpperCase();
+        const nameB = b.toUpperCase();
+        if (nameA < nameB) {
+            return -1;
+        }
+        if (nameA > nameB) {
+            return 1;
+        }
+    });
 
     const changeId = (e) => {setId(e.target.value)}
 

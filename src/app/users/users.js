@@ -2,12 +2,14 @@
 
 import InputSelect from "@/components/InputSelect"
 import Table from "@/components/table"
+import SortItem from "@/utils/sortItem"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useCallback, useEffect, useMemo, useState } from "react"
 
 
 export default function Users({ tableUsers, attribute }) {
+
 
     const router = useRouter()
     const [dataUsers, setDataUsers] = useState(tableUsers)
@@ -50,10 +52,48 @@ export default function Users({ tableUsers, attribute }) {
         return [... new Set(options)]
     }, [firstName, username, sector, profile, tableUsers])
 
-    const optionsFirstName = useMemo(() => getOptions('Nome', 'Nome'), [getOptions])
-    const optionsUsername = useMemo(() => getOptions('Usuario', 'Usuario'), [getOptions])
-    const optionsSector = useMemo(() => getOptions('Setor', 'Setor'), [getOptions])
-    const optionsProfile = useMemo(() => getOptions('Perfil', 'Perfil'), [getOptions])
+    const optionsFirstName = useMemo(() => getOptions('Nome', 'Nome'), [getOptions]).sort((a,b) => {
+        const nameA = a.toUpperCase();
+        const nameB = b.toUpperCase();  
+        if (nameA < nameB) {
+            return -1;
+        }   
+        if (nameA > nameB) {
+            return 1;
+        }       
+        })
+
+    const optionsUsername = useMemo(() => getOptions('Usuario', 'Usuario'), [getOptions]).sort((a,b) => {
+        const nameA = a.toUpperCase();
+        const nameB = b.toUpperCase();      
+        if (nameA < nameB) {
+            return -1;
+        }
+        if (nameA > nameB) {
+            return 1;
+        }   
+        })
+
+    const optionsSector = useMemo(() => getOptions('Setor', 'Setor'), [getOptions]).sort((a,b) => {
+        const nameA = a.toUpperCase();
+        const nameB = b.toUpperCase();
+        if (nameA < nameB) {
+            return -1;
+        }   
+        if (nameA > nameB) {
+            return 1;       
+        }   
+        })
+    const optionsProfile = useMemo(() => getOptions('Perfil', 'Perfil'), [getOptions]).sort((a,b) => {
+        const nameA = a.toUpperCase();
+        const nameB = b.toUpperCase();  
+        if (nameA < nameB) {
+            return -1;
+        }   
+        if (nameA > nameB) {
+            return 1;
+        }       
+        })
 
     const changeFirstName = (e) => {
         let newFirstName = e.target.value
