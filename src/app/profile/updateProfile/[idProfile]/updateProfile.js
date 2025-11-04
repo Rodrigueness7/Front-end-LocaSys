@@ -10,11 +10,63 @@ import { useRouter } from "next/navigation"
 
 export default function UpdateProfile({ data, idProfile, dataPermission, token }) {
 
+    let ordemPermission = dataPermission.map(value => {
+        if(value['Permission'].section === 'equipment') {
+            value['Permission'].section = 'Equipamento'
+        }
+        if(value['Permission'].section === 'branch') {
+            value['Permission'].section = 'Filial'
+        }
+        if(value['Permission'].section === 'sector') {
+            value['Permission'].section = 'Setor'
+        }
+        if(value['Permission'].section === 'user') {
+            value['Permission'].section = 'Usuário'
+        }
+        if(value['Permission'].section === 'profile') {
+            value['Permission'].section = 'Perfil'
+        }
+        if(value['Permission'].section === 'equipmentHistory') {
+            value['Permission'].section = 'Histórico do Equipamento'
+        }
+        if(value['Permission'].section === 'typeEquipment') {
+            value['Permission'].section = 'Tipo de Equipamento'
+        }
+        if(value['Permission'].section === 'equipmentRental') {
+            value['Permission'].section = 'Equipamento Alugado'
+        }
+        if(value['Permission'].section === 'permission') {
+            value['Permission'].section = 'Permissão'
+        }
+        if(value['Permission'].section === 'profile_permission') {
+            value['Permission'].section = 'Perfil_Permissão'
+        }
+        if(value['Permission'].section === 'contact') {     
+            value['Permission'].section = 'Contato'
+        }
+        if(value['Permission'].section === 'supplier') {
+            value['Permission'].section = 'Fornecedor'
+        }
+        if(value['Permission'].section === 'log') {
+            value['Permission'].section = 'Log'
+        }
+        return value   
+    }).sort((a, b) => {
+        if (a['Permission'].section < b['Permission'].section) {
+            return -1;
+        }   
+        if (a['Permission'].section > b['Permission'].section) {
+            return 1;
+        }       
+        return 0;
+    });
+
+    
     const router = useRouter()
     const [profile, setProfile] = useState(data.profile)
     const [result, setResult] = useState('')
     const [selectPermission, setSelectPermission] = useState(
-        dataPermission.map(values => ({
+        ordemPermission.map(values => ({
             id: values.idProfile_permission,
             permission: values['Permission'].permission,
             section: values['Permission'].section,
@@ -79,7 +131,7 @@ export default function UpdateProfile({ data, idProfile, dataPermission, token }
                 <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">Atualizar Perfil </h1>
                 <form className="grid grid-cols-1 gap-x-8 gap-y-4" onSubmit={updateProfile}>
                     <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Perfil"} name={"Profile"} type={'text'} value={profile} onchange={changeProfile} required={true}></InputForm>
-                    <div className="grid grid-cols-2 gap-4 max-h-60 overflow-y-auto">
+                    <div className="grid gap-4 max-h-60 overflow-y-auto">
                         {selectPermission.map((itens) => (
                             <label className="flex items-center" key={itens.id}>
                                 <input id={itens.id} type="checkbox" value={itens.section + ' - ' + itens.permission} checked={itens.checked} onChange={handleChange}></input>

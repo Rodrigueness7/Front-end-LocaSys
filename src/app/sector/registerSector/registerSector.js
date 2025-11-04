@@ -7,10 +7,11 @@ import addData from "../../../utils/addData"
 import { useRouter } from "next/navigation"
 import MessageModal from "@/components/messageModal"
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
+import SortItem from "@/utils/sortItem"
 
 export default function PageRegisterSector({dataBranch, token }) {
 
-    const listBranch = dataBranch.map(item => item.branch)
+    const listBranch = SortItem(dataBranch, 'branch').map(item => item.branch);
 
     const router = useRouter()
     const [sector, setSector] = useState('')

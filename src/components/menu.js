@@ -5,6 +5,7 @@ import InputForm from "@/components/InputForm";
 import InputSelect from "@/components/InputSelect";
 import MessageModal from "@/components/messageModal";
 import addData from "@/utils/addData";
+import SortItem from "@/utils/sortItem";
 import Link from "next/link";
 import { redirect, useRouter } from "next/navigation"
 import { useEffect, useState } from "react";
@@ -14,7 +15,7 @@ import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 export default function Menu({ token, dataBranch }) {
 
 
-    const listBranch = Array.isArray(dataBranch) ? dataBranch.map(item => item.branch) : [];
+    const listBranch = Array.isArray(dataBranch) ? SortItem(dataBranch, 'branch').map(item => item.branch) : [];
     const router = useRouter()
     const [show, setShow] = useState(false)
     const [file, setFile] = useState(null)

@@ -8,14 +8,13 @@ import inactivateData from "../../../../utils/inactivateData"
 import { useRouter } from "next/navigation"
 import MessageModal from "@/components/messageModal"
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
+import SortItem from "@/utils/sortItem"
 
 
 export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser, token }) {
 
-
-    const listSector = dataSector.map(item => item.sector)
-    const listProfile = dataProfile.map(item => item.profile)
-
+   const listSector = SortItem(dataSector, 'sector').map(item => item.sector); 
+   const listProfile = SortItem(dataProfile, 'profile').map(item => item.profile);
 
     const [firstName, setFirstName] = useState(dataUserId.firstName)
     const [lastName, setLastName] = useState(dataUserId.lastName)

@@ -6,14 +6,15 @@ import addData from "../../../utils/addData";
 import { useRouter } from "next/navigation";
 import MessageModal from "@/components/messageModal";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import SortItem from "@/utils/sortItem";
 
 
 export default function RegisterUser({ dataSector, dataProfile, token }) {
 
-   
-    const listSector = dataSector.map(item => item.sector)
-    const listProfile = dataProfile.map(item => item.profile)
+    const listSector = SortItem(dataSector, 'sector').map(item => item.sector); 
+    const listProfile = SortItem(dataProfile, 'profile').map(item => item.profile);
 
+      
     const router = useRouter()
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')

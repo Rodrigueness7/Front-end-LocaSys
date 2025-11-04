@@ -10,12 +10,65 @@ import { useRouter } from "next/navigation";
 
 export default function RegisterProfile({ token, dataPermission }) {
 
+    let ordemPermission = dataPermission.map(permission => {
+        if(permission.section == 'branch') {
+            permission.section = 'Filial'
+        }
+        if(permission.section == 'equipment') {
+            permission.section = 'Equipamento'
+        }
+        if(permission.section == 'sector') {
+            permission.section = 'Setor'
+        }
+        if(permission.section == 'user') {
+            permission.section = 'Usuário'
+        }
+        if(permission.section == 'profile') {
+            permission.section = 'Perfil'
+        }
+        if(permission.section == 'equipmentHistory') {
+            permission.section = 'Histórico do Equipamento'
+        }
+        if(permission.section == 'typeEquipment') {
+            permission.section = 'Tipo de Equipamento'
+        }
+        if(permission.section == 'equipmentRental') {
+            permission.section = 'Equipamento Alugado'
+        }
+        if(permission.section == 'permission') {
+            permission.section = 'Permissão'
+        }
+        if(permission.section == 'profile_permission') {
+            permission.section = 'Perfil_Permissão'
+        }
+        if(permission.section == 'contact') {     
+            permission.section = 'Contato'
+        }
+        if(permission.section == 'supplier') {
+            permission.section = 'Fornecedor'
+        }
+        if(permission.section == 'log') {
+            permission.section = 'Log'
+        }
+        return permission   
+    }).sort((a, b) => {
+        if (a.section < b.section) {
+            return -1;
+        } 
+        if (a.section > b.section) {
+            return 1;
+        }
+        return 0;
+    });
+
+    
+
     const router = useRouter()
     const [profile, setProfile] = useState('')
     const [selectedPermissions, setSelectPermissions] = useState(
-        dataPermission.map(permission => ({
+        ordemPermission.map(permission => ({
             id: permission.idPermission,
-            value: permission.permission + ' - ' + permission.section,
+            value: permission.section + ' - ' + permission.permission,
             checked: false
         }))
     )
@@ -75,7 +128,7 @@ export default function RegisterProfile({ token, dataPermission }) {
                 <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">Adicionar Perfil </h1>
                 <form className="grid grid-cols-1 gap-x-8 gap-y-4" onSubmit={addProfile}>
                     <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Perfil"} name={"Profile"} type={'text'} value={profile} onchange={changeProfile}></InputForm>
-                    <div className="grid grid-cols-2 gap-4 max-h-60 overflow-y-auto">
+                    <div className="grid  gap-4 max-h-60 overflow-y-auto">
                         {selectedPermissions.map(({ id, value, checked }) => (
                             <label className="flex items-center" key={id}>
                                 <input type="checkbox" value={value} checked={checked} onChange={handleChange}/>

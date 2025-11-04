@@ -9,16 +9,17 @@ import addData from "../../../../utils/addData"
 import { useRouter } from "next/navigation"
 import MessageModal from "@/components/messageModal"
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
+import SortItem from "@/utils/sortItem"
 
 
 export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, dataSector, dataSupplier, token, idEquipment, dataTypeEquipment, dataAllEquipment }) {
 
     const router = useRouter()
-    const listBranch = dataBranch.map(item => item.branch)
-    const listUsername = dataUser.map(item => item.username)
-    const listSector = dataSector.map(item => item.sector)
-    const listSupplier = dataSupplier.map(item => item.supplier)
-    const listTypeEquipment = dataTypeEquipment.map(item => item.typeEquipment)
+    const listBranch = SortItem(dataBranch, 'branch').map(item => item.branch)
+    const listUsername = SortItem(dataUser, 'username').map(item => item.username)
+    const listSector = SortItem(dataSector, 'sector').map(item => item.sector)
+    const listSupplier = SortItem(dataSupplier, 'supplier').map(item => item.supplier)
+    const listTypeEquipment = SortItem(dataTypeEquipment, 'typeEquipment').map(item => item.typeEquipment)
 
     
 
