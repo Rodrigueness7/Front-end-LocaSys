@@ -5,7 +5,7 @@ import { useState } from "react";
 export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, attributos, id, href, classButton, bt, positionTd, permission }) {
 
     const [currentPage, setCurrentPage] = useState(1)
-    const itemsPerPage = 20;
+    const itemsPerPage = 40;
 
     const startIndex = (currentPage - 1) * itemsPerPage
     const endIndex = startIndex + itemsPerPage

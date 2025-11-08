@@ -34,18 +34,11 @@ export default async function Logs() {
         data.push(itens)
     })
 
-    data.sort((a, b) => {
-    
-        if (a.actionDate > b.actionDate) {
-            return -1;
-        }   
-        if (a.actionDate < b.actionDate) {
-            return 1;
-        }   
-        return 0;   
-        
-    }
-    )
+
+  data.sort((a,b) => {
+    return b.idLog - a.idLog
+     
+  });
 
     return (
         <div className="bg-gray-100 py-8 overflow-x-auto h-screen px-12 w-full">
