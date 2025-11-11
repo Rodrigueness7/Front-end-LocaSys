@@ -12,7 +12,7 @@ import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
 import SortItem from "@/utils/sortItem"
 
 
-export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, dataSector, dataSupplier, token, idEquipment, dataTypeEquipment, dataAllEquipment }) {
+export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, dataSector, dataSupplier, token, idEquipment, dataTypeEquipment, dataAllEquipment, numberValue }) {
 
     const router = useRouter()
     const listBranch = SortItem(dataBranch, 'branch').map(item => item.branch)
@@ -143,7 +143,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             codProd: checked ? null : codProd,
             equipment: equipment,
             idTypeEquipment: idTypeEquipment,
-            value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
+            value: value == '' ? dataEquipment.value : parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
             idBranch: idBranch,
             idUser: idUser,
             idSector: idSector,
@@ -166,7 +166,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             idUser: idUser,
             idSector: idSector,
             idBranch: idBranch,
-            value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
+            value: value == '' ? dataEquipment.value : parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
             entryDate: entryDate,
             returnDate: null,
             entryDate: entryDate
@@ -189,7 +189,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             codProd: checked ? null : codProd,
             equipment: equipment,
             idTypeEquipment: idTypeEquipment,
-            value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
+            value: value == '' ? dataEquipment.value : parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
             idBranch: idBranch,
             idUser: idUser,
             idSector: idSector,
@@ -208,7 +208,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             idUser: idUser,
             idSector: idSector,
             idBranch: idBranch,
-            value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
+            value: value == '' ? dataEquipment.value : parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
             entryDate: entryDate,
             returnDate: returnDate
         }
@@ -240,11 +240,12 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             idUser: idUser,
             idSector: idSector,
             idBranch: idBranch,
-            value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
+            value: value == '' ? dataEquipment.value : parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
             entryDate: entryDate,
             returnDate: null
         }
 
+       
         await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addEquipmentHistory`, dataEquipmentHistory, token, setResult)
         setIsModalOpen(true)
 
@@ -253,7 +254,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             codProd: checked ? null : codProd,
             equipment: equipment,
             idTypeEquipment: idTypeEquipment,
-            value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
+            value: value == '' ? dataEquipment.value : parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
             idBranch: idBranch,
             idUser: idUser,
             idSector: idSector,
@@ -308,7 +309,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
                     </div>
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Equipamento'} type={'text'} name={'equipment'} value={equipment} onchange={changeEquipment} required={true}></InputForm>
                     <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Tipo'} name={'typeEquipment'} datas={listTypeEquipment} value={type} onchange={changeType}></InputSelect>
-                    {value !== undefined ? (
+                    {numberValue !== undefined ? (
                         <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Valor'} type={'decimal'} name={'value'} value={value} onchange={changeValue} maxLength={'10'} onKeyDown={pointLockValue} required={true}></InputForm>
                     ) : null}
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Data Entrada'} type={'date'} name={'entryDate'} value={entryDate} onchange={changeEntryDate} maxLength={'10'} required={true}></InputForm>
