@@ -82,9 +82,43 @@ export default function UpdateProfile({ data, idProfile, dataPermission, token }
 
     const handleChange = (e) => {
         const { id, checked } = e.target
-        setSelectPermission((p) => p.map((p) => p.id == id ? { ...p, checked } : p
-        ))
+        setSelectPermission((prev) => {
+            const current = prev.find((p) => p.id == id)
+
+            if(!current) return prev
+            
+            if(current.permission === 'Atualizar') {
+                return prev.map((p) => {
+                    if(checked && p.section === current.section && p.permission === 'Ler') {
+                        return {...p, checked: true}
+                    }
+
+                   if(!checked && p.section === current.section && p.permission === 'Ler') {
+                        return {...p, checked: false}
+                    }
+                  
+                    if(p.id == id) {
+                        return {...p, checked}
+                    }
+                    return p;
+                })
+            } 
+
+            if(current.permission === 'Ler') {
+                const hasGravar = prev.some(
+                    (p) => p.section === current.section && p.permission === "Atualizar" && p.checked
+                )
+
+                if(hasGravar && !checked) {
+                    return prev
+                }
+            }
+
+            return prev.map((p) => (p.id == id ? {...p, checked} : p))
+        })
     }
+
+
 
     const handleCloseModal = () => {
         setIsModalOpen(false)
