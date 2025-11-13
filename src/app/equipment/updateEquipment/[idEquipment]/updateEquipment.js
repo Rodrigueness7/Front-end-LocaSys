@@ -22,7 +22,6 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     const listTypeEquipment = SortItem(dataTypeEquipment, 'typeEquipment').map(item => item.typeEquipment)
 
     
-
     const [codProd, setCodProd] = useState(dataEquipment.codProd == null ? '' : dataEquipment.codProd)
     const [equipment, setEquipment] = useState(dataEquipment.equipment)
     const [type, setType] = useState(dataEquipment['TypeEquipment'].typeEquipment)
@@ -143,7 +142,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             codProd: checked ? null : codProd,
             equipment: equipment,
             idTypeEquipment: idTypeEquipment,
-            value: value == '' ? dataEquipment.value : parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
+            value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
             idBranch: idBranch,
             idUser: idUser,
             idSector: idSector,
@@ -151,9 +150,9 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             entryDate: entryDate
         }
 
-        
         await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateEquipment/${idEquipment}`, data, token, setResult)
         setIsModalOpen(true)
+       
 
         let existEquipment = dataAllEquipment.find(item => item.codProd == codProd)
         
@@ -166,7 +165,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             idUser: idUser,
             idSector: idSector,
             idBranch: idBranch,
-            value: value == '' ? dataEquipment.value : parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
+            value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
             entryDate: entryDate,
             returnDate: null,
             entryDate: entryDate
@@ -189,7 +188,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             codProd: checked ? null : codProd,
             equipment: equipment,
             idTypeEquipment: idTypeEquipment,
-            value: value == '' ? dataEquipment.value : parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
+            value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
             idBranch: idBranch,
             idUser: idUser,
             idSector: idSector,
@@ -208,7 +207,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             idUser: idUser,
             idSector: idSector,
             idBranch: idBranch,
-            value: value == '' ? dataEquipment.value : parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
+            value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
             entryDate: entryDate,
             returnDate: returnDate
         }
@@ -240,7 +239,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             idUser: idUser,
             idSector: idSector,
             idBranch: idBranch,
-            value: value == '' ? dataEquipment.value : parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
+            value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
             entryDate: entryDate,
             returnDate: null
         }
@@ -254,7 +253,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             codProd: checked ? null : codProd,
             equipment: equipment,
             idTypeEquipment: idTypeEquipment,
-            value: value == '' ? dataEquipment.value : parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
+            value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
             idBranch: idBranch,
             idUser: idUser,
             idSector: idSector,
