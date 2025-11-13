@@ -17,7 +17,7 @@ export default async function PageUpdateEquipment({ params }) {
 
      let permission = jwtDecode(token).permission
      const number = permission.find(number => number == 3)
-    
+     const numberValue = permission.find(number => number == 5)
 
     if(number == undefined) {
         redirect('/')
@@ -36,7 +36,7 @@ export default async function PageUpdateEquipment({ params }) {
     }
 
     return (
-        <UpdateEquipment dataEquipment={equipment} dataUser={user} dataBranch={branch} dataSector={sector} dataSupplier={supplier} token={token} idEquipment={idEquipment} dataTypeEquipment={typeEquipment} dataAllEquipment={allEquipment} ></UpdateEquipment>
+        <UpdateEquipment dataEquipment={equipment} dataUser={user} dataBranch={branch} dataSector={sector} dataSupplier={supplier} token={token} idEquipment={idEquipment} dataTypeEquipment={typeEquipment} dataAllEquipment={allEquipment} numberValue={numberValue} ></UpdateEquipment>
 
     )
 }
