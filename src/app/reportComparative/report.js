@@ -15,7 +15,17 @@ export default function Report({ equipmentHistory, equipmentRental }) {
     const [dataReport, setDataReport] = useState('')
     const [showTable, setShowTable] = useState(false)
     const [report, setReport] = useState(listOption[0])
+    
 
+    
+    const period = equipmentRental.filter(item => {
+       const idMax = Math.max(...equipmentRental.filter(itens => itens['Branch'].branch === item['Branch'].branch).map(i => i.idEquipmentRental))
+        if(item.idEquipmentRental === idMax) {
+            return item
+        }
+    })
+   
+  console.log(period.length > 0)
     const changeInitPeriod = (e) => {
         setInitPeriod(e.target.value)
     }
@@ -32,6 +42,8 @@ export default function Report({ equipmentHistory, equipmentRental }) {
         router.push('/login')
     }
 
+   
+    
     const equipmentDiverget = equipmentHistory.filter(items => !equipmentRental.some(itens => items['Equipment'].codProd == itens.codProd) && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate <= finishPeriod)).map(items => {
         const maxIdEquip = Math.max(...equipmentHistory.filter(itens => itens['Equipment'].codProd == items['Equipment'].codProd && items['Equipment'].codProd != null).map(i => i.idEquipmentHistory))
         let data
@@ -227,11 +239,18 @@ export default function Report({ equipmentHistory, equipmentRental }) {
     }
 
     return (
-        <div className="bg-gray-100 py-8 overflow-x-auto h-screen px-12 w-full">
-            <div className="flex justify-between mb-8 lg:px-8 sm:px-8 xl:w-1/2">
+        <div className=" bg-gray-100 py-8 overflow-x-auto h-screen px-12 w-full">   
+            <div className="flex justify-between mb-8 lg:px-8 sm:px-8 w-full ">
                 <div className="mt-8">
                     <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={generation}>Gerar Relatório</button>
                 </div>
+                {period.length > 0 && (
+                    <div className="flex flex-col bg-indigo-400 text-white p-5 rounded-lg">
+                {period.map(i => (
+                    <div  key={i.idEquipmentRental} >{`Última importação Filial ${i['Branch'].branch}: ${new Date(i.initPeriod).toLocaleDateString('pt-br', {timeZone: 'UTC'})} à ${new Date(i.finishPeriod).toLocaleDateString('pt-br', {timeZone: 'UTC'})} `}</div>    
+                    ))}
+            </div>
+                )}
             </div>
             <form className="ml-8 flex relative">
                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Relatório'} name={'report'} datas={listOption} value={report} onchange={changeReport}></InputSelect>
