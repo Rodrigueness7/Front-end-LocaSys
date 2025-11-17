@@ -187,50 +187,51 @@ export default function Menu({ token, dataBranch, dataEquipmentRental }) {
 
 
     return (
-        <div className="flex bg-slate-800 min-h-screen">
-            <div className={`text-white w-64 p-8 space-y-4 md:block`}>
-                <h1 className="font-bold text-2xl">Locasys</h1>
+        <div className="flex bg-slate-800 min-h-screen ml-64">
+            <div className={`text-white w-64 p-8 space-y-4 md:block fixed top-0 left-0 h-full overflow-y-auto bg-slate-800`}>
+                <div>
+                    <h1 className="font-bold text-2xl">Locasys</h1>
                 {permission.find(number => number == '10') && (
-                    <div >
+                    <div className="mt-4" >
                         <Link href={'/users'} className="hover:text-blue-500 transition duration-300">Usuário</Link>
                     </div>
                 )}
                 {permission.find(number => number == '1') && (
-                    <div>
+                    <div className="mt-4">
                         <Link href={'/equipment'} className="hover:text-blue-500 transition duration-300">Equipamento</Link>
                     </div>
                 )}
                 {permission.find(number => number == '6') && (
-                    <div>
+                    <div className="mt-4">
                         <Link href={'/branch'} className="hover:text-blue-500 transition duration-300">Filial</Link>
                     </div>
                 )}
                 {permission.find(number => number == '19') && (
-                    <div>
+                    <div className="mt-4">
                         <Link href={'/sector'} className="hover:text-blue-500 transition duration-300">Setor</Link>
                     </div>
                 )}
                 {permission.find(number => number == '44') && (
-                    <div>
+                    <div className="mt-4">
                         <Link href={'/supplier'} className="hover:text-blue-500 transition duration-300">Fornecedor</Link>
                     </div>
                 )}
                 {permission.find(number => number == '48') && (
-                    <div>
+                    <div className="mt-4">
                         <Link href={'/typeEquipment'} className="hover:text-blue-500 transition duration-300">Tipo de Equipmento</Link>
                     </div>
                 )}
                 {permission.find(number => number == '15') && (
-                    <div>
+                    <div className="mt-4">
                         <Link href={'/profile'} className="hover:text-blue-500 transition duration-300">Perfil</Link>
                     </div>
                 )}
                 {permission.find(item => item == '35') && (
-                    <div>
+                    <div className="mt-4">
                         <Link href={'/logs'} className="hover:text-blue-500 transition duration-300">Log</Link>
                     </div>
                 )}
-                <div>
+                <div className="mt-4">
                     {permission.find(number => number == 31) && (<button onClick={handleShow} className="hover:text-blue-500 transition duration-300">Arquivo</button>)}
                     {show == true ? (
                         <div className="flex flex-col">
@@ -243,7 +244,7 @@ export default function Menu({ token, dataBranch, dataEquipmentRental }) {
                         </div>
                     ) : null}
                 </div>
-                <div>
+                <div className="mt-4">
                     {permission.find(number => number == 31) && (<button onClick={handleReport} className="hover:text-blue-500 transition duration-300" >Relatório</button>)}
                     {showReport == true ? (
                         <ul className="ml-5">
@@ -251,8 +252,9 @@ export default function Menu({ token, dataBranch, dataEquipmentRental }) {
                         </ul>
                     ) : null}
                 </div>
-                <div>
+                <div className="mt-4">
                     <button onClick={handleExit}>Sair</button>
+                </div>
                 </div>
             </div>
             {showImport && (
