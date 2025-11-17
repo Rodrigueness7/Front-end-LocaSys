@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 
-export default function Menu({ token, dataBranch }) {
+export default function Menu({ token, dataBranch, dataEquipmentRental }) {
 
 
     const listBranch = Array.isArray(dataBranch) ? SortItem(dataBranch, 'branch').map(item => item.branch) : [];
@@ -31,15 +31,21 @@ export default function Menu({ token, dataBranch }) {
     const [showReport, setShowReport] = useState(false)
     const [permission, setPermission] = useState([])
 
+    const period = dataEquipmentRental.filter(item => {
+        const idMax = Math.max(...dataEquipmentRental.filter(itens => itens['Branch'].branch === item['Branch'].branch).map(i => i.idEquipmentRental))
+        if (item.idEquipmentRental === idMax) {
+            return item
+        }
+    })
 
     useEffect(() => {
         let data = localStorage.getItem('permission')
-        if(!data) {
+        if (!data) {
             return router.push('/login')
         }
-          let number = data.split(',').map(number => number)
-            setPermission(number)
-        
+        let number = data.split(',').map(number => number)
+        setPermission(number)
+
     }, [router])
 
     const changeCellInit = (e) => {
@@ -62,7 +68,7 @@ export default function Menu({ token, dataBranch }) {
         setBranch(e.target.value)
     }
 
-    if(dataBranch.message) {
+    if (dataBranch.message) {
         redirect('/login')
     }
 
@@ -109,7 +115,7 @@ export default function Menu({ token, dataBranch }) {
         } else {
             setShowReport(false)
         }
-        
+
     }
 
     const handleSubmit = async (event) => {
@@ -142,13 +148,13 @@ export default function Menu({ token, dataBranch }) {
         setInitPeriod('')
         setFinishPeriod('')
         setIsModalOpen(true)
-       
+
     }
 
     const handleDelete = async (e) => {
         e.preventDefault()
         const idBranch = dataBranch.find(item => item.branch === branch).idBranch
-        
+
         const data = {
             initPeriod: initPeriod,
             finishPeriod: finishPeriod,
@@ -156,73 +162,73 @@ export default function Menu({ token, dataBranch }) {
         }
 
         await fetch(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/deleteAllEquipmentRental`, {
-        method: 'DELETE',
-        headers: {
-            'content-type': 'application/json',
-            'Authorization': token
-        }, 
-        body: JSON.stringify(data)
-    }).then(
-        result => result.json()
-    ).then(
-        res => {
-            if (res.successMessage) {
-                setResult({ success: res.successMessage })
-            } else {
-                setResult({ error: res.errorMessage })
+            method: 'DELETE',
+            headers: {
+                'content-type': 'application/json',
+                'Authorization': token
+            },
+            body: JSON.stringify(data)
+        }).then(
+            result => result.json()
+        ).then(
+            res => {
+                if (res.successMessage) {
+                    setResult({ success: res.successMessage })
+                } else {
+                    setResult({ error: res.errorMessage })
+                }
             }
-        }
-    )
-    setInitPeriod('')
-    setFinishPeriod('')
-    setIsModalOpen(true)
+        )
+        setInitPeriod('')
+        setFinishPeriod('')
+        setIsModalOpen(true)
     }
 
-   
+
 
     return (
-        <div className="flex bg-slate-800">
-            <div className={`text-white w-64 h-screen p-8 space-y-4 md:block`}>
+        <div className="flex bg-slate-800 min-h-screen">
+            <div className={`text-white w-64 p-8 space-y-4 md:block`}>
                 <h1 className="font-bold text-2xl">Locasys</h1>
                 {permission.find(number => number == '10') && (
-                <div >
-                    <Link href={'/users'} className="hover:text-blue-500 transition duration-300">Usuário</Link>
-                </div>
+                    <div >
+                        <Link href={'/users'} className="hover:text-blue-500 transition duration-300">Usuário</Link>
+                    </div>
                 )}
                 {permission.find(number => number == '1') && (
-                <div>
-                    <Link href={'/equipment'} className="hover:text-blue-500 transition duration-300">Equipamento</Link>
-                </div>
+                    <div>
+                        <Link href={'/equipment'} className="hover:text-blue-500 transition duration-300">Equipamento</Link>
+                    </div>
                 )}
                 {permission.find(number => number == '6') && (
-                <div>
-                    <Link href={'/branch'} className="hover:text-blue-500 transition duration-300">Filial</Link>
-                </div>
+                    <div>
+                        <Link href={'/branch'} className="hover:text-blue-500 transition duration-300">Filial</Link>
+                    </div>
                 )}
                 {permission.find(number => number == '19') && (
-                <div>
-                    <Link href={'/sector'} className="hover:text-blue-500 transition duration-300">Setor</Link>
-                </div>
+                    <div>
+                        <Link href={'/sector'} className="hover:text-blue-500 transition duration-300">Setor</Link>
+                    </div>
                 )}
                 {permission.find(number => number == '44') && (
-                <div>
-                    <Link href={'/supplier'} className="hover:text-blue-500 transition duration-300">Fornecedor</Link>
-                </div>
+                    <div>
+                        <Link href={'/supplier'} className="hover:text-blue-500 transition duration-300">Fornecedor</Link>
+                    </div>
                 )}
                 {permission.find(number => number == '48') && (
-                <div>
-                    <Link href={'/typeEquipment'} className="hover:text-blue-500 transition duration-300">Tipo de Equipmento</Link>
-                </div>
+                    <div>
+                        <Link href={'/typeEquipment'} className="hover:text-blue-500 transition duration-300">Tipo de Equipmento</Link>
+                    </div>
                 )}
                 {permission.find(number => number == '15') && (
-                <div>
-                    <Link href={'/profile'} className="hover:text-blue-500 transition duration-300">Perfil</Link>
-                </div>
+                    <div>
+                        <Link href={'/profile'} className="hover:text-blue-500 transition duration-300">Perfil</Link>
+                    </div>
                 )}
                 {permission.find(item => item == '35') && (
                     <div>
-                    <Link href={'/logs'} className="hover:text-blue-500 transition duration-300">Log</Link>
-                </div>
+                        <Link href={'/logs'} className="hover:text-blue-500 transition duration-300">Log</Link>
+                    </div>
                 )}
                 <div>
                     {permission.find(number => number == 31) && (<button onClick={handleShow} className="hover:text-blue-500 transition duration-300">Arquivo</button>)}
@@ -238,7 +244,7 @@ export default function Menu({ token, dataBranch }) {
                     ) : null}
                 </div>
                 <div>
-                   {permission.find(number => number == 31) && ( <button onClick={handleReport} className="hover:text-blue-500 transition duration-300" >Relatório</button>)}
+                    {permission.find(number => number == 31) && (<button onClick={handleReport} className="hover:text-blue-500 transition duration-300" >Relatório</button>)}
                     {showReport == true ? (
                         <ul className="ml-5">
                             <Link className="hover:text-blue-500 transition duration-300" href={'/reportComparative'}><li>Comparativo Equipamentos</li></Link>
@@ -264,12 +270,19 @@ export default function Menu({ token, dataBranch }) {
                                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Filial'} name={'branch'} datas={listBranch} value={branch} onchange={changeBranch}></InputSelect>
                             </div>
                             <button type="submit" className=" w-full mt-4 bg-blue-500 text-white px-4 py-2 rounded">Enviar</button>
-                        </form>  
-                         <MessageModal isOpen={isModalOpen} onClose={handleCloseModal} message={result.error ? result.error : result.success} icone={
-                    result?.error ? (<FaTimesCircle className="text-red-500 w-24 h-24 mx-auto mb-4 rounded-full" />) : (
-                        <FaCheckCircle className="text-green-500 w-24 h-24 mx-auto mb-4 rounded-full" />
-                    )
-                }></MessageModal>
+                            {period.length > 0 && (
+                                <div className="mt-5 bg-indigo-400 text-white w-3/5 p-5 rounded-lg">
+                                {period.map(i => (
+                                    <div key={i.idEquipmentRental} >{`Última importação Filial ${i['Branch'].branch}: ${new Date(i.initPeriod).toLocaleDateString('pt-br', { timeZone: 'UTC' })} à ${new Date(i.finishPeriod).toLocaleDateString('pt-br', { timeZone: 'UTC' })} `}</div>
+                                ))}
+                            </div>
+                            )}
+                        </form>
+                        <MessageModal isOpen={isModalOpen} onClose={handleCloseModal} message={result.error ? result.error : result.success} icone={
+                            result?.error ? (<FaTimesCircle className="text-red-500 w-24 h-24 mx-auto mb-4 rounded-full" />) : (
+                                <FaCheckCircle className="text-green-500 w-24 h-24 mx-auto mb-4 rounded-full" />
+                            )
+                        }></MessageModal>
                     </div>
                 </FormModal>
             )}
@@ -284,15 +297,15 @@ export default function Menu({ token, dataBranch }) {
                         </div>
                         <button onClick={handleDelete} className=" w-full mt-4 bg-blue-500 text-white px-4 py-2 rounded">Deletar</button>
                         <MessageModal isOpen={isModalOpen} onClose={handleCloseModal} message={result.error ? result.error : result.success} icone={
-                    result?.error ? (<FaTimesCircle className="text-red-500 w-24 h-24 mx-auto mb-4 rounded-full" />) : (
-                        <FaCheckCircle className="text-green-500 w-24 h-24 mx-auto mb-4 rounded-full" />
-                    )
-                }></MessageModal>
+                            result?.error ? (<FaTimesCircle className="text-red-500 w-24 h-24 mx-auto mb-4 rounded-full" />) : (
+                                <FaCheckCircle className="text-green-500 w-24 h-24 mx-auto mb-4 rounded-full" />
+                            )
+                        }></MessageModal>
                     </div>
                 </FormModal>
             )}
-             
-        </div> 
+
+        </div>
     )
 }
 

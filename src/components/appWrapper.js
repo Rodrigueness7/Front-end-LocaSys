@@ -15,6 +15,7 @@ export default function AppWrapper({ children }) {
     }, [])
     const token = getCookie("token");
     const [branch, setBranch] = useState([]);
+    const [equipmentRental, setEquipmentRental] = useState([])
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
@@ -31,7 +32,19 @@ export default function AppWrapper({ children }) {
                     console.error("Erro ao buscar branches:", error);
                 }
             }
+
+            async function fetchEquipmentRental() {
+                try {
+                   const data = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllEquipmentRental`, token);
+                   setEquipmentRental(data)
+                } catch (error) {
+                    console.error("Erro ao buscar branches:", error);
+                }
+            }
+
             fetchBranches();
+            fetchEquipmentRental()
+
         }
     }, [pathname, hideMenuRoutes, token, isClient]);
 
@@ -39,8 +52,8 @@ export default function AppWrapper({ children }) {
     
     return (
         <div className="flex">
-            {!shouldHideMenu && <Menu token={token} dataBranch={branch} />}
+            {!shouldHideMenu && <Menu token={token} dataBranch={branch} dataEquipmentRental={equipmentRental} />}
             {children}
-        </div>
+        </div> 
     )
 }
