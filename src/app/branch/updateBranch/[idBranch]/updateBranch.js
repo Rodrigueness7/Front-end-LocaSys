@@ -6,18 +6,24 @@ import inactivateData from "../../../../utils/inactivateData"
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
 import { useRouter } from "next/navigation"
 import MessageModal from "@/components/messageModal"
+import InputSelect from "@/components/InputSelect"
 
 
-export default function UpdateBranch({ dataBranch, idBranch, token }) {
+export default function UpdateBranch({ dataBranch, idBranch, token, dataAllBranch }) {
 
+    let findHeadquarter = dataAllBranch.find(item => item.idBranch === dataBranch.headquarter)?.branch == null ? '' : dataAllBranch.find(item => item.idBranch === dataBranch.headquarter)?.branch
+
+    const listBranch = dataAllBranch.map(branch => branch.branch)
     const [branch, setBranch] = useState(dataBranch.branch)
-    const [CNPJ, setCNPJ] = useState((dataBranch.CNPJ == null) ? "" : dataBranch.CNPJ)
-    const [corporateName, setCoporateName] = useState((dataBranch.corporateName == null) ? "" : dataBranch.corporateName)
+    const [headquarter, setHeadquarter] = useState(findHeadquarter)
+    const [CNPJ, setCNPJ] = useState((dataBranch.CNPJ == null) ? '' : dataBranch.CNPJ)
+    const [corporateName, setCoporateName] = useState((dataBranch.corporateName == null) ? '' : dataBranch.corporateName)
     const [uniqueIdentifier, setUniqueIdentifier] = useState(dataBranch.uniqueIdentifier)
     const [result, setResult] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)
     const router = useRouter()
     const [permission, setPermission] = useState([])
+    const [isCheked, setIsChecked] = useState(dataBranch.headquarter == null ? false : true)
     
     
         useEffect(() => {
@@ -58,6 +64,10 @@ export default function UpdateBranch({ dataBranch, idBranch, token }) {
         }   
     }
 
+     const handleCheckboxChange = (e) => {
+        setIsChecked(prev => !prev)
+    }
+
     const handleCloseModal = () => {
         setIsModalOpen(false)
         if (result.success) {
@@ -65,10 +75,17 @@ export default function UpdateBranch({ dataBranch, idBranch, token }) {
         }
     }
 
+    
+    const handleHeadquarter = (e) => {
+        setHeadquarter(e.target.value)
+    }
+
+
     const updateBranch = async () => {
         const data = {
             branch: branch,
             CNPJ: CNPJ,
+            headquarter: isCheked == true ? dataAllBranch.find(item => item.branch === headquarter)?.idBranch || null : null,
             corporateName: corporateName,
             uniqueIdentifier: uniqueIdentifier
         }
@@ -99,6 +116,13 @@ export default function UpdateBranch({ dataBranch, idBranch, token }) {
                 <form className="grid grid-cols-1 gap-x-8 gap-y-4">
                     <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Código Filial"} name={"uniqueIdentifier"} type={'text'} value={uniqueIdentifier} onchange={changeUniqueIdentifier}></InputForm>
                     <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Filial"} name={"branch"} type={'text'} value={branch} onchange={changeBranch}></InputForm>
+                     <div className="relative">
+                        <input className="" type="checkbox" checked={isCheked} onChange={handleCheckboxChange}></input>
+                        <label className="ml-3">Vincular a matriz </label>
+                    </div>
+                    {isCheked && (
+                     <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Filial'} name={'branch'} datas={listBranch} value={headquarter} onchange={handleHeadquarter} required={false}></InputSelect>
+                    )}
                     <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"CNPJ"} name={"CNPJ"} type={'text'} value={CNPJ} onchange={changeCNPJ}></InputForm>
                     <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Razão Social"} name={"corporateName"} type={'text'} value={corporateName} onchange={changeCoporateName}></InputForm>
                 </form>

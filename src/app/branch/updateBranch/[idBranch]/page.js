@@ -29,8 +29,10 @@ export default async function PageUpdateBranch({ params }) {
         redirect('/login')
     }
 
+    let AllBranch = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllBranch`, token)
+
     return (
-        <UpdateBranch dataBranch={branch} idBranch={idBranch} token={token}></UpdateBranch>
+        <UpdateBranch dataBranch={branch} idBranch={idBranch} token={token} dataAllBranch={AllBranch}></UpdateBranch>
         
     )
 }

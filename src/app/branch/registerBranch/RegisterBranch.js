@@ -6,9 +6,12 @@ import MessageModal from "../../../components/messageModal";
 import { FaCheckCircle } from 'react-icons/fa';
 import { FaTimesCircle } from 'react-icons/fa'
 import { useRouter } from "next/navigation";
+import InputSelect from "@/components/InputSelect";
 
 
-export default function PageRegisterBranch({ token }) {
+export default function PageRegisterBranch({ token, dataBranch }) {
+
+    const listBranch = dataBranch.map(branch => branch.branch)
 
     const [branch, setBranch] = useState('')
     const [CNPJ, setCNPJ] = useState('')
@@ -17,7 +20,8 @@ export default function PageRegisterBranch({ token }) {
     const [result, setResult] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)
     const router = useRouter()
-    
+    const [isCheked, setIsChecked] = useState(false)
+    const [headquarter, setHeadquarter] = useState(listBranch[0] || '')
     
 
     const changeBranch = (e) => {
@@ -55,17 +59,30 @@ export default function PageRegisterBranch({ token }) {
         }
     }
 
+    const handleCheckboxChange = (e) => {
+        setIsChecked(prev => !prev)
+    }
+
+    const handleHeadquarter = (e) => {
+        setHeadquarter(e.target.value)
+    }
+
     const addBranch = async () => {
+        let idHeadquarter = dataBranch.find(item => item.branch === headquarter)?.idBranch || null
+    
+
         const data = {
             branch: branch,
             CNPJ: CNPJ,
+            headquarter: isCheked == true ? idHeadquarter : null,
             corporateName: corporateName,
             uniqueIdentifier: uniqueIdentifier
         }
 
+        
         await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addBranch`, data, token, setResult)
         setIsModalOpen(true)
-
+       
     }
 
     return (
@@ -75,6 +92,13 @@ export default function PageRegisterBranch({ token }) {
                 <form className="grid grid-cols-1 gap-x-8 gap-y-4">
                     <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Código Filial"} name={"uniqueIdentifier"} type={'text'} value={uniqueIdentifier} onchange={changeUniqueIdentifier}></InputForm>
                     <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Filial"} name={"branch"} type={'text'} value={branch} onchange={changeBranch}></InputForm>
+                    <div className="relative">
+                        <input className="" type="checkbox" checked={isCheked} onChange={handleCheckboxChange}></input>
+                        <label className="ml-3">Vincular a matriz </label>
+                    </div>
+                    {isCheked && (
+                        <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Filial'} name={'branch'} datas={listBranch} value={headquarter} onchange={handleHeadquarter} required={false}></InputSelect>
+                    )}
                     <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"CNPJ"} name={"CNPJ"} type={'text'} value={CNPJ} onchange={changeCNPJ}></InputForm>
                     <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Razão Social"} name={"corporateName"} type={'text'} value={corporateName} onchange={changeCoporateName}></InputForm>
                 </form>
