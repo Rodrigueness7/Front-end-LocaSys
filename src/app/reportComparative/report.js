@@ -5,16 +5,18 @@ import Table from "@/components/table";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function Report({ equipmentHistory, equipmentRental }) {
+export default function Report({ equipmentHistory, equipmentRental, branch }) {
 
     const options = [{ id: 0, option: 'Comparativo Equipamentos' }, { id: 1, option: 'Comparativo de valor' }, { id: 2, option: 'Divergênia de valor' }, { id: 3, option: 'Equipamentos Divergentes' }]
     const listOption = options.map(item => item.option)
+    const listBranch = branch.map(item => item.branch)
     const router = useRouter()
     const [initPeriod, setInitPeriod] = useState('')
     const [finishPeriod, setFinishPeriod] = useState('')
     const [dataReport, setDataReport] = useState('')
     const [showTable, setShowTable] = useState(false)
     const [report, setReport] = useState(listOption[0])
+    const [branchSelected, setBranchSelected] = useState('')
     
 
     
@@ -25,7 +27,7 @@ export default function Report({ equipmentHistory, equipmentRental }) {
         }
     })
    
-  console.log(period.length > 0)
+
     const changeInitPeriod = (e) => {
         setInitPeriod(e.target.value)
     }
@@ -38,12 +40,15 @@ export default function Report({ equipmentHistory, equipmentRental }) {
         setReport(e.target.value)
     }
 
+    const changeBranch = (e) => {
+        setBranchSelected(e.target.value)
+    }
+
     if (equipmentRental.message) {
         router.push('/login')
     }
 
-   
-    
+
     const equipmentDiverget = equipmentHistory.filter(items => !equipmentRental.some(itens => items['Equipment'].codProd == itens.codProd) && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate <= finishPeriod)).map(items => {
         const maxIdEquip = Math.max(...equipmentHistory.filter(itens => itens['Equipment'].codProd == items['Equipment'].codProd && items['Equipment'].codProd != null).map(i => i.idEquipmentHistory))
         let data
@@ -71,7 +76,13 @@ export default function Report({ equipmentHistory, equipmentRental }) {
 
     const comparativeEquipment = equipmentRental.filter(item => item.initPeriod.slice(0, 10) == initPeriod && item.finishPeriod.slice(0, 10) == finishPeriod).map(item => {
         const maxId = Math.max(...equipmentHistory.filter(items => items['Equipment'].codProd == item.codProd).map(itens => itens.idEquipmentHistory))
-        let filterEquipment = equipmentHistory.filter(items => items['Equipment'].codProd == item.codProd && items.idEquipmentHistory === maxId)
+        let filterEquipment = []
+        if (branchSelected == '') {
+            filterEquipment = equipmentHistory.filter(items => items['Equipment'].codProd == item.codProd && items.idEquipmentHistory === maxId)
+        } else {
+            filterEquipment = equipmentHistory.filter(items => items['Equipment'].codProd == item.codProd && items.idEquipmentHistory === maxId && items['Branch'].branch == branchSelected)
+        }   
+
         let data
 
         if (filterEquipment.length > 0 && filterEquipment[0].entryDate <= finishPeriod && (filterEquipment[0].returnDate == null || filterEquipment[0].returnDate <= finishPeriod)) {
@@ -117,10 +128,11 @@ export default function Report({ equipmentHistory, equipmentRental }) {
 })
 
 
-     const comparativeValue = equipmentHistory.filter( items => equipmentRental.some( itens => itens.value == items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate <= finishPeriod))).map( items => {
+     const comparativeValue = equipmentHistory.filter( items => equipmentRental.some( itens => itens.value == items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate <= finishPeriod) && items['Branch'].branch == branchSelected)).map( items => {
         const maxId = Math.max(...equipmentHistory.filter(itens => itens['Equipment'].codProd == items['Equipment'].codProd).map(i => i.idEquipmentHistory))
         let data
 
+        
         if (items.idEquipmentHistory === maxId) {
             return data = {
                 id: items.idEquipmentHistory,
@@ -256,6 +268,7 @@ export default function Report({ equipmentHistory, equipmentRental }) {
                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Relatório'} name={'report'} datas={listOption} value={report} onchange={changeReport}></InputSelect>
                 <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Data inicial'} type={'date'} name={'initPeriod'} value={initPeriod} onchange={changeInitPeriod}></InputForm>
                 <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Data final'} type={'date'} name={'finshPeriod'} value={finishPeriod} onchange={changeFinishPeriod}></InputForm>
+                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Filial'} name={'branch'} datas={listBranch} value={branchSelected} onchange={changeBranch}></InputSelect>
                 <div className="mt-2 ml-4">
                     <button onClick={search} className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ">Buscar</button>
                 </div>
