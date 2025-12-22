@@ -54,12 +54,14 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
         setIsChecked(prev => !prev)
     }
 
-    const headquarter = branch.find(item => item.headquarter == item.idBranch).idBranch
+    const headquarter = branchSelected != '' ? branch.find(item => item.branch == branchSelected).headquarter : ''
+    
+    console.log(headquarter)
     
     let filterEquipmentHistory = branchSelected != '' ? equipmentHistory.filter( items => equipmentRental.some( itens => itens.value == items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate <= finishPeriod) && items['Branch'].branch == branchSelected)) : equipmentHistory.filter( items => equipmentRental.some( itens => itens.value == items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate <= finishPeriod)))
 
     if (isCheked && branchSelected != '') {
-        filterEquipmentHistory = branchSelected != '' ? equipmentHistory.filter( items => equipmentRental.some( itens => itens.value == items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate <= finishPeriod) && items['Branch'].headquarter == headquarter)) : equipmentHistory.filter( items => equipmentRental.some( itens => itens.value == items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate <= finishPeriod)))
+        filterEquipmentHistory = branchSelected != '' ? equipmentHistory.filter( items => equipmentRental.some( itens => itens.value == items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate <= finishPeriod) && items['Branch'].headquarter === headquarter)) : equipmentHistory.filter( items => equipmentRental.some( itens => itens.value == items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate <= finishPeriod)))
 
     }
 
@@ -203,6 +205,11 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
     const search = (e) => {
         e.preventDefault()
 
+        if(branchSelected == '' && isCheked) {
+            return (
+                alert('Selecione uma filial para buscar pela matriz')
+            )
+        }
 
         if (equipmentRental.length == 0) {
             return (
