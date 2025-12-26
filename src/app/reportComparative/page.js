@@ -22,11 +22,11 @@ export default async function PageReport() {
 
     const dataEquipmentHistory = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllEquipmentHistory`, token)
     const dataEquipmentRental = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllEquipmentRental`, token)
-    
+    const dataBranch = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllBranch`, token)
 
 
     return(
-        <Report equipmentHistory={dataEquipmentHistory} equipmentRental={dataEquipmentRental}></Report>
+        <Report equipmentHistory={dataEquipmentHistory} equipmentRental={dataEquipmentRental} branch={dataBranch}></Report>
            
     )
 
