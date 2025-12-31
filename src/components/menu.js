@@ -6,6 +6,7 @@ import InputSelect from "@/components/InputSelect";
 import MessageModal from "@/components/messageModal";
 import addData from "@/utils/addData";
 import SortItem from "@/utils/sortItem";
+import { getCookie } from "cookies-next";
 import Link from "next/link";
 import { redirect, useRouter } from "next/navigation"
 import { useEffect, useState } from "react";
@@ -30,7 +31,7 @@ export default function Menu({ token, dataBranch, dataEquipmentRental }) {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [showReport, setShowReport] = useState(false)
     const [permission, setPermission] = useState([])
-
+    const [username, setUsername] = useState('')
     const period = dataEquipmentRental.filter(item => {
         const idMax = Math.max(...dataEquipmentRental.filter(itens => itens['Branch'].branch === item['Branch'].branch).map(i => i.idEquipmentRental))
         if (item.idEquipmentRental === idMax) {
@@ -40,6 +41,8 @@ export default function Menu({ token, dataBranch, dataEquipmentRental }) {
 
     useEffect(() => {
         let data = localStorage.getItem('permission')
+        let usernameLocal = localStorage.getItem('username')
+        setUsername(usernameLocal)
         if (!data) {
             return router.push('/login')
         }
@@ -256,6 +259,7 @@ export default function Menu({ token, dataBranch, dataEquipmentRental }) {
                     <button onClick={handleExit}>Sair</button>
                 </div>
                 </div>
+                <div className="text-white absolute bottom-0 left-2">Usuário: {username}</div>
             </div>
             {showImport && (
                 <FormModal setShow={setShowImport}>
@@ -306,7 +310,7 @@ export default function Menu({ token, dataBranch, dataEquipmentRental }) {
                     </div>
                 </FormModal>
             )}
-
+            
         </div>
     )
 }

@@ -28,6 +28,7 @@ export default function Supplier({ tableSupplier }) {
             ['Fornecedor'] : item.supplier,
             ['Email'] : item.email,
             ['Contato'] : item.contact,
+            ['Telefone'] : item.telephone,
             ['CNPJ'] : item.CNPJ,
             ['Endereço'] : item.address,
             ['Cep'] : item.zipCode,
@@ -79,7 +80,7 @@ export default function Supplier({ tableSupplier }) {
                 </div>
             </form>
             <div className="ml-8 flex-1 h-[67%] overflow-x-auto">
-                <Table Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white sticky top-0 z-10 text-nowrap rounded-lg'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={['id', 'Fornecedor', 'Email', 'Contato', 'CNPJ', 'Endereço', 'Cep', 'Estado', 'Cidade']} data={dataSupplier} attributos={['idSupplier', 'supplier', 'email', 'contact', 'CNPJ', 'address', 'zipCode', 'state', 'city']} id={'idSupplier'} href={'./supplier/updateSupplier'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} bt={'...'} permission={permission.find(number => number == '46')}></Table>
+                <Table Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white sticky top-0 z-10 text-nowrap rounded-lg'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={['id', 'Fornecedor', 'Email', 'Contato', 'Telefone', 'CNPJ', 'Endereço', 'Cep', 'Estado', 'Cidade']} data={dataSupplier} attributos={['idSupplier', 'supplier', 'email', 'contact', 'telephone', 'CNPJ', 'address', 'zipCode', 'state', 'city']} id={'idSupplier'} href={'./supplier/updateSupplier'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} bt={'...'} permission={permission.find(number => number == '46')}></Table>
             </div>
         </div>
     )
