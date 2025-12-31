@@ -13,6 +13,7 @@ export default function RegisterSupplier({ token }) {
     const [supplier, setSupplier] = useState('')
     const [email, setEmail] = useState('')
     const [contact, setContact] = useState('')
+    const [telephone, setTelephone] = useState('')
     const [CNPJ, setCNPJ] = useState('')
     const [address, setAddress] = useState('')
     const [zipCode, setZipCode] = useState('')
@@ -38,10 +39,18 @@ export default function RegisterSupplier({ token }) {
 
     const changeContact = (e) => {
         let newContact = e.target.value
-        if (newContact === '' || /^[0-9]*$/.test(newContact) && newContact.length <= 11) {
+        if (newContact === '' || newContact.length <= 80) {
             setContact(newContact)
         }
     }
+
+    const changeTelephone = (e) => {
+        let newTelephone = e.target.value   
+        if (newTelephone === '' || /^[0-9]*$/.test(newTelephone) && newTelephone.length <= 11) {
+            setTelephone(newTelephone)
+        }
+    }
+
 
     const changeCNPJ = (e) => {
         const newCNPJ = e.target.value
@@ -90,6 +99,7 @@ export default function RegisterSupplier({ token }) {
             supplier: supplier,
             email: email,
             contact: contact,
+            telephone: telephone,
             CNPJ: CNPJ,
             address: address,
             zipCode: zipCode,
@@ -109,6 +119,7 @@ export default function RegisterSupplier({ token }) {
                     <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Fornecedor"} name={"supplier"} type={'text'} value={supplier} onchange={changeSupplier}></InputForm>
                     <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Email"} name={"email"} type={'text'} value={email} onchange={changeEmail}></InputForm>
                     <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Contato"} name={"contact"} type={'text'} value={contact} onchange={changeContact}></InputForm>
+                    <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Telefone"} name={"telephone"} type={'text'} value={telephone} onchange={changeTelephone}></InputForm>
                     <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"CNPJ"} name={"CNPJ"} type={'text'} value={CNPJ} onchange={changeCNPJ}></InputForm>
                     <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Endereço"} name={"address"} type={'text'} value={address} onchange={changeAdress}></InputForm>
                     <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"CEP"} name={"zipCode"} type={'text'} value={zipCode} onchange={changeZipCode}></InputForm>
