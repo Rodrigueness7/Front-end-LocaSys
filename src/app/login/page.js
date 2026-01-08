@@ -48,6 +48,7 @@ export default function Login() {
     if (value.successMessage) {
       route.push('/')
       localStorage.setItem('username', username)
+      localStorage.setItem('data', new Date().toLocaleDateString('pt-br', {timeZone: 'UTC'}))
       localStorage.setItem('permission', jwtDecode(value.token).permission)
       
      
