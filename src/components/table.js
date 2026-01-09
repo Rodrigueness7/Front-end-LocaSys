@@ -1,10 +1,11 @@
 'use client'
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, attributos, id, href, classButton, bt, positionTd, permission }) {
+export default function Table({ Table, TrThead, Th, Td, headers, data, attributos, id, href, classButton, bt, positionTd, permission, filterCheckbox = false, transf }) {
 
     const [currentPage, setCurrentPage] = useState(1)
+    const [checkedRows, setCheckedRows] = useState([]);
     const itemsPerPage = 40;
 
     const startIndex = (currentPage - 1) * itemsPerPage
@@ -19,6 +20,16 @@ export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, 
             setCurrentPage(page)
         }
     }
+
+   const handleChecked = (rowId) => {
+    setCheckedRows((prev) => prev.includes(rowId) ? prev.filter((id) => id !== rowId) : [...prev, rowId] 
+  );
+};
+ 
+    useEffect(() => {
+        localStorage.setItem('id', checkedRows)
+    })
+    
 
      const generatePageList = () => {
         const pages = [];
@@ -46,11 +57,12 @@ export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, 
         <table  className={`${Table}`}>
              <thead>
                     <tr className={`${TrThead} sticky top-0 bg-gray-100 z-10`}>
+                        {filterCheckbox == true ? (<th className='rounded-tl-lg'></th>) : null}
                         {headers.map((header, index) => (
                             <th
                                 key={index}
                                 className={`${Th} py-3 px-4 text-left 
-                                ${index === 0 ? "rounded-tl-lg" : ""} 
+                                ${index === 0 ? "" : ""} 
                                 ${index === headers.length - 1 && !permission ? "rounded-tr-xl" : ""}`}
                             >
                                 {header}
@@ -63,11 +75,13 @@ export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, 
             <tbody>
                 {currentData.map((row) => (
                     <tr key={row[id]} className='border-b hover:bg-blue-100' >
+                        {filterCheckbox == true ? (<td ><input className="ml-5" type="checkbox" checked={checkedRows.includes(row[id])} onChange={() => handleChecked(row[id])}></input></td>) : null}
                         {attributos.map(item => (
                             <td key={item} className={Td}>{row[item]}</td>
                         ))}
                         {permission && (<td className={positionTd}><Link href={href + `/${row[id]}`}><button className={classButton}>{bt}</button></Link></td>)}
                     </tr>
+                  
                 ))}
             </tbody>
         </table>
@@ -82,8 +96,6 @@ export default function Table({ Table, TrThead, Th, TrTbody, Td, headers, data, 
                         onClick={() => page !== '...' && changePage(page)} 
                         className={`px-4 py-2 border-md rounded-md ${currentPage === page ? 'bg-blue-500 text-white' : 'bg-gray-500 hover:bg-gray-400'}`}
                         disabled={page === '...'}
-                            
-
                     >
                         {page}
                     </button>

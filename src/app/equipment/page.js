@@ -46,8 +46,15 @@ export default async function PageEquipment() {
     let defaultAtrribute = ['Código', 'Equipamento', 'Tipo', 'Data Entrada', 'Data Retorno', 'Usuario', 'Filial', 'Setor', 'Fornecedor', 'Valor']
     let attribute = data.length === 0 ? defaultAtrribute : Object.keys(data[0]);
    
+    let dataUser = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllUser`, token)
+    let dataSector = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllSector`, token)
+    let dataType = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllTypeEquipment`, token)
+    let dataBranch = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllBranch`, token)
+    let dataSupplier = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllSupplier`, token)
+
+   
     
     return (
-        <Equipment tableEquipment={data} attribute={attribute}></Equipment>
+        <Equipment tableEquipment={data} attribute={attribute} token={token} dataUser={dataUser} dataSector={dataSector} dataType={dataType} dataBranch={dataBranch} dataSupplier={dataSupplier}></Equipment>
     )
 }
