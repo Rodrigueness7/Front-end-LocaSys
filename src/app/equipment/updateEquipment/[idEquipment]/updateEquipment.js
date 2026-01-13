@@ -297,6 +297,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
                     </div>
                 }></Modal>
                 ): null}
+                
             </div>
             <div className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
                 <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">Atualizar Equipamento</h1>
