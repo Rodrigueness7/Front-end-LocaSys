@@ -40,11 +40,11 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
    
 
     const changeCodProd = (e) => {
-        const newValue = e.target.value
-        if (/^[0-9]*$/.test(newValue) && newValue.length <= 20 && !checked) {
-            setCodProd(newValue)
+        if(e.target.value == "") {
+            setCodProd(e.target.value)
         }
     }
+        
 
     const changeEquipment = (e) => {
         setEquipment(e.target.value)
@@ -103,15 +103,6 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     const changeReturnDate = (e) => {
         setReturnDate(e.target.value)
     }
-
-     const handleEquipmentWithoutCode = (e) => {
-        const {checked} = e.target  
-        setChecked(checked)
-
-        if(checked) {
-            setCodProd('')
-        }
-    }  
 
 
     const handleCloseModal = () => {
@@ -266,6 +257,17 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
          setIsModalOpen(true)    
     }
 
+    const removerEquipment = async (e) => {
+        e.preventDefault()
+
+        let data = {
+            deletedAt : new Date().toISOString()
+        }
+
+        await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/deleteEquipment/${idEquipment}`, data, token, setResult)
+        setIsModalOpen(true)
+    }
+
     return (
         <section className="bg-gray-100 py-3 w-full">
             <div className="flex justify-between">
@@ -297,16 +299,27 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
                     </div>
                 }></Modal>
                 ): null}
+                {dataEquipment.returnDate == null ? (
+                    <Modal classFirstDivButton={'flex items-start mb-8 lg:px-2 sm:px-0'} classFirstButton={"p-2 bg-indigo-500 rounded-lg text-white"} FirstButton={'Deletar'} classCloseModal={'fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'} classDivChildren={'bg-white rounded-lg shadow-lg w-96 p-6'} classDivButton={'flex justify-end mt-6'} classSecondButton={'px-4 py-2 text-gray-600 bg-gray-200 rounded hover:bg-gray-300'} secondButton={'Não'} Children={
+                    <div className="relative">
+                        <div>Tem certeza que deseja deletar esse equipamento?</div>
+                        <MessageModal isOpen={isModalOpen} onClose={handleCloseModal} message={result.error ? result.error : result.success} icone={
+                            result?.error ? (<FaTimesCircle className="text-red-500 w-24 h-24 mx-auto mb-4 rounded-full" />) : (
+                                <FaCheckCircle className="text-green-500 w-24 h-24 mx-auto mb-4 rounded-full" />
+                            )
+                        }></MessageModal>
+                        <div className="absolute bottom-15">
+                            <button onClick={removerEquipment} className="p-2 mt-4 bg-indigo-500 rounded-lg text-white w-16">Sim</button>
+                        </div>
+                    </div>
+                }></Modal>
+                ): null}
                 
             </div>
             <div className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
                 <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">Atualizar Equipamento</h1>
                 <form className="grid grid-cols-1 gap-x-8 gap-y-4" onSubmit={updateEquipment}>
-                    <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-0'} label={'Código'} type={'text'} name={'codProd'} value={codProd} onchange={changeCodProd} maxLength={'10'}></InputForm>
-                    <div className="flex items-center mb-4">
-                        <input type="checkbox" checked={checked} onChange={handleEquipmentWithoutCode}></input>
-                        <label className="ml-2 text-sm text-gray-700">Equipamento sem código</label>
-                    </div>
+                    <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-0'} label={'Código'} type={'text'} name={'codProd'} value={codProd} onchange={changeCodProd} disabled={true} maxLength={'10'}></InputForm>
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Equipamento'} type={'text'} name={'equipment'} value={equipment} onchange={changeEquipment} required={true}></InputForm>
                     <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Tipo'} name={'typeEquipment'} datas={listTypeEquipment} value={type} onchange={changeType}></InputSelect>
                     {numberValue !== undefined ? (

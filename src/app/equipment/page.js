@@ -26,7 +26,8 @@ export default async function PageEquipment() {
    
     
     let data = equipment.map(itens => {
-        let result = {
+        if(itens.deletedAt == null) {
+            let result = {
             id: itens.idEquipment,
             ['Código']: itens.codProd,
             ['Equipamento']: itens.equipment,
@@ -36,15 +37,21 @@ export default async function PageEquipment() {
             ['Usuario']: itens['User'].username,
             ['Filial']: itens['Branch'].branch,
             ['Setor']: itens['Sector'].sector,
-            ['Fornecedor']: itens['Supplier'].supplier
+            ['Fornecedor']: itens['Supplier'].supplier,
+            ['Data Deletado'] : itens.deletedAt ? new Date(itens.deletedAt).toLocaleDateString('pt-BR', { timeZone: 'UTC' }) : ''
         }
         if(itens.value !== undefined) {
             result['Valor'] = itens.value
         }
         return result
+            
+        }
+       
     })
+
+
     let defaultAtrribute = ['Código', 'Equipamento', 'Tipo', 'Data Entrada', 'Data Retorno', 'Usuario', 'Filial', 'Setor', 'Fornecedor', 'Valor']
-    let attribute = data.length === 0 ? defaultAtrribute : Object.keys(data[0]);
+    let attribute = data.length === 0 ? defaultAtrribute : Object.keys(data[data.length - 1]);
    
     let dataUser = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllUser`, token)
     let dataSector = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllSector`, token)

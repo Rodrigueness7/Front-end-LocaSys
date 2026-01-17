@@ -20,6 +20,7 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
     const branches = dataBranch.map(item => item.branch)
     const suppliers = dataSupplier.map(item => item.supplier)
 
+
     const router = useRouter()
     const [dataEquipment, setDataEquipment] = useState(tableEquipment)
     const [codProd, setCodProd] = useState('')
@@ -191,7 +192,7 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
     const handleCloseModal = () => {
         setIsModalOpen(false)
         if (result.success) {
-            router.push('/')
+            window.location.reload()
         }
     }
 
@@ -205,8 +206,6 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
         }
 
     }
-
-
 
 
     const transfer = (e) => {
@@ -249,7 +248,7 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
                     <Link href={'../equipment/registerEquipment'}><button className='p-2 bg-indigo-500 rounded-lg text-white'>Novo Equipamento</button></Link>
                 )}
                 <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={generation}>Gerar Relatório</button>
-                <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={handleShow}>Tranfêrencia</button>
+                <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={handleShow}>Transferir Equipamento</button>
                 {show == true ? (<FormModal setShow={setShow}>{
                     <div>
                         <p>{listIdEquipment.split(',')[0] == '' ? 'Não há item marcado' : `Items marcados: ${listIdEquipment.split(',').length}`}</p>
