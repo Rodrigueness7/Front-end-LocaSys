@@ -9,10 +9,10 @@ import fetchData from "@/utils/fetchData"
 import updateData from "@/utils/updateData"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { use, useCallback, useEffect, useMemo, useState } from "react"
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
 
-export default function Equipment({ tableEquipment, attribute, token, dataUser, dataSector, dataType, dataBranch, dataSupplier }) {
+export default function Equipment({ tableEquipment, attribute, token, dataUser, dataSector, dataType, dataBranch, dataSupplier, idTransfer }) {
 
     const users = dataUser.map(item => item.username)
     const sectors = dataSector.map(item => item.sector)
@@ -37,7 +37,7 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
     const [listSupplier, setListSupplier] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [result, setResult] = useState('')
-    const [listIdEquipment, setListIdEquipment] =  useState([''])
+    const [listIdEquipment, setListIdEquipment] = useState([])
 
 
 
@@ -51,10 +51,24 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
 
     }, [router])
 
-    useEffect(()=>{
-        let idEquipment = localStorage.getItem('id')
-        setListIdEquipment(idEquipment)
-    })
+    useEffect(() => {
+        const updateValue = () => {
+            const stored = localStorage.getItem('id');
+            setListIdEquipment(stored ? JSON.parse(stored) : []);
+        };
+
+        updateValue();
+
+        window.addEventListener('storage', updateValue);
+        window.addEventListener('local-storage-change', updateValue);
+
+        return () => {
+            window.removeEventListener('storage', updateValue);
+            window.removeEventListener('local-storage-change', updateValue);
+        };
+    }, []);
+
+
 
     const generation = async () => {
         sessionStorage.setItem('dataEquipment', JSON.stringify(dataEquipment))
@@ -210,10 +224,10 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
 
     const transfer = (e) => {
         e.preventDefault()
+        if (listIdEquipment.length === 0) {
+            return alert('Não há item para transferir');
+        }
 
-        if(listIdEquipment.split(',')[0] == '') {
-            alert('Não há item para Transferir')
-        } 
 
         const idUser = listUser != "" ? dataUser.find(item => item.username === listUser).idUser : ""
         const idSector = listSector != "" ? dataSector.find(item => item.sector === listSector).idSector : ""
@@ -223,7 +237,7 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
 
 
 
-        listIdEquipment.split(',').map(async item => {
+        listIdEquipment.map(async item => {
             let findEquipment = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findEquipmentId/${item}`, token)
 
             let data = {
@@ -251,23 +265,21 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
                 <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={handleShow}>Transferir Equipamento</button>
                 {show == true ? (<FormModal setShow={setShow}>{
                     <div>
-                        <p>{listIdEquipment.split(',')[0] == '' ? 'Não há item marcado' : `Items marcados: ${listIdEquipment.split(',').length}`}</p>
+                        <p>{listIdEquipment.length === 0 ? 'Não há item marcado' : `Items marcados: ${listIdEquipment.length}`}</p>
                         <div className="w-full mt-5 flex justify-between relative h-36">
-                        <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-45 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Filial'} name={'branch'} datas={branches} value={listBranch} onchange={changeListBranch} required={false}></InputSelect>
-                        <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-45 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Usuário'} name={'username'} datas={users} value={listUser} onchange={changeListUser} required={false}></InputSelect>
-                        <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-45 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Setor'} name={'sector'} datas={sectors} value={listSector} onchange={changeListSector} required={false}></InputSelect>
-                        <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-45 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Tipo'} name={'TypeEquipment'} datas={types} value={listType} onchange={changeListType} required={false}></InputSelect>
-                        <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-45 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Fornecedor'} name={'supplier'} datas={suppliers} value={listSupplier} onchange={changeListSupplier} required={false}></InputSelect>
-                        <button className="p-2 bg-indigo-500 rounded-lg text-white absolute left-0 bottom-0 w-36 " onClick={transfer}>Alterar</button>
-                        <MessageModal isOpen={isModalOpen} onClose={handleCloseModal} message={result.error ? result.error : result.success} icone={
-                            result?.error ? (<FaTimesCircle className="text-red-500 w-24 h-24 mx-auto mb-4 rounded-full" />) : (
-                                <FaCheckCircle className="text-green-500 w-24 h-24 mx-auto mb-4 rounded-full" />
-                            )
-                        }></MessageModal>
+                            <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-45 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Filial'} name={'branch'} datas={branches} value={listBranch} onchange={changeListBranch} required={false}></InputSelect>
+                            <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-45 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Usuário'} name={'username'} datas={users} value={listUser} onchange={changeListUser} required={false}></InputSelect>
+                            <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-45 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Setor'} name={'sector'} datas={sectors} value={listSector} onchange={changeListSector} required={false}></InputSelect>
+                            <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-45 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Tipo'} name={'TypeEquipment'} datas={types} value={listType} onchange={changeListType} required={false}></InputSelect>
+                            <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-45 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Fornecedor'} name={'supplier'} datas={suppliers} value={listSupplier} onchange={changeListSupplier} required={false}></InputSelect>
+                            <button className="p-2 bg-indigo-500 rounded-lg text-white absolute left-0 bottom-0 w-36 " onClick={transfer}>Alterar</button>
+                            <MessageModal isOpen={isModalOpen} onClose={handleCloseModal} message={result.error ? result.error : result.success} icone={
+                                result?.error ? (<FaTimesCircle className="text-red-500 w-24 h-24 mx-auto mb-4 rounded-full" />) : (
+                                    <FaCheckCircle className="text-green-500 w-24 h-24 mx-auto mb-4 rounded-full" />
+                                )
+                            }></MessageModal>
+                        </div>
                     </div>
-                    </div>
-                    
-
                 }</FormModal>) : null}
 
             </div>
