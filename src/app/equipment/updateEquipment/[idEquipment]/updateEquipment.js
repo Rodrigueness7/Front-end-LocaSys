@@ -27,15 +27,15 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     const [type, setType] = useState(dataEquipment['TypeEquipment'].typeEquipment)
     const [value, setValue] = useState(dataEquipment.value.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2}))
     const [branch, setBranch] = useState(dataEquipment['Branch'].branch)
-    const [username, setUsername] = useState(dataEquipment['User'].username)
-    const [sector, setSector] = useState(dataEquipment['Sector'].sector)
+    const [username, setUsername] = useState(dataEquipment['User'] == null ? '' : dataEquipment['User'].username)
+    const [sector, setSector] = useState(dataEquipment['Sector'] == null ? '' : dataEquipment['Sector'].sector)
     const [supplier, setSupplier] = useState(dataEquipment['Supplier'].supplier)
     const [entryDate, setEntryDate] = useState(new Date(dataEquipment.entryDate).toISOString().split('T')[0])
     const [returnDate, setReturnDate] = useState('')
     const [reason, setReason] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [result, setResult] = useState('')
-    const [checked, setChecked] = useState(dataEquipment.codProd == null ? true : false)
+     const [checked, setChecked] = useState(false)
 
    
 
@@ -104,6 +104,18 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         setReturnDate(e.target.value)
     }
 
+     const handleEquipmentInactive = (e) => {
+        const { checked } = e.target  
+        setChecked(checked)
+    }  
+
+    const handleEquipmentDisabled = () => {
+        if(checked) { 
+            return true
+        }
+        return false
+
+    }
 
     const handleCloseModal = () => {
         setIsModalOpen(false)
@@ -119,14 +131,29 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         }
     }
 
+    const controlRequired = () => {
+        if(username === '' || sector === '') {
+            return false
+        }
+        return true
+    }
+
 
     const updateEquipment = async (e) => {
         e.preventDefault()
-        const idUser = dataUser.find(item => item.username === username).idUser
-        const idSector = dataSector.find(item => item.sector === sector).idSector
+        const idUser = username === '' ? null : dataUser.find(item => item.username === username).idUser
+        const idSector = sector === '' ? null : dataSector.find(item => item.sector === sector).idSector
         const idBranch = dataBranch.find(item => item.branch === branch).idBranch
         const idSupplier = dataSupplier.find(item => item.supplier === supplier).idSupplier
         const idTypeEquipment = dataTypeEquipment.find(item => item.typeEquipment === type).idTypeEquipment
+
+       const idSituation = () => {
+            if(username === '' && sector === '') {
+                return 4
+            } else if(checked) {
+                return 2
+            }
+       }
 
         const data = {
             idEquipment: 0,
@@ -138,16 +165,17 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             idUser: idUser,
             idSector: idSector,
             idSupplier: idSupplier,
-            entryDate: entryDate
+            entryDate: entryDate,
+            entryDate: entryDate,
+            idSituation: idSituation()
+            
         }
-
-        await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateEquipment/${idEquipment}`, data, token, setResult)
-        setIsModalOpen(true)
-       
+        console.log(data)
+        // await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateEquipment/${idEquipment}`, data, token, setResult)
+        // setIsModalOpen(true)
 
         let existEquipment = dataAllEquipment.find(item => item.codProd == codProd)
         
-
         if(existEquipment == undefined || codProd) {
             let dataEquipmentHistory = {
             idEquipmentHistory: 0,
@@ -158,8 +186,8 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             idBranch: idBranch,
             value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
             entryDate: entryDate,
-            returnDate: null,
-            entryDate: entryDate
+            returnDate: null
+
         }
        
         await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addEquipmentHistory`, dataEquipmentHistory, token, setResult)
@@ -320,16 +348,20 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
                 <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">Atualizar Equipamento</h1>
                 <form className="grid grid-cols-1 gap-x-8 gap-y-4" onSubmit={updateEquipment}>
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-0'} label={'Código'} type={'text'} name={'codProd'} value={codProd} onchange={changeCodProd} disabled={true} maxLength={'10'}></InputForm>
-                    <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Equipamento'} type={'text'} name={'equipment'} value={equipment} onchange={changeEquipment} required={true}></InputForm>
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Tipo'} name={'typeEquipment'} datas={listTypeEquipment} value={type} onchange={changeType}></InputSelect>
+                    <div className="flex items-center mb-4">
+                        <input type="checkbox" name="Equipamento sem Código" checked={checked} onChange={handleEquipmentInactive}></input>
+                        <label className="ml-2 text-sm text-gray-700">Inativar Equipamento</label>
+                    </div>
+                    <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Equipamento'} type={'text'} name={'equipment'} value={equipment} onchange={changeEquipment} required={true} disabled={handleEquipmentDisabled()}></InputForm>
+                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Tipo'} name={'typeEquipment'} datas={listTypeEquipment} value={type} onchange={changeType} disabled={handleEquipmentDisabled()}></InputSelect>
                     {numberValue !== undefined ? (
-                        <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Valor'} type={'decimal'} name={'value'} value={value} onchange={changeValue} maxLength={'10'} onKeyDown={pointLockValue} required={true}></InputForm>
+                        <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Valor'} type={'decimal'} name={'value'} value={value} onchange={changeValue} maxLength={'10'} onKeyDown={pointLockValue} required={controlRequired()} disabled={handleEquipmentDisabled()}></InputForm>
                     ) : null}
-                    <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Data Entrada'} type={'date'} name={'entryDate'} value={entryDate} onchange={changeEntryDate} maxLength={'10'} required={true}></InputForm>
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Filial'} name={'branch'} datas={listBranch} value={branch} onchange={changeBranch}></InputSelect>
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Usuário'} name={'username'} datas={listUsername} value={username} onchange={changeUsername}></InputSelect>
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Setor'} name={'sector'} datas={listSector} value={sector} onchange={changeSector}></InputSelect>
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Fonercedor'} name={'supplier'} datas={listSupplier} value={supplier} onchange={changeSupplier}></InputSelect>
+                    <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Data Entrada'} type={'date'} name={'entryDate'} value={entryDate} onchange={changeEntryDate} maxLength={'10'} disabled={handleEquipmentDisabled()}></InputForm>
+                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Filial'} name={'branch'} datas={listBranch} value={branch} onchange={changeBranch} disabled={handleEquipmentDisabled()}></InputSelect>
+                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Usuário'} name={'username'} datas={listUsername} value={username} onchange={changeUsername} disabled={handleEquipmentDisabled()} required={controlRequired()}></InputSelect>
+                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Setor'} name={'sector'} datas={listSector} value={sector} onchange={changeSector} disabled={handleEquipmentDisabled()} required={controlRequired()}></InputSelect>
+                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Fonercedor'} name={'supplier'} datas={listSupplier} value={supplier} onchange={changeSupplier} disabled={handleEquipmentDisabled()}></InputSelect>
                     <div className="mb-6">
                         <button type="submit" className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">Atualizar</button>
                     </div>

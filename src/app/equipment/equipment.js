@@ -281,7 +281,6 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
                         </div>
                     </div>
                 }</FormModal>) : null}
-
             </div>
             <form className=" ml-8 flex relative" onSubmit={searchEquipment}>
                 <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-32 px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Código'} type={'text'} name={'codProd'} value={codProd} onchange={changeCodProd} maxLength={'10'}></InputForm>
