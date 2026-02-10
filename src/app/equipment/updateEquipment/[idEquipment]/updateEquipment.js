@@ -110,7 +110,9 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     }  
 
     const handleEquipmentDisabled = () => {
-        if(checked) { 
+        if(checked || dataEquipment.returnDate !== null) { 
+            setSector('')
+            setUsername('')
             return true
         }
         return false
@@ -133,9 +135,9 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
 
     const controlRequired = () => {
         if(username === '' || sector === '') {
-            return false
+            return true
         }
-        return true
+        return false
     }
 
 
@@ -148,16 +150,18 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         const idTypeEquipment = dataTypeEquipment.find(item => item.typeEquipment === type).idTypeEquipment
 
        const idSituation = () => {
-            if(username === '' && sector === '') {
-                return 4
-            } else if(checked) {
+            if(checked) {
                 return 2
+            } else if(username !== '' && sector !== '') {
+                return 4
+            } else if(username == '' && sector == '') {
+                return 1
             }
        }
 
         const data = {
             idEquipment: 0,
-            codProd: checked ? null : codProd,
+            codProd: codProd,
             equipment: equipment,
             idTypeEquipment: idTypeEquipment,
             value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
@@ -170,9 +174,9 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             idSituation: idSituation()
             
         }
-        console.log(data)
-        // await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateEquipment/${idEquipment}`, data, token, setResult)
-        // setIsModalOpen(true)
+
+        await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateEquipment/${idEquipment}`, data, token, setResult)
+        setIsModalOpen(true)
 
         let existEquipment = dataAllEquipment.find(item => item.codProd == codProd)
         
@@ -186,7 +190,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             idBranch: idBranch,
             value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
             entryDate: entryDate,
-            returnDate: null
+            returnDate: null,
 
         }
        
@@ -196,23 +200,13 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     }
 
     const returnEquipment = async () => {
-        const idUser = dataUser.find(item => item.username === username).idUser
-        const idSector = dataSector.find(item => item.sector === sector).idSector
+        const idUser = username === '' ? null : dataUser.find(item => item.username === username).idUser
+        const idSector = sector === '' ? null : dataSector.find(item => item.sector === sector).idSector
         const idBranch = dataBranch.find(item => item.branch === branch).idBranch
-        const idSupplier = dataSupplier.find(item => item.supplier === supplier).idSupplier
-        const idTypeEquipment = dataTypeEquipment.find(item => item.typeEquipment === type).idTypeEquipment
-
+     
         const data = {
-            idEquipment: 0,
-            codProd: checked ? null : codProd,
-            equipment: equipment,
-            idTypeEquipment: idTypeEquipment,
-            value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
-            idBranch: idBranch,
-            idUser: idUser,
-            idSector: idSector,
-            idSupplier: idSupplier,
-            returnDate: returnDate
+            returnDate: returnDate,
+            idSituation: 5
         }
 
         await inactivateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/returnEquipment/${idEquipment}`, data, token, setResult)
@@ -238,17 +232,19 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     }
 
     const reactivate = async () => {
-        const idUser = dataUser.find(item => item.username === username).idUser
-        const idSector = dataSector.find(item => item.sector === sector).idSector
+        const idUser = username === '' ? null : dataUser.find(item => item.username === username).idUser
+        const idSector = sector === '' ? null : dataSector.find(item => item.sector === sector).idSector
         const idBranch = dataBranch.find(item => item.branch === branch).idBranch
-        const idSupplier = dataSupplier.find(item => item.supplier === supplier).idSupplier
-        const idTypeEquipment = dataTypeEquipment.find(item => item.typeEquipment === type).idTypeEquipment
+     
 
-        let data = {
-            returnDate: null
+        let dataEquipment = {
+            returnDate: null,
+            entryDate: entryDate,
+            idSituation: 4
         }
-        await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/returnEquipment/${idEquipment}`, data, token, setResult)
-        setIsModalOpen(true)
+        
+         await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/reactivateEquipment/${idEquipment}`, dataEquipment, token, setResult)
+         setIsModalOpen(true)  
 
 
         let dataEquipmentHistory = {
@@ -262,27 +258,11 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             entryDate: entryDate,
             returnDate: null
         }
-
        
         await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addEquipmentHistory`, dataEquipmentHistory, token, setResult)
         setIsModalOpen(true)
 
-        let dataEquipment = {
-            idEquipment: 0,
-            codProd: checked ? null : codProd,
-            equipment: equipment,
-            idTypeEquipment: idTypeEquipment,
-            value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
-            idBranch: idBranch,
-            idUser: idUser,
-            idSector: idSector,
-            idSupplier: idSupplier,
-            returnDate: null,
-            entryDate: entryDate
-        }
-        
-         await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateEquipment/${idEquipment}`, dataEquipment, token, setResult)
-         setIsModalOpen(true)    
+          
     }
 
     const removerEquipment = async (e) => {
@@ -299,7 +279,8 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     return (
         <section className="bg-gray-100 py-3 w-full">
             <div className="flex justify-between">
-                <Modal classFirstDivButton={'flex items-start mb-8 lg:px-2 sm:px-0'} classFirstButton={"p-2 bg-indigo-500 rounded-lg text-white"} FirstButton={'Devolver'} classCloseModal={'fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'} classDivChildren={'bg-white rounded-lg shadow-lg w-96 p-6'} classDivButton={'flex justify-end mt-6'} classSecondButton={'px-4 py-2 text-gray-600 bg-gray-200 rounded hover:bg-gray-300'} secondButton={'Fechar'} Children={
+               {dataEquipment.returnDate == null ? (
+                 <Modal classFirstDivButton={'flex items-start mb-8 lg:px-2 sm:px-0'} classFirstButton={"p-2 bg-indigo-500 rounded-lg text-white"} FirstButton={'Devolver'} classCloseModal={'fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'} classDivChildren={'bg-white rounded-lg shadow-lg w-96 p-6'} classDivButton={'flex justify-end mt-6'} classSecondButton={'px-4 py-2 text-gray-600 bg-gray-200 rounded hover:bg-gray-300'} secondButton={'Fechar'} Children={
                     <div>
                         <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Data Devolução'} type={'date'} name={'returnDate'} value={returnDate} onchange={changeReturnDate}></InputForm>
                         <form>
@@ -313,7 +294,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
                         }></MessageModal>
                         <button onClick={returnEquipment} className="p-2 mt-4 bg-indigo-500 rounded-lg text-white">Devolver</button>
                     </div>
-                }></Modal>
+                }></Modal>) : null}
                 {dataEquipment.returnDate !== null ? (
                     <Modal classFirstDivButton={'flex items-start mb-8 lg:px-2 sm:px-0'} classFirstButton={"p-2 bg-indigo-500 rounded-lg text-white"} FirstButton={'Reativar'} classCloseModal={'fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'} classDivChildren={'bg-white rounded-lg shadow-lg w-96 p-6'} classDivButton={'flex justify-end mt-6'} classSecondButton={'px-4 py-2 text-gray-600 bg-gray-200 rounded hover:bg-gray-300'} secondButton={'Fechar'} Children={
                     <div>
