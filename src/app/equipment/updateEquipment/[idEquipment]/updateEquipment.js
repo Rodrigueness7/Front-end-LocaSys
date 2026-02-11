@@ -35,7 +35,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     const [reason, setReason] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [result, setResult] = useState('')
-     const [checked, setChecked] = useState(false)
+    const [checked, setChecked] = useState(dataEquipment['Situation'].idSituation == 2 ? true : false)
 
    
 
@@ -88,6 +88,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     }
 
     const changeSector = (e) => {
+        
         setSector(e.target.value)
 
     }
@@ -111,8 +112,6 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
 
     const handleEquipmentDisabled = () => {
         if(checked || dataEquipment.returnDate !== null) { 
-            setSector('')
-            setUsername('')
             return true
         }
         return false
@@ -134,12 +133,14 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     }
 
     const controlRequired = () => {
-        if(username === '' || sector === '') {
+        if(username !== '' || sector !== '') {
             return true
-        }
+        } 
         return false
+        
     }
 
+    console.log(username == '' )
 
     const updateEquipment = async (e) => {
         e.preventDefault()
@@ -153,9 +154,9 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             if(checked) {
                 return 2
             } else if(username !== '' && sector !== '') {
-                return 4
-            } else if(username == '' && sector == '') {
                 return 1
+            } else if(username == '' && sector == '') {
+                return 4
             }
        }
 
@@ -166,8 +167,8 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             idTypeEquipment: idTypeEquipment,
             value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
             idBranch: idBranch,
-            idUser: idUser,
-            idSector: idSector,
+            idUser: checked ? null : idUser,
+            idSector: checked ? null: idSector,
             idSupplier: idSupplier,
             entryDate: entryDate,
             entryDate: entryDate,
@@ -185,8 +186,8 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             idEquipmentHistory: 0,
             idEquipment: idEquipment,
             reason: null,
-            idUser: idUser,
-            idSector: idSector,
+            idUser: checked ? null : idUser,
+            idSector: checked ? null : idSector,
             idBranch: idBranch,
             value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
             entryDate: entryDate,
