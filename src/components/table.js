@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-export default function Table({ Table, TrThead, Th, Td, headers, data, attributos, id, href, classButton, bt, positionTd, permission, filterCheckbox = false, idTransfer }) {
+export default function Table({ Table, TrThead, Th, Td, headers, data, attributos, id, href, classButton, bt, positionTd, permission, filterCheckbox = false }) {
 
     const [currentPage, setCurrentPage] = useState(1)
     const [checkedRows, setCheckedRows] = useState([]);
@@ -65,8 +65,8 @@ export default function Table({ Table, TrThead, Th, Td, headers, data, attributo
                             <th
                                 key={index}
                                 className={`${Th} py-3 px-4 text-left 
-                                ${index === 0 ? "" : ""} 
-                                ${index === headers.length - 1 && !permission ? "rounded-tr-xl" : ""}`}
+                                ${index === 0 && filterCheckbox == false ? "rounded-tl-lg" : ""} 
+                                ${index === headers.length - 1 && !permission ? "rounded-tr-lg" : ""}`}
                             >
                                 {header}
                             </th>

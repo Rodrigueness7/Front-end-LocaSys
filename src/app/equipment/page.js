@@ -60,10 +60,10 @@ export default async function PageEquipment() {
     let dataType = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllTypeEquipment`, token)
     let dataBranch = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllBranch`, token)
     let dataSupplier = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllSupplier`, token)
-
+    let dataSituation = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllSituation`, token)
    
     
     return (
-        <Equipment tableEquipment={data} attribute={attribute} token={token} dataUser={dataUser} dataSector={dataSector} dataType={dataType} dataBranch={dataBranch} dataSupplier={dataSupplier}></Equipment>
+        <Equipment tableEquipment={data} attribute={attribute} token={token} dataUser={dataUser} dataSector={dataSector} dataType={dataType} dataBranch={dataBranch} dataSupplier={dataSupplier} dataSituation={dataSituation}></Equipment>
     )
 }
