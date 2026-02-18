@@ -19,13 +19,15 @@ export default async function Home() {
     }
 
     const branch = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllBranch`, token)
+    const dataEquipments = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllEquipment`, token)
+
 
     if(branch.message) {
         redirect('/login')
     }
 
     return (
-        <PageHome token={token} dataBranch={branch}></PageHome>
+        <PageHome dataEquipments={dataEquipments}></PageHome>
        
     )
 }

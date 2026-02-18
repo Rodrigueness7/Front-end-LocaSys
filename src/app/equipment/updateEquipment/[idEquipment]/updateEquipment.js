@@ -27,15 +27,15 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     const [type, setType] = useState(dataEquipment['TypeEquipment'].typeEquipment)
     const [value, setValue] = useState(dataEquipment.value.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2}))
     const [branch, setBranch] = useState(dataEquipment['Branch'].branch)
-    const [username, setUsername] = useState(dataEquipment['User'].username)
-    const [sector, setSector] = useState(dataEquipment['Sector'].sector)
+    const [username, setUsername] = useState(dataEquipment['User'] == null ? '' : dataEquipment['User'].username)
+    const [sector, setSector] = useState(dataEquipment['Sector'] == null ? '' : dataEquipment['Sector'].sector)
     const [supplier, setSupplier] = useState(dataEquipment['Supplier'].supplier)
     const [entryDate, setEntryDate] = useState(new Date(dataEquipment.entryDate).toISOString().split('T')[0])
     const [returnDate, setReturnDate] = useState('')
     const [reason, setReason] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [result, setResult] = useState('')
-    const [checked, setChecked] = useState(dataEquipment.codProd == null ? true : false)
+    const [checked, setChecked] = useState(dataEquipment['Situation'].idSituation == 2 ? true : false)
 
    
 
@@ -88,6 +88,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     }
 
     const changeSector = (e) => {
+        
         setSector(e.target.value)
 
     }
@@ -104,6 +105,18 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         setReturnDate(e.target.value)
     }
 
+     const handleEquipmentInactive = (e) => {
+        const { checked } = e.target  
+        setChecked(checked)
+    }  
+
+    const handleEquipmentDisabled = () => {
+        if(checked || dataEquipment.returnDate !== null) { 
+            return true
+        }
+        return false
+
+    }
 
     const handleCloseModal = () => {
         setIsModalOpen(false)
@@ -119,47 +132,67 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         }
     }
 
+    const controlRequired = () => {
+        if(username !== '' || sector !== '') {
+            return true
+        } 
+        return false
+        
+    }
+
+    console.log(username == '' )
 
     const updateEquipment = async (e) => {
         e.preventDefault()
-        const idUser = dataUser.find(item => item.username === username).idUser
-        const idSector = dataSector.find(item => item.sector === sector).idSector
+        const idUser = username === '' ? null : dataUser.find(item => item.username === username).idUser
+        const idSector = sector === '' ? null : dataSector.find(item => item.sector === sector).idSector
         const idBranch = dataBranch.find(item => item.branch === branch).idBranch
         const idSupplier = dataSupplier.find(item => item.supplier === supplier).idSupplier
         const idTypeEquipment = dataTypeEquipment.find(item => item.typeEquipment === type).idTypeEquipment
 
+       const idSituation = () => {
+            if(checked) {
+                return 2
+            } else if(username !== '' && sector !== '') {
+                return 1
+            } else if(username == '' && sector == '') {
+                return 4
+            }
+       }
+
         const data = {
             idEquipment: 0,
-            codProd: checked ? null : codProd,
+            codProd: codProd,
             equipment: equipment,
             idTypeEquipment: idTypeEquipment,
             value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
             idBranch: idBranch,
-            idUser: idUser,
-            idSector: idSector,
+            idUser: checked ? null : idUser,
+            idSector: checked ? null: idSector,
             idSupplier: idSupplier,
-            entryDate: entryDate
+            entryDate: entryDate,
+            entryDate: entryDate,
+            idSituation: idSituation()
+            
         }
 
         await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateEquipment/${idEquipment}`, data, token, setResult)
         setIsModalOpen(true)
-       
 
         let existEquipment = dataAllEquipment.find(item => item.codProd == codProd)
         
-
         if(existEquipment == undefined || codProd) {
             let dataEquipmentHistory = {
             idEquipmentHistory: 0,
             idEquipment: idEquipment,
             reason: null,
-            idUser: idUser,
-            idSector: idSector,
+            idUser: checked ? null : idUser,
+            idSector: checked ? null : idSector,
             idBranch: idBranch,
             value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
             entryDate: entryDate,
             returnDate: null,
-            entryDate: entryDate
+
         }
        
         await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addEquipmentHistory`, dataEquipmentHistory, token, setResult)
@@ -168,23 +201,13 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     }
 
     const returnEquipment = async () => {
-        const idUser = dataUser.find(item => item.username === username).idUser
-        const idSector = dataSector.find(item => item.sector === sector).idSector
+        const idUser = username === '' ? null : dataUser.find(item => item.username === username).idUser
+        const idSector = sector === '' ? null : dataSector.find(item => item.sector === sector).idSector
         const idBranch = dataBranch.find(item => item.branch === branch).idBranch
-        const idSupplier = dataSupplier.find(item => item.supplier === supplier).idSupplier
-        const idTypeEquipment = dataTypeEquipment.find(item => item.typeEquipment === type).idTypeEquipment
-
+     
         const data = {
-            idEquipment: 0,
-            codProd: checked ? null : codProd,
-            equipment: equipment,
-            idTypeEquipment: idTypeEquipment,
-            value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
-            idBranch: idBranch,
-            idUser: idUser,
-            idSector: idSector,
-            idSupplier: idSupplier,
-            returnDate: returnDate
+            returnDate: returnDate,
+            idSituation: 5
         }
 
         await inactivateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/returnEquipment/${idEquipment}`, data, token, setResult)
@@ -210,17 +233,19 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     }
 
     const reactivate = async () => {
-        const idUser = dataUser.find(item => item.username === username).idUser
-        const idSector = dataSector.find(item => item.sector === sector).idSector
+        const idUser = username === '' ? null : dataUser.find(item => item.username === username).idUser
+        const idSector = sector === '' ? null : dataSector.find(item => item.sector === sector).idSector
         const idBranch = dataBranch.find(item => item.branch === branch).idBranch
-        const idSupplier = dataSupplier.find(item => item.supplier === supplier).idSupplier
-        const idTypeEquipment = dataTypeEquipment.find(item => item.typeEquipment === type).idTypeEquipment
+     
 
-        let data = {
-            returnDate: null
+        let dataEquipment = {
+            returnDate: null,
+            entryDate: entryDate,
+            idSituation: 4
         }
-        await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/returnEquipment/${idEquipment}`, data, token, setResult)
-        setIsModalOpen(true)
+        
+         await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/reactivateEquipment/${idEquipment}`, dataEquipment, token, setResult)
+         setIsModalOpen(true)  
 
 
         let dataEquipmentHistory = {
@@ -234,27 +259,11 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             entryDate: entryDate,
             returnDate: null
         }
-
        
         await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addEquipmentHistory`, dataEquipmentHistory, token, setResult)
         setIsModalOpen(true)
 
-        let dataEquipment = {
-            idEquipment: 0,
-            codProd: checked ? null : codProd,
-            equipment: equipment,
-            idTypeEquipment: idTypeEquipment,
-            value: parseFloat(value.replace(/[^\d.,]/g, '').replace(/\./g, '').replace(/,/g, '.')),
-            idBranch: idBranch,
-            idUser: idUser,
-            idSector: idSector,
-            idSupplier: idSupplier,
-            returnDate: null,
-            entryDate: entryDate
-        }
-        
-         await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateEquipment/${idEquipment}`, dataEquipment, token, setResult)
-         setIsModalOpen(true)    
+          
     }
 
     const removerEquipment = async (e) => {
@@ -271,7 +280,8 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     return (
         <section className="bg-gray-100 py-3 w-full">
             <div className="flex justify-between">
-                <Modal classFirstDivButton={'flex items-start mb-8 lg:px-2 sm:px-0'} classFirstButton={"p-2 bg-indigo-500 rounded-lg text-white"} FirstButton={'Devolver'} classCloseModal={'fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'} classDivChildren={'bg-white rounded-lg shadow-lg w-96 p-6'} classDivButton={'flex justify-end mt-6'} classSecondButton={'px-4 py-2 text-gray-600 bg-gray-200 rounded hover:bg-gray-300'} secondButton={'Fechar'} Children={
+               {dataEquipment.returnDate == null ? (
+                 <Modal classFirstDivButton={'flex items-start mb-8 lg:px-2 sm:px-0'} classFirstButton={"p-2 bg-indigo-500 rounded-lg text-white"} FirstButton={'Devolver'} classCloseModal={'fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'} classDivChildren={'bg-white rounded-lg shadow-lg w-96 p-6'} classDivButton={'flex justify-end mt-6'} classSecondButton={'px-4 py-2 text-gray-600 bg-gray-200 rounded hover:bg-gray-300'} secondButton={'Fechar'} Children={
                     <div>
                         <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Data Devolução'} type={'date'} name={'returnDate'} value={returnDate} onchange={changeReturnDate}></InputForm>
                         <form>
@@ -285,7 +295,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
                         }></MessageModal>
                         <button onClick={returnEquipment} className="p-2 mt-4 bg-indigo-500 rounded-lg text-white">Devolver</button>
                     </div>
-                }></Modal>
+                }></Modal>) : null}
                 {dataEquipment.returnDate !== null ? (
                     <Modal classFirstDivButton={'flex items-start mb-8 lg:px-2 sm:px-0'} classFirstButton={"p-2 bg-indigo-500 rounded-lg text-white"} FirstButton={'Reativar'} classCloseModal={'fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'} classDivChildren={'bg-white rounded-lg shadow-lg w-96 p-6'} classDivButton={'flex justify-end mt-6'} classSecondButton={'px-4 py-2 text-gray-600 bg-gray-200 rounded hover:bg-gray-300'} secondButton={'Fechar'} Children={
                     <div>
@@ -320,16 +330,20 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
                 <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">Atualizar Equipamento</h1>
                 <form className="grid grid-cols-1 gap-x-8 gap-y-4" onSubmit={updateEquipment}>
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-0'} label={'Código'} type={'text'} name={'codProd'} value={codProd} onchange={changeCodProd} disabled={true} maxLength={'10'}></InputForm>
-                    <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Equipamento'} type={'text'} name={'equipment'} value={equipment} onchange={changeEquipment} required={true}></InputForm>
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Tipo'} name={'typeEquipment'} datas={listTypeEquipment} value={type} onchange={changeType}></InputSelect>
+                    <div className="flex items-center mb-4">
+                        <input type="checkbox" name="Equipamento sem Código" checked={checked} onChange={handleEquipmentInactive}></input>
+                        <label className="ml-2 text-sm text-gray-700">Inativar Equipamento</label>
+                    </div>
+                    <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Equipamento'} type={'text'} name={'equipment'} value={equipment} onchange={changeEquipment} required={true} disabled={handleEquipmentDisabled()}></InputForm>
+                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Tipo'} name={'typeEquipment'} datas={listTypeEquipment} value={type} onchange={changeType} disabled={handleEquipmentDisabled()}></InputSelect>
                     {numberValue !== undefined ? (
-                        <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Valor'} type={'decimal'} name={'value'} value={value} onchange={changeValue} maxLength={'10'} onKeyDown={pointLockValue} required={true}></InputForm>
+                        <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Valor'} type={'decimal'} name={'value'} value={value} onchange={changeValue} maxLength={'10'} onKeyDown={pointLockValue} required={controlRequired()} disabled={handleEquipmentDisabled()}></InputForm>
                     ) : null}
-                    <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Data Entrada'} type={'date'} name={'entryDate'} value={entryDate} onchange={changeEntryDate} maxLength={'10'} required={true}></InputForm>
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Filial'} name={'branch'} datas={listBranch} value={branch} onchange={changeBranch}></InputSelect>
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Usuário'} name={'username'} datas={listUsername} value={username} onchange={changeUsername}></InputSelect>
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Setor'} name={'sector'} datas={listSector} value={sector} onchange={changeSector}></InputSelect>
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Fonercedor'} name={'supplier'} datas={listSupplier} value={supplier} onchange={changeSupplier}></InputSelect>
+                    <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Data Entrada'} type={'date'} name={'entryDate'} value={entryDate} onchange={changeEntryDate} maxLength={'10'} disabled={handleEquipmentDisabled()}></InputForm>
+                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Filial'} name={'branch'} datas={listBranch} value={branch} onchange={changeBranch} disabled={handleEquipmentDisabled()}></InputSelect>
+                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Usuário'} name={'username'} datas={listUsername} value={username} onchange={changeUsername} disabled={handleEquipmentDisabled()} required={controlRequired()}></InputSelect>
+                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Setor'} name={'sector'} datas={listSector} value={sector} onchange={changeSector} disabled={handleEquipmentDisabled()} required={controlRequired()}></InputSelect>
+                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Fonercedor'} name={'supplier'} datas={listSupplier} value={supplier} onchange={changeSupplier} disabled={handleEquipmentDisabled()}></InputSelect>
                     <div className="mb-6">
                         <button type="submit" className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">Atualizar</button>
                     </div>

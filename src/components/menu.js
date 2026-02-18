@@ -262,7 +262,7 @@ export default function Menu({ token, dataBranch, dataEquipmentRental }) {
                     <button onClick={handleExit}>Sair</button>
                 </div>
                 </div>
-                <div className="text-white absolute bottom-4 left-2">Usuário: {username}</div>
+                <div className="text-white absolute bottom-6 left-2">Usuário: {username}</div>
                 <div className="text-white absolute bottom-0 left-2">Data de Login: {dataLogin}</div>
                 
             </div>

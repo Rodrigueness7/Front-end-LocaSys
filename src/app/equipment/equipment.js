@@ -12,7 +12,8 @@ import { useRouter } from "next/navigation"
 import { use, useCallback, useEffect, useMemo, useState } from "react"
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
 
-export default function Equipment({ tableEquipment, attribute, token, dataUser, dataSector, dataType, dataBranch, dataSupplier, idTransfer }) {
+export default function Equipment({ tableEquipment, attribute, token, dataUser, dataSector, dataType, dataBranch, dataSupplier, dataSituation }) {
+
 
     const users = dataUser.map(item => item.username)
     const sectors = dataSector.map(item => item.sector)
@@ -21,8 +22,9 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
     const suppliers = dataSupplier.map(item => item.supplier)
 
 
+
     const router = useRouter()
-    const [dataEquipment, setDataEquipment] = useState(tableEquipment)
+    const [dataEquipment, setDataEquipment] = useState(tableEquipment.filter(item => item['Situação'] !== 'Inativo' && item['Situação'] !== 'Devolvido'))
     const [codProd, setCodProd] = useState('')
     const [equipment, setEquipment] = useState('')
     const [type, setType] = useState('')
@@ -38,6 +40,9 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [result, setResult] = useState('')
     const [listIdEquipment, setListIdEquipment] = useState([])
+    const [isOpen, setIsOpen] = useState(false)
+    const [selectedOptions, setSelectedOptions] = useState([])
+
 
 
 
@@ -68,6 +73,17 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
         };
     }, []);
 
+    const handleCheckboxChange = (e) => {
+        const { value, checked } = e.target;
+
+        if (checked) {
+            setSelectedOptions((prev) => [...prev, value]);
+        } else {
+            setSelectedOptions((prev) =>
+                prev.filter((option) => option !== value)
+            );
+        }
+    };
 
 
     const generation = async () => {
@@ -81,16 +97,28 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
 
 
     const filter = () => {
-        return tableEquipment.filter((item) => {
-            return (
-                (codProd ? item['Código'] == codProd : true) &&
-                (equipment ? item['Equipamento'] === equipment : true) &&
-                (type ? item['Tipo'] === type : true) &&
-                (branch ? item['Filial'] === branch : true) &&
-                (username ? item['Usuario'] === username : true)
-            )
-        })
-    }
+    return tableEquipment.filter((item) => {
+
+        if (selectedOptions.length === 0) {
+            if (item['Situação'] === 'Inativo' || item['Situação'] === 'Devolvido') {
+                return false;
+            }
+        }
+
+        return (
+            (codProd ? item['Código'] == codProd : true) &&
+            (equipment ? item['Equipamento'] === equipment : true) &&
+            (type ? item['Tipo'] === type : true) &&
+            (branch ? item['Filial'] === branch : true) &&
+            (username ? item['Usuario'] === username : true) &&
+            (selectedOptions.length > 0 
+                ? selectedOptions.includes(item['Situação']) 
+                : true)
+        );
+    });
+};
+
+
 
     const getOptions = useCallback((field, ignore = '') => {
         const dataFilter = tableEquipment.filter((item) =>
@@ -98,11 +126,12 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
             (equipment && ignore != 'Equipamento' ? item['Equipamento'] === equipment : true) &&
             (type && ignore != 'Tipo' ? item['Tipo'] === type : true) &&
             (branch && ignore != 'Filial' ? item['Filial'] === branch : true) &&
-            (username && ignore != 'Usuario' ? item['Usuario'] === username : true)
+            (username && ignore != 'Usuario' ? item['Usuario'] === username : true) &&
+            (selectedOptions.length > 0 && ignore != 'Situação' ? selectedOptions.includes(item['Situação']) : true)
         );
         const options = dataFilter.map(item => item[field]);
         return [...new Set(options)];
-    }, [codProd, equipment, type, branch, username, tableEquipment]);
+    }, [codProd, equipment, type, branch, username, selectedOptions, tableEquipment]);
 
 
     const optionsBranch = useMemo(() => getOptions('Filial', 'Filial'), [getOptions]).sort((a, b) => {
@@ -201,6 +230,7 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
         e.preventDefault()
 
         setDataEquipment(filter())
+        setIsOpen(false)
     }
 
     const handleCloseModal = () => {
@@ -281,20 +311,39 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
                         </div>
                     </div>
                 }</FormModal>) : null}
-
             </div>
             <form className=" ml-8 flex relative" onSubmit={searchEquipment}>
                 <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-32 px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Código'} type={'text'} name={'codProd'} value={codProd} onchange={changeCodProd} maxLength={'10'}></InputForm>
-                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-45 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Equipamento'} name={'equipment'} datas={optionsEquipment} value={equipment} onchange={changeEquipment} required={false}></InputSelect>
-                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-40 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Tipo'} name={'type'} datas={optionsType} value={type} onchange={changeType} required={false}></InputSelect>
-                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-40 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Filial'} name={'branch'} datas={optionsBranch} value={branch} onchange={changeBranch} required={false}></InputSelect>
-                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-40 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Usuário'} name={'username'} datas={optionsUsername} value={username} onchange={changeUsername} required={false}></InputSelect>
+                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-40 min-w-[160px] max-w-[200px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Equipamento'} name={'equipment'} datas={optionsEquipment} value={equipment} onchange={changeEquipment} required={false}></InputSelect>
+                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-45 min-w-[160px] max-w-[250px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Tipo'} name={'type'} datas={optionsType} value={type} onchange={changeType} required={false}></InputSelect>
+                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-40 min-w-[160px] max-w-[200px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Filial'} name={'branch'} datas={optionsBranch} value={branch} onchange={changeBranch} required={false}></InputSelect>
+                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-40 min-w-[160px] max-w-[200px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Usuário'} name={'username'} datas={optionsUsername} value={username} onchange={changeUsername} required={false}></InputSelect>
+                <div >
+                    <div
+                        onClick={() => setIsOpen(!isOpen)}
+                        className="mt-6 cursor-pointer flex items-center px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm text-black w-56 "
+                    >
+                        {selectedOptions.length > 0 ? selectedOptions.join(', ') : 'Selecione Situações'}
+                    </div>
+
+                    {isOpen && (
+                        <div className="absolute mt-1 w-56 bg-white border border-gray-300 rounded-md shadow-lg z-50  max-h-60 overflow-y-auto">
+                            {dataSituation?.sucessMessage?.map((situation, index) => (
+                                <label key={index} className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                                    <input type="checkbox" value={situation.situation} checked={selectedOptions.includes(situation.situation)} onChange={handleCheckboxChange} className="mr-2" />
+                                    {situation.situation}
+                                </label>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
                 <div className="flex items-center ml-2 mt-2">
                     <button className='p-3 bg-indigo-500 rounded-lg text-white' type="submit">Buscar</button>
                 </div>
             </form>
             <div className='ml-8 flex-1 h-[67%] overflow-x-auto'>
-                <Table filterCheckbox={true} Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white text-nowrap rounded-lg'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={attribute} data={dataEquipment} attributos={attribute} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./equipment/updateEquipment'} bt={'...'} permission={permission.find(number => number == '3')}></Table>
+                <Table filterCheckbox={true} Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white text-nowrap rounded-lg'} Th={'py-3 px-4 text-left '} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={attribute} data={dataEquipment} attributos={attribute} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./equipment/updateEquipment'} bt={'...'} permission={permission.find(number => number == '3')}></Table>
             </div>
         </div>
     )
