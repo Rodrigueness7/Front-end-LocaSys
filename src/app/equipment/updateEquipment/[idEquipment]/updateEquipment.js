@@ -140,7 +140,6 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         
     }
 
-    console.log(username == '' )
 
     const updateEquipment = async (e) => {
         e.preventDefault()

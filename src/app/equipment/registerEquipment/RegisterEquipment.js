@@ -114,10 +114,11 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
     }
 
      const controlRequired = () => {
-        if(username === '' || sector === '') {
+        if(username !== '' || sector !== '') {
             return true
-        }
+        } 
         return false
+        
     }
 
     const addEquipment = async (e) => {
