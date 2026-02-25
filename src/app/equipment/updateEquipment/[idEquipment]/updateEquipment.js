@@ -36,7 +36,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [result, setResult] = useState('')
     const [checked, setChecked] = useState(dataEquipment['Situation'].idSituation == 2 ? true : false)
-
+    const [replaceEquipment, setReplaceEquipment] = useState('')
    
 
     const changeCodProd = (e) => {
@@ -138,6 +138,10 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         } 
         return false
         
+    }
+
+    const handleReplace = (e) => {
+        setReplaceEquipment(e.target.value)
     }
 
 
@@ -276,10 +280,92 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         setIsModalOpen(true)
     }
 
+    const replace = () => {
+        const idUser = username === '' ? null : dataUser.find(item => item.username === username).idUser
+        const idSector = sector === '' ? null : dataSector.find(item => item.sector === sector).idSector
+       
+        const findEquipment = dataAllEquipment.find(item => item.codProd == replaceEquipment) === undefined ? null : dataAllEquipment.find(item => item.codProd == replaceEquipment)
+
+        if(findEquipment == null) {
+            setResult({error: 'Equipamento não encontrado'})
+            setIsModalOpen(true)
+            return;
+        }
+
+        if(findEquipment.codProd == dataEquipment.codProd) {
+            setResult({error: 'Não é possível substituir pelo mesmo equipamento'})
+            setIsModalOpen(true)
+            return;
+        }   
+
+        
+
+        const data = [{
+            idEquipment: findEquipment.idEquipment,
+            codProd: findEquipment.codProd,
+            equipment: findEquipment.equipment,
+            idTypeEquipment: findEquipment['TypeEquipment'].idTypeEquipment,
+            value: findEquipment.value,
+            idBranch: findEquipment['Branch'].idBranch,
+            idUser: idUser,
+            idSector: idSector,
+            idSupplier: findEquipment['Supplier'].idSupplier,
+            entryDate: findEquipment.entryDate,
+            idSituation: dataEquipment['Situation'].idSituation
+        },
+        {
+            idEquipment: dataEquipment.idEquipment,
+            codProd: dataEquipment.codProd,
+            equipment: dataEquipment.equipment,
+            idTypeEquipment: dataEquipment['TypeEquipment'].idTypeEquipment,
+            value: dataEquipment.value,
+            idBranch: dataEquipment['Branch'].idBranch,
+            idUser: findEquipment['User'] == null ? null : dataEquipment['User'].idUser,
+            idSector: findEquipment['Sector'] == null ? null : dataEquipment['Sector'].idSector,
+            idSupplier: dataEquipment['Supplier'].idSupplier,
+            entryDate: dataEquipment.entryDate,
+            idSituation: findEquipment['Situation'].idSituation
+        }]
+
+        const dataEquipmentHistory = [{
+            idEquipmentHistory: 0,
+            idEquipment: findEquipment.idEquipment, 
+            reason: null,
+            idUser: idUser,
+            idSector: idSector,
+            idBranch: findEquipment['Branch'].idBranch,
+            value: findEquipment.value,
+            entryDate: findEquipment.entryDate,
+            returnDate: findEquipment.returnDate
+        },
+        {   idEquipmentHistory: 0,
+            idEquipment: dataEquipment.idEquipment, 
+            reason: null,
+            idUser: findEquipment['User'] == null ? null : dataEquipment['User'].idUser,
+            idSector: findEquipment['Sector'] == null ? null : dataEquipment['Sector'].idSector,
+            idBranch: dataEquipment['Branch'].idBranch,
+            value: dataEquipment.value,
+            entryDate: dataEquipment.entryDate,
+            returnDate: dataEquipment.returnDate
+        }]
+
+        
+
+            data.map(async (item) => {
+                await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateEquipment/${item.idEquipment}`, item, token, setResult)
+            })
+            
+            dataEquipmentHistory.map(async (item) => {  
+                    await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addEquipmentHistory`, item, token, setResult)
+            })
+                setIsModalOpen(true)
+    }
+
     return (
         <section className="bg-gray-100 py-3 w-full">
             <div className="flex justify-between">
-               {dataEquipment.returnDate == null ? (
+              <div className = 'flex flex-col h-0'>
+                 {dataEquipment.returnDate == null ? (
                  <Modal classFirstDivButton={'flex items-start mb-8 lg:px-2 sm:px-0'} classFirstButton={"p-2 bg-indigo-500 rounded-lg text-white"} FirstButton={'Devolver'} classCloseModal={'fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'} classDivChildren={'bg-white rounded-lg shadow-lg w-96 p-6'} classDivButton={'flex justify-end mt-6'} classSecondButton={'px-4 py-2 text-gray-600 bg-gray-200 rounded hover:bg-gray-300'} secondButton={'Fechar'} Children={
                     <div>
                         <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Data Devolução'} type={'date'} name={'returnDate'} value={returnDate} onchange={changeReturnDate}></InputForm>
@@ -295,6 +381,20 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
                         <button onClick={returnEquipment} className="p-2 mt-4 bg-indigo-500 rounded-lg text-white">Devolver</button>
                     </div>
                 }></Modal>) : null}
+                 <Modal classFirstDivButton={'flex items-start mb-8 lg:px-2 sm:px-0'} classFirstButton={"p-2 bg-indigo-500 rounded-lg text-white"} FirstButton={'Substituir'} classCloseModal={'fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'} classDivChildren={'bg-white rounded-lg shadow-lg w-96 p-6'} classDivButton={'flex justify-end mt-6'} classSecondButton={'px-4 py-2 text-gray-600 bg-gray-200 rounded hover:bg-gray-300'} secondButton={'Fechar'} Children={
+                    <div className="relative">
+                        <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Equipamento Substituto'} type={'text'} name={'replaceEquipment'} value={replaceEquipment} onchange={handleReplace} disabled={false}></InputForm>
+                        <MessageModal isOpen={isModalOpen} onClose={handleCloseModal} message={result.error ? result.error : result.success} icone={
+                            result?.error ? (<FaTimesCircle className="text-red-500 w-24 h-24 mx-auto mb-4 rounded-full" />) : (
+                                <FaCheckCircle className="text-green-500 w-24 h-24 mx-auto mb-4 rounded-full" />
+                            )
+                        }></MessageModal>
+                        <div className="absolute bottom-15">
+                            <button onClick={replace} className="p-2 mt-4 bg-indigo-500 rounded-lg text-white w-24">Substituir</button>
+                        </div>
+                    </div>
+                }></Modal>
+              </div>
                 {dataEquipment.returnDate !== null ? (
                     <Modal classFirstDivButton={'flex items-start mb-8 lg:px-2 sm:px-0'} classFirstButton={"p-2 bg-indigo-500 rounded-lg text-white"} FirstButton={'Reativar'} classCloseModal={'fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'} classDivChildren={'bg-white rounded-lg shadow-lg w-96 p-6'} classDivButton={'flex justify-end mt-6'} classSecondButton={'px-4 py-2 text-gray-600 bg-gray-200 rounded hover:bg-gray-300'} secondButton={'Fechar'} Children={
                     <div>
@@ -323,8 +423,9 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
                     </div>
                 }></Modal>
                 ): null}
-                
+               
             </div>
+            
             <div className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
                 <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">Atualizar Equipamento</h1>
                 <form className="grid grid-cols-1 gap-x-8 gap-y-4" onSubmit={updateEquipment}>
