@@ -83,8 +83,8 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
                 entryDate: items.entryDate == null ? '' : new Date(items.entryDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
                 returnDateKM: '',
                 returnDate: items.returnDate == null ? '' : new Date(items.returnDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
-                user: items['User'].username,
-                sector: items['Sector'].sector
+                user: items['User'] == null ? '' : items['User'].username,
+                sector: items['Sector'] == null ? '' : items['Sector'].sector
             }
 
             
@@ -105,9 +105,10 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
         }
 
         let data
+        
 
         if (filterEquipment.length > 0 && filterEquipment[0].entryDate <= finishPeriod && (filterEquipment[0].returnDate == null || filterEquipment[0].returnDate <= finishPeriod)) {
-
+            // console.log(item.init == null ? null : new Date(item.init).toLocaleDateString('pt-BR', { timeZone: 'UTC' }))
             return data = {
                 id: item.idEquipmentRental,
                 codProd: item.codProd,
@@ -115,15 +116,17 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
                 valueKm: item.value,
                 value: filterEquipment[0].value,
                 branch: filterEquipment[0]['Branch'].branch,
-                entryDateKM: item.init == null ? '' : new Date(item.init).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                entryDateKM: item.init == null ? null : new Date(item.init).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
                 entryDate: filterEquipment[0].entryDate == null ? '' : new Date(filterEquipment[0].entryDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
                 returnDateKM: item.finish == null ? "" : new Date(item.finish).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
                 returnDate: filterEquipment[0].returnDate == null ? "" : new Date(filterEquipment[0].returnDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
-                user: filterEquipment[0]['User'].username,
-                sector: filterEquipment[0]['Sector'].sector
+                user: filterEquipment[0]['User'] == null ? '' : filterEquipment[0]['User'].username,
+                sector: filterEquipment[0]['Sector'] == null ? '' : filterEquipment[0]['Sector'].sector
 
+            
             }
         } else {
+            console.log(item.init == null ? '' : new Date(item.init).toLocaleDateString('pt-BR', { timeZone: 'UTC' }))
             return data = {
                 id: item.idEquipmentRental,
                 codProd: item.codProd,
@@ -131,7 +134,7 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
                 valueKm: item.value,
                 value: '',
                 branch: '',
-                entryDateKM: item.init == null ? "" : new Date(item.init).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                entryDateKM: item.init == null ? '' : new Date(item.init).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
                 entryDate: '',
                 returnDateKM: item.finish == null ? "" : new Date(item.finish).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
                 returnDate: '',
@@ -167,8 +170,8 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
                 entryDate: items.entryDate == null ? '' : new Date(items.entryDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
                 returnDateKM: equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value == items.value).finish == null ? "" : new Date(equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value == items.value).finish).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),  
                 returnDate: items.returnDate == null ? "" : new Date(items.returnDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
-                user: items['User'].username,
-                sector: items['Sector'].sector
+                user: items['User'] == null ? '' : items['User'].username,
+                sector: items['Sector'] == null ? '' : items['Sector'].sector
         }
      }
     })
@@ -194,8 +197,8 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
                 entryDate: items.entryDate == null ? '' : new Date(items.entryDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
                 returnDateKM: equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value != items.value).finish == null ? "" : new Date(equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value != items.value).finish).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
                 returnDate: items.returnDate == null ? "" : new Date(items.returnDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
-                user: items['User'].username,
-                sector: items['Sector'].sector
+                user: items['User'] == null ? '' : items['User'].username,
+                sector: items['Sector'] == null ? '' : items['Sector'].sector
                 
         }
     }})
@@ -213,7 +216,7 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
 
         if (equipmentRental.length == 0) {
             return (
-                alert('Não há dados para comparar')
+                alert('Não há dados para Comparar')
             )
         }
 
@@ -309,7 +312,7 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
             </form>
             {showTable && (
                 <div className="ml-8 flex-1 h-[65%] overflow-x-auto">
-                    <Table Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white sticky top-0 z-10 text-nowrap rounded-lg'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={['Código', 'Equipamento', 'Valor K&M', 'Valor', 'Filial', 'Entrada K&M', 'Entrada', 'Retorno K&M', 'Retorno', 'Usuário', 'Setor']} data={dataReport} attributos={['codProd', 'equipment', 'valueKm', 'value', 'branch', 'entryDateKm', 'entryDate', 'returnDateKm', 'returnDate', 'user', 'sector']} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'#'} bt={'...'}></Table>
+                    <Table Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white sticky top-0 z-10 text-nowrap rounded-lg'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={['Código', 'Equipamento', 'Valor K&M', 'Valor', 'Filial', 'Entrada K&M', 'Entrada', 'Retorno K&M', 'Retorno', 'Usuário', 'Setor']} data={dataReport} attributos={['codProd', 'equipment', 'valueKm', 'value', 'branch', 'entryDateKM', 'entryDate', 'returnDateKM', 'returnDate', 'user', 'sector']} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'#'} bt={'...'}></Table>
                 </div>
             )}
         </div>
