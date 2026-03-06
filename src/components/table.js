@@ -2,7 +2,25 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-export default function Table({ Table, TrThead, Th, Td, headers, data, attributos, id, href, classButton, bt, positionTd, permission, filterCheckbox = false }) {
+export default function Table({ 
+    Table, 
+    TrThead, 
+    Th, 
+    Td, 
+    headers, 
+    data, 
+    attributos, 
+    id, 
+    href, 
+    classButton, 
+    bt, 
+    positionTd, 
+    permission, 
+    filterCheckbox = false,
+    handleSort,
+    sortColumn,
+    sortDirection
+}) {
 
     const [currentPage, setCurrentPage] = useState(1)
     const [checkedRows, setCheckedRows] = useState([]);
@@ -63,12 +81,16 @@ export default function Table({ Table, TrThead, Th, Td, headers, data, attributo
                         {filterCheckbox == true ? (<th className='rounded-tl-lg'></th>) : null}
                         {headers.map((header, index) => (
                             <th
+                                onClick={() => {handleSort(header)}} 
                                 key={index}
-                                className={`${Th} py-3 px-4 text-left 
+                                className={`${Th} py-3 px-4 text-left cursor-pointer
                                 ${index === 0 && filterCheckbox == false ? "rounded-tl-lg" : ""} 
                                 ${index === headers.length - 1 && !permission ? "rounded-tr-lg" : ""}`}
                             >
                                 {header}
+                                {sortColumn === header && (
+                                    <span className="ml-1">{sortDirection === 'asc' ? '▲' : '▼'}</span>
+                                )}
                             </th>
                         ))}
                         {permission && (<th className={`${Th} py-3 px-4 text-left rounded-tr-lg`}></th>)}

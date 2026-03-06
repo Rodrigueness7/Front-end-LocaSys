@@ -3,6 +3,7 @@
 import InputForm from "@/components/InputForm"
 import InputSelect from "@/components/InputSelect"
 import Table from "@/components/table"
+import orderData from "@/utils/orderData"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useCallback, useEffect, useMemo, useState } from "react"
@@ -15,7 +16,10 @@ export default function Sector({ tableSector }) {
     const [sector, setSector] = useState('')
     const [branch, setBranch] = useState('')
     const [permission, setPermission] = useState([])
-    
+    const [sortColumn, setSortColumn] = useState('')
+    const [sortDirection, setSortDirection] = useState('asc')
+
+  
     
         useEffect(() => {
             let data = localStorage.getItem('permission')
@@ -27,15 +31,14 @@ export default function Sector({ tableSector }) {
             
         }, [router])
 
-    let data = dataSector.map((item) => {
-        let dataTable = {
-            ['id'] : item.idSector,
-            ['Setor'] : item.sector,
-            ['Filial'] : item.branch
-        }
-        return dataTable
-    })
 
+
+    const sortData = orderData(dataSector, sortColumn, sortDirection, setSortColumn, setSortDirection).sortedData
+    const handleSort = orderData(dataSector, sortColumn, sortDirection, setSortColumn, setSortDirection).handleSort
+    const sortColumnState = orderData(dataSector, sortColumn, sortDirection, setSortColumn, setSortDirection).sortColumn
+    const sortDirectionState = orderData(dataSector, sortColumn, sortDirection, setSortColumn, setSortDirection).sortDirection
+
+    console.log(dataSector)
    
 
     const filter = () => {
@@ -113,7 +116,7 @@ export default function Sector({ tableSector }) {
                 </div>
             </form>
             <div className='ml-8 flex-1 h-[65%] overflow-x-auto w-1/3'>
-                <Table Table={'table-auto bg-white shadow-md rounded-lg w-full '} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black'} headers={['id', 'Setor', 'Filial']} data={dataSector} attributos={['idSector', 'sector', 'branch']} id={'idSector'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./sector/updateSector'} bt={'...'} permission={permission.find(number => number == '21')}></Table>
+                <Table Table={'table-auto bg-white shadow-md rounded-lg w-full '} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black'} headers={['id', 'Setor', 'Filial']} data={sortData} attributos={['id', 'Setor', 'Filial']} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./sector/updateSector'} bt={'...'} permission={permission.find(number => number == '21')} handleSort={handleSort} sortColumn={sortColumnState} sortDirection={sortDirectionState}></Table>
             </div>
         </div>
     )

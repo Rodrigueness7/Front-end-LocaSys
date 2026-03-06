@@ -19,6 +19,15 @@ export default async function PageSector() {
 
     const sector = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllSector`, token)
 
+    let formatedSector = sector.map((item) => {
+            let dataTable = {
+                ['id'] : item.idSector,
+                ['Setor'] : item.sector,
+                ['Filial'] : item['Branch'].branch
+            }
+            return dataTable
+        })
+
     if (sector.message) {
         redirect('/login')
     }
@@ -37,6 +46,6 @@ export default async function PageSector() {
     })
 
     return (
-        <Sector tableSector={data}></Sector>
+        <Sector tableSector={formatedSector}></Sector>
     )
 }
