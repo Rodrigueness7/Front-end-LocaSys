@@ -2,7 +2,7 @@
 
 import { useMemo } from "react"
 
-export default function orderData(data, sortColumn, sortDirection, setSortColumn, setSortDirection) {
+export default function OrderData(data, sortColumn, sortDirection, setSortColumn, setSortDirection) {
     
     const sortedData = useMemo(() => {
         if (!sortColumn) return data
@@ -18,7 +18,6 @@ export default function orderData(data, sortColumn, sortDirection, setSortColumn
     }, [data, sortColumn, sortDirection])
     
     const handleSort = (column) => {
-        console.log(sortColumn)
         if (sortColumn === column) {
             setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc')   
         } else {

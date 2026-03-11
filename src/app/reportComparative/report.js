@@ -2,6 +2,7 @@
 import InputForm from "@/components/InputForm";
 import InputSelect from "@/components/InputSelect";
 import Table from "@/components/table";
+import orderData from "@/utils/orderData";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -13,14 +14,15 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
     const router = useRouter()
     const [initPeriod, setInitPeriod] = useState('')
     const [finishPeriod, setFinishPeriod] = useState('')
-    const [dataReport, setDataReport] = useState('')
+    const [dataReport, setDataReport] = useState([])
     const [showTable, setShowTable] = useState(false)
     const [report, setReport] = useState(listOption[0])
     const [branchSelected, setBranchSelected] = useState('')
     const [isCheked, setIsChecked] = useState(false)
+    const [sortColumnState, setSortColumnState] = useState('')
+    const [sortDirectionState, setSortDirectionState] = useState('asc')
   
    
-    
     
     const period = equipmentRental.filter(item => {
        const idMax = Math.max(...equipmentRental.filter(itens => itens['Branch'].branch === item['Branch'].branch).map(i => i.idEquipmentRental))
@@ -55,8 +57,7 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
     }
 
     const headquarter = branchSelected != '' ? branch.find(item => item.branch == branchSelected).headquarter : ''
-    
-    console.log(headquarter)
+
     
     let filterEquipmentHistory = branchSelected != '' ? equipmentHistory.filter( items => equipmentRental.some( itens => itens.value == items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate <= finishPeriod) && items['Branch'].branch == branchSelected)) : equipmentHistory.filter( items => equipmentRental.some( itens => itens.value == items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate <= finishPeriod)))
 
@@ -108,7 +109,6 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
         
 
         if (filterEquipment.length > 0 && filterEquipment[0].entryDate <= finishPeriod && (filterEquipment[0].returnDate == null || filterEquipment[0].returnDate <= finishPeriod)) {
-            // console.log(item.init == null ? null : new Date(item.init).toLocaleDateString('pt-BR', { timeZone: 'UTC' }))
             return data = {
                 id: item.idEquipmentRental,
                 codProd: item.codProd,
@@ -126,7 +126,6 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
             
             }
         } else {
-            console.log(item.init == null ? '' : new Date(item.init).toLocaleDateString('pt-BR', { timeZone: 'UTC' }))
             return data = {
                 id: item.idEquipmentRental,
                 codProd: item.codProd,
@@ -283,6 +282,27 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
         }
     }
 
+ const formatedData = dataReport.map(item => {
+       return{
+            ['id'] : item.id,
+            ['Código'] : item.codProd,
+            ['Equipamento'] : item.equipment,
+            ['Valor K&M'] : item.valueKm,
+            ['Entrada K&M'] : item.entryDateKM,
+            ['Retorno K&M'] : item.returnDateKM,
+            ['Usuário'] : item.user,
+            ['Retorno'] : item.returnDate,
+            ['Setor'] : item.sector,
+            ['Valor'] : item.value,
+            ['Entrada'] : item.entryDate,
+            ['Filial'] : item.branch    
+       } 
+
+    }) 
+
+    const {sortedData, handleSort, sortColumn, sortDirection} = orderData(formatedData, sortColumnState, sortDirectionState, setSortColumnState, setSortDirectionState)
+
+
     return (
         <div className=" bg-gray-100 py-8 overflow-x-auto h-screen px-12 w-full">   
             <div className="flex justify-between mb-8 lg:px-8 sm:px-8 w-full ">
@@ -312,7 +332,7 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
             </form>
             {showTable && (
                 <div className="ml-8 flex-1 h-[65%] overflow-x-auto">
-                    <Table Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white sticky top-0 z-10 text-nowrap rounded-lg'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={['Código', 'Equipamento', 'Valor K&M', 'Valor', 'Filial', 'Entrada K&M', 'Entrada', 'Retorno K&M', 'Retorno', 'Usuário', 'Setor']} data={dataReport} attributos={['codProd', 'equipment', 'valueKm', 'value', 'branch', 'entryDateKM', 'entryDate', 'returnDateKM', 'returnDate', 'user', 'sector']} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'#'} bt={'...'}></Table>
+                    <Table Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white sticky top-0 z-10 text-nowrap rounded-lg'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={['Código', 'Equipamento', 'Valor K&M', 'Valor', 'Filial', 'Entrada K&M', 'Entrada', 'Retorno K&M', 'Retorno', 'Usuário', 'Setor']} data={sortedData} attributos={['Código', 'Equipamento', 'Valor K&M', 'Valor', 'Filial', 'Entrada K&M', 'Entrada', 'Retorno K&M', 'Retorno', 'Usuário', 'Setor']} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'#'} bt={'...'} sortColumn={sortColumn} sortDirection={sortDirection} handleSort={handleSort}></Table>
                 </div>
             )}
         </div>

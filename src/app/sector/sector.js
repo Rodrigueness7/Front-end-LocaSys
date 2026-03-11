@@ -16,9 +16,9 @@ export default function Sector({ tableSector }) {
     const [sector, setSector] = useState('')
     const [branch, setBranch] = useState('')
     const [permission, setPermission] = useState([])
-    const [sortColumn, setSortColumn] = useState('')
-    const [sortDirection, setSortDirection] = useState('asc')
-
+    const [sortColumnState, setSortColumnState] = useState('')
+    const [sortDirectionState, setSortDirectionState] = useState('asc')
+    const {sortedData, handleSort, sortColumn, sortDirection}  = orderData(dataSector, sortColumnState, sortDirectionState, setSortColumnState, setSortDirectionState)
   
     
         useEffect(() => {
@@ -31,15 +31,7 @@ export default function Sector({ tableSector }) {
             
         }, [router])
 
-
-
-    const sortData = orderData(dataSector, sortColumn, sortDirection, setSortColumn, setSortDirection).sortedData
-    const handleSort = orderData(dataSector, sortColumn, sortDirection, setSortColumn, setSortDirection).handleSort
-    const sortColumnState = orderData(dataSector, sortColumn, sortDirection, setSortColumn, setSortDirection).sortColumn
-    const sortDirectionState = orderData(dataSector, sortColumn, sortDirection, setSortColumn, setSortDirection).sortDirection
-
-    console.log(dataSector)
-   
+       
 
     const filter = () => {
         return tableSector.filter((item) => {
@@ -116,7 +108,7 @@ export default function Sector({ tableSector }) {
                 </div>
             </form>
             <div className='ml-8 flex-1 h-[65%] overflow-x-auto w-1/3'>
-                <Table Table={'table-auto bg-white shadow-md rounded-lg w-full '} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black'} headers={['id', 'Setor', 'Filial']} data={sortData} attributos={['id', 'Setor', 'Filial']} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./sector/updateSector'} bt={'...'} permission={permission.find(number => number == '21')} handleSort={handleSort} sortColumn={sortColumnState} sortDirection={sortDirectionState}></Table>
+                <Table Table={'table-auto bg-white shadow-md rounded-lg w-full '} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black'} headers={['id', 'Setor', 'Filial']} data={sortedData} attributos={['id', 'Setor', 'Filial']} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./sector/updateSector'} bt={'...'} permission={permission.find(number => number == '21')} handleSort={handleSort} sortColumn={sortColumn} sortDirection={sortDirection}></Table>
             </div>
         </div>
     )

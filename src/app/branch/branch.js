@@ -20,13 +20,9 @@ export default function Branch({ tableBranch }) {
      })
     const router = useRouter()
     const [permission, setPermission] = useState([])
-    const [sortColumn, setSortColumn] = useState('')
-    const [sortDirection, setSortDirection] = useState('asc')
-
-    const sortedData = orderData(data, sortColumn, sortDirection, setSortColumn, setSortDirection).sortedData
-    const handleSort = orderData(data, sortColumn, sortDirection, setSortColumn, setSortDirection).handleSort
-    const sortColumnState = orderData(data, sortColumn, sortDirection, setSortColumn, setSortDirection).sortColumn
-    const sortDirectionState = orderData(data, sortColumn, sortDirection, setSortColumn, setSortDirection).sortDirection
+    const [sortColumnState, setSortColumnState] = useState('')
+    const [sortDirectionState, setSortDirectionState] = useState('asc')
+    const {sortedData, handleSort, sortColumn, sortDirection} = orderData(data, sortColumnState, sortDirectionState, setSortColumnState, setSortDirectionState)
 
 
          useEffect(() => {
@@ -54,7 +50,7 @@ export default function Branch({ tableBranch }) {
                 <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={generation}>Gerar Relatório</button>
             </div>
             <div className="ml-8 flex-1 h-[78%] overflow-x-auto w-3/5">
-                <Table Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white text-nowrap rounded-lg'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={['Código Filial', 'Filial', 'CNPJ', 'Razão Social']} data={sortedData} attributos={['Código Filial', 'Filial', 'CNPJ', 'Razão Social']} id={'idBranch'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./branch/updateBranch'} bt={'...'} permission={permission.find(number => number == '8')} handleSort={handleSort} sortColumn={sortColumnState} sortDirection={sortDirectionState}></Table>
+                <Table Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white text-nowrap rounded-lg'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={['Código Filial', 'Filial', 'CNPJ', 'Razão Social']} data={sortedData} attributos={['Código Filial', 'Filial', 'CNPJ', 'Razão Social']} id={'idBranch'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./branch/updateBranch'} bt={'...'} permission={permission.find(number => number == '8')} handleSort={handleSort} sortColumn={sortColumn} sortDirection={sortDirection}></Table>
             </div>
         </div>
 

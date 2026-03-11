@@ -43,13 +43,9 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
     const [listIdEquipment, setListIdEquipment] = useState([])
     const [isOpen, setIsOpen] = useState(false)
     const [selectedOptions, setSelectedOptions] = useState([])
-    const [sortColumn, setSortColumn] = useState('')
-    const [sortDirection, setSortDirection] = useState('asc')
-
-    const sortData = orderData(dataEquipment, sortColumn, sortDirection, setSortColumn, setSortDirection).sortedData
-    const handleSort = orderData(dataEquipment, sortColumn, sortDirection, setSortColumn, setSortDirection).handleSort
-    const sortColumnState = orderData(dataEquipment, sortColumn, sortDirection, setSortColumn, setSortDirection).sortColumn
-    const sortDirectionState = orderData(dataEquipment, sortColumn, sortDirection, setSortColumn, setSortDirection).sortDirection
+    const [sortColumnState, setSortColumnState] = useState('')
+    const [sortDirectionState, setSortDirectionState] = useState('asc')
+    const {sortedData, handleSort, sortColumn, sortDirection} = orderData(tableEquipment, sortColumnState, sortDirectionState, setSortColumnState, setSortDirectionState)
 
 
 
@@ -352,7 +348,7 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
                 </div>
             </form>
             <div className='ml-8 flex-1 h-[67%] overflow-x-auto'>
-                <Table filterCheckbox={true} Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white text-nowrap rounded-lg'} Th={'py-3 px-4 text-left '} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={attribute} data={sortData} attributos={attribute} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./equipment/updateEquipment'} bt={'...'} permission={permission.find(number => number == '3')} handleSort={handleSort} sortColumn={sortColumnState} sortDirection={sortDirectionState}></Table>
+                <Table filterCheckbox={true} Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white text-nowrap rounded-lg'} Th={'py-3 px-4 text-left '} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={attribute} data={sortedData} attributos={attribute} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./equipment/updateEquipment'} bt={'...'} permission={permission.find(number => number == '3')} handleSort={handleSort} sortColumn={sortColumn} sortDirection={sortDirection}></Table>
             </div>
         </div>
     )
