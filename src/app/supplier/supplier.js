@@ -15,7 +15,8 @@ export default function Supplier({ tableSupplier }) {
     const [sortColumnState, setSortColumnState] = useState('')
     const [sortDirectionState, setSortDirectionState] = useState('asc')
     const {sortedData, handleSort, sortColumn, sortDirection} = orderData(dataSupplier, sortColumnState, sortDirectionState, setSortColumnState, setSortDirectionState)
-    
+    const [totalize, setTotalize] = useState(dataSupplier.length)
+
         useEffect(() => {
             let data = localStorage.getItem('permission')
             if (!data) {
@@ -29,7 +30,7 @@ export default function Supplier({ tableSupplier }) {
     const filter = () => {
         return tableSupplier.filter((item) => {
             return (
-                (supplier ? item.supplier.toLowerCase() == supplier.toLowerCase().trim() : true)
+                (supplier ? item['Fornecedor'].toLowerCase() == supplier.toLowerCase().trim() : true)
             )
         })
     }
@@ -41,6 +42,7 @@ export default function Supplier({ tableSupplier }) {
     const searchSupplier = (e) => {
         e.preventDefault()
         setDataSupplier(filter())
+        setTotalize(filter().length)
     }
 
     const generation = async () => {
@@ -70,6 +72,7 @@ export default function Supplier({ tableSupplier }) {
             <div className="ml-8 flex-1 h-[67%] overflow-x-auto">
                 <Table Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white sticky top-0 z-10 text-nowrap rounded-lg'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={['id', 'Fornecedor', 'Email', 'Contato', 'Telefone', 'CNPJ', 'Endereço', 'Cep', 'Estado', 'Cidade']} data={sortedData} attributos={['id', 'Fornecedor', 'Email', 'Contato', 'Telefone', 'CNPJ', 'Endereço', 'Cep', 'Estado', 'Cidade']} id={'id'} href={'./supplier/updateSupplier'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} bt={'...'} permission={permission.find(number => number == '46')} handleSort={handleSort} sortColumn={sortColumn} sortDirection={sortDirection}></Table>
             </div>
+            <div className="ml-8">{`Total de Fornecedor: ${totalize}`}</div>
         </div>
     )
 }

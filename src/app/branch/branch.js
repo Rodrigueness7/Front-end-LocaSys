@@ -23,7 +23,7 @@ export default function Branch({ tableBranch }) {
     const [sortColumnState, setSortColumnState] = useState('')
     const [sortDirectionState, setSortDirectionState] = useState('asc')
     const {sortedData, handleSort, sortColumn, sortDirection} = orderData(data, sortColumnState, sortDirectionState, setSortColumnState, setSortDirectionState)
-
+    const [totalize, setTotalize] = useState(data.length)
 
          useEffect(() => {
              let data = localStorage.getItem('permission')
@@ -42,7 +42,7 @@ export default function Branch({ tableBranch }) {
      }
 
     return (
-        <div className="bg-gray-100 py-8 overflow-x-auto h-screen px-12 w-full">
+        <div className="bg-gray-100 py-8 overflow-x-auto h-screen px-12 w-full relative">
             <div className="flex justify-between mb-8 lg:px-8 sm:px-8 xl:w-1/2">
                {permission.find(number => number == '7') && (
                  <Link href={'../branch/registerBranch'}><button className='p-2 bg-indigo-500 rounded-lg text-white'>Nova Filial</button></Link>
@@ -52,6 +52,7 @@ export default function Branch({ tableBranch }) {
             <div className="ml-8 flex-1 h-[78%] overflow-x-auto w-3/5">
                 <Table Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white text-nowrap rounded-lg'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={['Código Filial', 'Filial', 'CNPJ', 'Razão Social']} data={sortedData} attributos={['Código Filial', 'Filial', 'CNPJ', 'Razão Social']} id={'idBranch'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./branch/updateBranch'} bt={'...'} permission={permission.find(number => number == '8')} handleSort={handleSort} sortColumn={sortColumn} sortDirection={sortDirection}></Table>
             </div>
+            <div className="ml-8">{`Total de Filial: ${totalize}`}</div>
         </div>
 
     )

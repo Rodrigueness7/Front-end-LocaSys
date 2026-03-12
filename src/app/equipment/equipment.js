@@ -45,8 +45,8 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
     const [selectedOptions, setSelectedOptions] = useState([])
     const [sortColumnState, setSortColumnState] = useState('')
     const [sortDirectionState, setSortDirectionState] = useState('asc')
-    const {sortedData, handleSort, sortColumn, sortDirection} = orderData(tableEquipment, sortColumnState, sortDirectionState, setSortColumnState, setSortDirectionState)
-
+    const {sortedData, handleSort, sortColumn, sortDirection} = orderData(dataEquipment, sortColumnState, sortDirectionState, setSortColumnState, setSortDirectionState)
+    const [totalize, setTotalize] = useState(dataEquipment.length)
 
 
     useEffect(() => {
@@ -75,7 +75,6 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
             window.removeEventListener('local-storage-change', updateValue);
         };
     }, []);
-
 
     const handleCheckboxChange = (e) => {
         const { value, checked } = e.target;
@@ -233,8 +232,8 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
 
     const searchEquipment = (e) => {
         e.preventDefault()
-
         setDataEquipment(filter())
+        setTotalize(filter().length)
         setIsOpen(false)
     }
 
@@ -350,6 +349,7 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
             <div className='ml-8 flex-1 h-[67%] overflow-x-auto'>
                 <Table filterCheckbox={true} Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white text-nowrap rounded-lg'} Th={'py-3 px-4 text-left '} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={attribute} data={sortedData} attributos={attribute} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./equipment/updateEquipment'} bt={'...'} permission={permission.find(number => number == '3')} handleSort={handleSort} sortColumn={sortColumn} sortDirection={sortDirection}></Table>
             </div>
+            <div className="ml-8 mt-3">{`Total de Equipamentos: ${totalize}`}</div>
         </div>
     )
 }
