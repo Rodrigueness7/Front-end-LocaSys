@@ -10,7 +10,7 @@ import orderData from "@/utils/orderData"
 import updateData from "@/utils/updateData"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { use, useCallback, useEffect, useMemo, useState } from "react"
+import {useCallback, useEffect, useMemo, useState } from "react"
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
 
 export default function Equipment({ tableEquipment, attribute, token, dataUser, dataSector, dataType, dataBranch, dataSupplier, dataSituation }) {
@@ -48,7 +48,7 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
     const {sortedData, handleSort, sortColumn, sortDirection} = orderData(dataEquipment, sortColumnState, sortDirectionState, setSortColumnState, setSortDirectionState)
     const [totalize, setTotalize] = useState(dataEquipment.length)
 
-
+   
     useEffect(() => {
         let data = localStorage.getItem('permission')
         if (!data) {
@@ -56,6 +56,7 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
         }
         let number = data.split(',').map(number => number)
         setPermission(number)
+
 
     }, [router])
 

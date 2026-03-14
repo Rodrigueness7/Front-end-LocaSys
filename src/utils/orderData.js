@@ -3,7 +3,7 @@
 import { useMemo } from "react"
 
 export default function OrderData(data, sortColumn, sortDirection, setSortColumn, setSortDirection) {
-    const regexDDMMYYYY = /^\d{2}\/\d{2}\/\d{4}$/;
+   const regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
     
     const sortedData = useMemo(() => {
         if (!sortColumn) return data
@@ -12,10 +12,14 @@ export default function OrderData(data, sortColumn, sortDirection, setSortColumn
             const valueB = b[sortColumn]
 
             
+            if(regex.test(valueA)) {
+                const toIso = d => d.split('/').reverse().join('-')
+                return sortDirection === 'asc' ? new Date(toIso(valueA)) - new Date(toIso(valueB)) : new Date(toIso(valueB)) - new Date(toIso(valueA))
+            }
+
             if (typeof valueA === 'string') {
                 return sortDirection === 'asc' ? (valueA ?? '').localeCompare(valueB ?? '') : (valueB ?? '').localeCompare(valueA ?? '')
             }
-
 
             if(typeof valueA === '')
             return sortDirection === 'asc' ? valueA - valueB : valueB - valueA
