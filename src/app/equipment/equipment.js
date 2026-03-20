@@ -16,11 +16,11 @@ import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
 export default function Equipment({ tableEquipment, attribute, token, dataUser, dataSector, dataType, dataBranch, dataSupplier, dataSituation }) {
 
 
-    const users = dataUser.map(item => item.username)
-    const sectors = dataSector.map(item => item.sector)
+    // const users = dataUser.map(item => item.username)
+    // const sectors = dataSector.map(item => item.sector)
     const types = dataType.map(item => item.typeEquipment)
     const branches = dataBranch.map(item => item.branch)
-    const suppliers = dataSupplier.map(item => item.supplier)
+    const situation = dataSituation.map(item => item.situation)
 
 
 
@@ -38,6 +38,7 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
     const [listType, setListType] = useState('')
     const [listBranch, setListBranch] = useState('')
     const [listSupplier, setListSupplier] = useState('')
+    const [listSituation, setListSituation] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [result, setResult] = useState('')
     const [listIdEquipment, setListIdEquipment] = useState([])
@@ -90,6 +91,10 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
     };
 
 
+    
+    
+
+    
 
     const generation = async () => {
         sessionStorage.setItem('dataEquipment', JSON.stringify(dataEquipment))
@@ -205,10 +210,13 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
 
     const changeBranch = (e) => {
         setBranch(e.target.value)
+        setListSector('')
+        setListUser('')
     }
 
     const changeUsername = (e) => {
         setUsername(e.target.value)
+        setListSector('')
     }
 
     const changeListUser = (e) => {
@@ -217,6 +225,7 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
 
     const changeListSector = (e) => {
         setListSector(e.target.value)
+        setListUser('')
     }
 
     const changeListType = (e) => {
@@ -227,9 +236,10 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
         setListBranch(e.target.value)
     }
 
-    const changeListSupplier = (e) => {
-        setListSupplier(e.target.value)
+    const changeListSituation = (e) => {
+        setListSituation(e.target.value)
     }
+
 
     const searchEquipment = (e) => {
         e.preventDefault()
@@ -256,6 +266,21 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
 
     }
 
+     const optionUpdate = useMemo(() => {
+
+        let optionBranchOfSector = dataSector.filter(item => item['Branch'].branch === listBranch).map(item => item.sector)
+        let optionSectorOfUSer = dataUser.filter(item => item['Sector'].sector === listSector).map(item => item.username)
+        let optionUserOfSector = dataUser.filter(item => item.username === listUser).map(item => item['Sector'].sector)
+        let optionSectorOfBranch = dataSector.filter(item => item.sector === listSector).map(item => item['Branch'].branch)
+
+        return{optionBranchOfSector, optionSectorOfUSer, optionUserOfSector, optionSectorOfBranch}
+       
+}, [listBranch, listSector, listUser, dataSector, dataUser]);
+
+
+    const sectors = listBranch ? optionUpdate.optionBranchOfSector : dataSector.map(item => item.sector)
+    const users = listSector ? optionUpdate.optionSectorOfUSer : dataUser.map(item => item.username)
+  
 
     const transfer = (e) => {
         e.preventDefault()
@@ -263,30 +288,31 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
             return alert('Não há item para transferir');
         }
 
-
-        const idUser = listUser != "" ? dataUser.find(item => item.username === listUser).idUser : ""
-        const idSector = listSector != "" ? dataSector.find(item => item.sector === listSector).idSector : ""
-        const idBranch = listBranch != "" ? dataBranch.find(item => item.branch === listBranch).idBranch : ""
-        const idSupplier = listSupplier != "" ? dataSupplier.find(item => item.supplier === listSupplier).idSupplier : ""
-        const idTypeEquipment = listType != "" ? dataType.find(item => item.typeEquipment === listType).idTypeEquipment : ""
+        const idUser = listUser != "" ? dataUser.find(item => item.username === listUser).idUser : null
+        const idSector = listSector != "" ? dataSector.find(item => item.sector === listSector).idSector : null
+        const idBranch = listBranch != "" ? dataBranch.find(item => item.branch === listBranch).idBranch : null
+        const idSupplier = listSupplier != "" ? dataSupplier.find(item => item.supplier === listSupplier).idSupplier : null
+        const idTypeEquipment = listType != "" ? dataType.find(item => item.typeEquipment === listType).idTypeEquipment : null
 
 
 
         listIdEquipment.map(async item => {
             let findEquipment = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findEquipmentId/${item}`, token)
 
-            let data = {
-                idTypeEquipment: listType === "" ? findEquipment['TypeEquipment'].idTypeEquipment : idTypeEquipment,
-                idBranch: listBranch === "" ? findEquipment['Branch'].idBranch : idBranch,
-                idUser: listUser === "" ? findEquipment['User'].idUser : idUser,
-                idSector: listSector === "" ? findEquipment['Sector'].idSector : idSector,
-                idSupplier: listSupplier === "" ? findEquipment['Supplier'].idSupplier : idSupplier,
-            }
+          let data = {
+            idBranch : idBranch === null ? findEquipment['Branch'].idBranch : idBranch,
+            idUser : idUser == null || idSector == null ? findEquipment['User'].idUser : idUser,
+            idSector : idUser == null || idSector == null ? findEquipment['Sector'].idSector : idSector,
+            idTypeEquipment: idTypeEquipment == null ? findEquipment['TypeEquipment'].idTypeEquipment : idTypeEquipment,
+            idSituation: idUser && idSector ? 1 : findEquipment['Situation'].idSituation
+          }
 
-            await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/transferEquipment/${item}`, data, token, setResult)
-            setIsModalOpen(true)
+          console.log(data)
+            
+            // await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/transferEquipment/${item}`, data, token, setResult)
+            // setIsModalOpen(true)
         })
-
+        
     }
 
 
@@ -297,16 +323,16 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
                     <Link href={'../equipment/registerEquipment'}><button className='p-2 bg-indigo-500 rounded-lg text-white'>Novo Equipamento</button></Link>
                 )}
                 <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={generation}>Gerar Relatório</button>
-                <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={handleShow}>Transferir Equipamento</button>
+                <button className='p-2 bg-indigo-500 rounded-lg text-white' onClick={handleShow}>Atualizar Equipamento</button>
                 {show == true ? (<FormModal setShow={setShow}>{
                     <div>
                         <p>{listIdEquipment.length === 0 ? 'Não há item marcado' : `Items marcados: ${listIdEquipment.length}`}</p>
                         <div className="w-full mt-5 flex justify-between relative h-36">
                             <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-45 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Filial'} name={'branch'} datas={branches} value={listBranch} onchange={changeListBranch} required={false}></InputSelect>
-                            <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-45 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Usuário'} name={'username'} datas={users} value={listUser} onchange={changeListUser} required={false}></InputSelect>
                             <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-45 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Setor'} name={'sector'} datas={sectors} value={listSector} onchange={changeListSector} required={false}></InputSelect>
-                            <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-45 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Tipo'} name={'TypeEquipment'} datas={types} value={listType} onchange={changeListType} required={false}></InputSelect>
-                            <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-45 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Fornecedor'} name={'supplier'} datas={suppliers} value={listSupplier} onchange={changeListSupplier} required={false}></InputSelect>
+                            <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-45 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Usuário'} name={'username'} datas={users} value={listUser} onchange={changeListUser} required={false}></InputSelect>
+                            <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-45 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Tipo'} name={'typeEquipment'} datas={types} value={listType} onchange={changeListType} required={false}></InputSelect>
+                            <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-45 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Situatio'} name={'situation'} datas={situation} value={listSituation} onchange={changeListSituation} required={false}></InputSelect>
                             <button className="p-2 bg-indigo-500 rounded-lg text-white absolute left-0 bottom-0 w-36 " onClick={transfer}>Alterar</button>
                             <MessageModal isOpen={isModalOpen} onClose={handleCloseModal} message={result.error ? result.error : result.success} icone={
                                 result?.error ? (<FaTimesCircle className="text-red-500 w-24 h-24 mx-auto mb-4 rounded-full" />) : (
