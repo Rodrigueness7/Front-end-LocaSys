@@ -13,13 +13,11 @@ import { useRouter } from "next/navigation"
 import {useCallback, useEffect, useMemo, useState } from "react"
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
 
-export default function Equipment({ tableEquipment, attribute, token, dataUser, dataSector, dataType, dataBranch, dataSupplier, dataSituation }) {
+export default function Equipment({ tableEquipment, attribute, token, dataUser, dataSector, dataType, dataBranch, dataSituation }) {
 
 
-    // const users = dataUser.map(item => item.username)
-    // const sectors = dataSector.map(item => item.sector)
+   
     const types = dataType.map(item => item.typeEquipment)
-    const branches = dataBranch.map(item => item.branch)
     const situation = dataSituation.map(item => item.situation)
 
 
@@ -37,7 +35,6 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
     const [listSector, setListSector] = useState('')
     const [listType, setListType] = useState('')
     const [listBranch, setListBranch] = useState('')
-    const [listSupplier, setListSupplier] = useState('')
     const [listSituation, setListSituation] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [result, setResult] = useState('')
@@ -48,7 +45,7 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
     const [sortDirectionState, setSortDirectionState] = useState('asc')
     const {sortedData, handleSort, sortColumn, sortDirection} = orderData(dataEquipment, sortColumnState, sortDirectionState, setSortColumnState, setSortDirectionState)
     const [totalize, setTotalize] = useState(dataEquipment.length)
-
+    const [enable, setEnable] = useState(false)
    
     useEffect(() => {
         let data = localStorage.getItem('permission')
@@ -92,10 +89,6 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
 
 
     
-    
-
-    
-
     const generation = async () => {
         sessionStorage.setItem('dataEquipment', JSON.stringify(dataEquipment))
 
@@ -210,22 +203,22 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
 
     const changeBranch = (e) => {
         setBranch(e.target.value)
-        setListSector('')
-        setListUser('')
+        
     }
 
     const changeUsername = (e) => {
         setUsername(e.target.value)
-        setListSector('')
+       
     }
 
     const changeListUser = (e) => {
         setListUser(e.target.value)
+       
     }
 
     const changeListSector = (e) => {
         setListSector(e.target.value)
-        setListUser('')
+        
     }
 
     const changeListType = (e) => {
@@ -234,6 +227,7 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
 
     const changeListBranch = (e) => {
         setListBranch(e.target.value)
+        
     }
 
     const changeListSituation = (e) => {
@@ -266,6 +260,10 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
 
     }
 
+    const handleEneble = (e) => {
+        setEnable(prev => !prev)
+    }
+
      const optionUpdate = useMemo(() => {
 
         let optionBranchOfSector = dataSector.filter(item => item['Branch'].branch === listBranch).map(item => item.sector)
@@ -278,8 +276,11 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
 }, [listBranch, listSector, listUser, dataSector, dataUser]);
 
 
-    const sectors = listBranch ? optionUpdate.optionBranchOfSector : dataSector.map(item => item.sector)
-    const users = listSector ? optionUpdate.optionSectorOfUSer : dataUser.map(item => item.username)
+    let branchesOfUser = listSector ? optionUpdate.optionSectorOfBranch : dataBranch.map(item => item.branch)
+    let sectorOfBranch = listBranch ? optionUpdate.optionBranchOfSector : dataSector.map(item => item.sector)
+    let userOfSector = listSector ? optionUpdate.optionSectorOfUSer : dataUser.map(item => item.username)
+    let sectorOfUser = listUser ? optionUpdate.optionUserOfSector : null
+  
   
 
     const transfer = (e) => {
@@ -291,9 +292,8 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
         const idUser = listUser != "" ? dataUser.find(item => item.username === listUser).idUser : null
         const idSector = listSector != "" ? dataSector.find(item => item.sector === listSector).idSector : null
         const idBranch = listBranch != "" ? dataBranch.find(item => item.branch === listBranch).idBranch : null
-        const idSupplier = listSupplier != "" ? dataSupplier.find(item => item.supplier === listSupplier).idSupplier : null
         const idTypeEquipment = listType != "" ? dataType.find(item => item.typeEquipment === listType).idTypeEquipment : null
-
+        const idSituation = listSituation != "" ? dataSituation.find(item => item.situation === listSituation).idSituation : null
 
 
         listIdEquipment.map(async item => {
@@ -304,7 +304,7 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
             idUser : idUser == null || idSector == null ? findEquipment['User'].idUser : idUser,
             idSector : idUser == null || idSector == null ? findEquipment['Sector'].idSector : idSector,
             idTypeEquipment: idTypeEquipment == null ? findEquipment['TypeEquipment'].idTypeEquipment : idTypeEquipment,
-            idSituation: idUser && idSector ? 1 : findEquipment['Situation'].idSituation
+            idSituation: idSituation == null ? findEquipment['Situation'].idSituation : idSituation
           }
 
           console.log(data)
@@ -327,13 +327,19 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
                 {show == true ? (<FormModal setShow={setShow}>{
                     <div>
                         <p>{listIdEquipment.length === 0 ? 'Não há item marcado' : `Items marcados: ${listIdEquipment.length}`}</p>
-                        <div className="w-full mt-5 flex justify-between relative h-36">
-                            <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-45 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Filial'} name={'branch'} datas={branches} value={listBranch} onchange={changeListBranch} required={false}></InputSelect>
-                            <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-45 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Setor'} name={'sector'} datas={sectors} value={listSector} onchange={changeListSector} required={false}></InputSelect>
-                            <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-45 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Usuário'} name={'username'} datas={users} value={listUser} onchange={changeListUser} required={false}></InputSelect>
-                            <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-45 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Tipo'} name={'typeEquipment'} datas={types} value={listType} onchange={changeListType} required={false}></InputSelect>
-                            <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-45 px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Situatio'} name={'situation'} datas={situation} value={listSituation} onchange={changeListSituation} required={false}></InputSelect>
-                            <button className="p-2 bg-indigo-500 rounded-lg text-white absolute left-0 bottom-0 w-36 " onClick={transfer}>Alterar</button>
+                        <div className="top-5">
+                            <input  type="checkbox" checked={enable} onChange={handleEneble}></input>
+                            <label>Habilitar Tipo e Situação</label>
+                        </div>
+                        <div>
+                            <form onSubmit={transfer} className="w-full mt-5 flex justify-between relative h-36">
+                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Filial'} name={'branch'} datas={branchesOfUser} value={listBranch} onchange={changeListBranch} required={true}></InputSelect>
+                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Setor'} name={'sector'} datas={sectorOfUser == null ? sectorOfBranch : sectorOfUser} value={listSector} onchange={changeListSector} required={true}></InputSelect>
+                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Usuário'} name={'username'} datas={userOfSector} value={listUser} onchange={changeListUser} required={true}></InputSelect>
+                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Tipo'} name={'typeEquipment'} datas={types} value={listType} onchange={changeListType} required={false} disabled={enable == false}></InputSelect>
+                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Situação'} name={'situation'} datas={situation} value={listSituation} onchange={changeListSituation} required={false} disabled={enable == false}></InputSelect>
+                                <button className="p-2 bg-indigo-500 rounded-lg text-white absolute left-0 bottom-0 w-36 " type="submit">Alterar</button>
+                            </form>
                             <MessageModal isOpen={isModalOpen} onClose={handleCloseModal} message={result.error ? result.error : result.success} icone={
                                 result?.error ? (<FaTimesCircle className="text-red-500 w-24 h-24 mx-auto mb-4 rounded-full" />) : (
                                     <FaCheckCircle className="text-green-500 w-24 h-24 mx-auto mb-4 rounded-full" />
@@ -349,7 +355,7 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-45 min-w-[160px] max-w-[250px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Tipo'} name={'type'} datas={optionsType} value={type} onchange={changeType} required={false}></InputSelect>
                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-40 min-w-[160px] max-w-[200px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Filial'} name={'branch'} datas={optionsBranch} value={branch} onchange={changeBranch} required={false}></InputSelect>
                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-40 min-w-[160px] max-w-[200px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Usuário'} name={'username'} datas={optionsUsername} value={username} onchange={changeUsername} required={false}></InputSelect>
-                <div >
+                <div>
                     <div
                         onClick={() => setIsOpen(!isOpen)}
                         className="mt-6 cursor-pointer flex items-center px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm text-black w-56 "
@@ -358,8 +364,8 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
                     </div>
 
                     {isOpen && (
-                        <div className="absolute mt-1 w-56 bg-white border border-gray-300 rounded-md shadow-lg z-50  max-h-60 overflow-y-auto">
-                            {dataSituation?.sucessMessage?.map((situation, index) => (
+                        <div className="absolute mt-1 w-56 bg-white border border-gray-300 rounded-md shadow-lg z-50 max-h-60 overflow-y-auto">
+                            {dataSituation.map((situation, index) => (
                                 <label key={index} className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer">
                                     <input type="checkbox" value={situation.situation} checked={selectedOptions.includes(situation.situation)} onChange={handleCheckboxChange} className="mr-2" />
                                     {situation.situation}
