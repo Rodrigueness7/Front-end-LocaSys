@@ -293,24 +293,30 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
         const idSector = listSector != "" ? dataSector.find(item => item.sector === listSector).idSector : null
         const idBranch = listBranch != "" ? dataBranch.find(item => item.branch === listBranch).idBranch : null
         const idTypeEquipment = listType != "" ? dataType.find(item => item.typeEquipment === listType).idTypeEquipment : null
-        const idSituation = listSituation != "" ? dataSituation.find(item => item.situation === listSituation).idSituation : null
+        let idSituation = listSituation != "" ? dataSituation.find(item => item.situation === listSituation).idSituation : null
 
+       
 
         listIdEquipment.map(async item => {
             let findEquipment = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findEquipmentId/${item}`, token)
+
+            if(listSituation == null && listSector == null && listUser == null) {
+                 idSituation = findEquipment['Situation'].idSituation
+            } else if (listSector && listUser) {
+                idSituation = 1
+            }
 
           let data = {
             idBranch : idBranch === null ? findEquipment['Branch'].idBranch : idBranch,
             idUser : idUser == null || idSector == null ? findEquipment['User'].idUser : idUser,
             idSector : idUser == null || idSector == null ? findEquipment['Sector'].idSector : idSector,
             idTypeEquipment: idTypeEquipment == null ? findEquipment['TypeEquipment'].idTypeEquipment : idTypeEquipment,
-            idSituation: idSituation == null ? findEquipment['Situation'].idSituation : idSituation
+            idSituation: idSituation
           }
 
-          console.log(data)
             
-            // await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/transferEquipment/${item}`, data, token, setResult)
-            // setIsModalOpen(true)
+            await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/transferEquipment/${item}`, data, token, setResult)
+            setIsModalOpen(true)
         })
         
     }
@@ -327,15 +333,15 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
                 {show == true ? (<FormModal setShow={setShow}>{
                     <div>
                         <p>{listIdEquipment.length === 0 ? 'Não há item marcado' : `Items marcados: ${listIdEquipment.length}`}</p>
-                        <div className="top-5">
+                        <div className="mt-5">
                             <input  type="checkbox" checked={enable} onChange={handleEneble}></input>
                             <label>Habilitar Tipo e Situação</label>
                         </div>
                         <div>
                             <form onSubmit={transfer} className="w-full mt-5 flex justify-between relative h-36">
-                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Filial'} name={'branch'} datas={branchesOfUser} value={listBranch} onchange={changeListBranch} required={true}></InputSelect>
-                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Setor'} name={'sector'} datas={sectorOfUser == null ? sectorOfBranch : sectorOfUser} value={listSector} onchange={changeListSector} required={true}></InputSelect>
-                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Usuário'} name={'username'} datas={userOfSector} value={listUser} onchange={changeListUser} required={true}></InputSelect>
+                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Filial'} name={'branch'} datas={branchesOfUser} value={listBranch} onchange={changeListBranch} required={true} disabled={enable == true}></InputSelect>
+                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Setor'} name={'sector'} datas={sectorOfUser == null ? sectorOfBranch : sectorOfUser} value={listSector} onchange={changeListSector} required={true} disabled={enable == true}></InputSelect>
+                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Usuário'} name={'username'} datas={userOfSector} value={listUser} onchange={changeListUser} required={true} disabled={enable == true}></InputSelect>
                                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Tipo'} name={'typeEquipment'} datas={types} value={listType} onchange={changeListType} required={false} disabled={enable == false}></InputSelect>
                                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Situação'} name={'situation'} datas={situation} value={listSituation} onchange={changeListSituation} required={false} disabled={enable == false}></InputSelect>
                                 <button className="p-2 bg-indigo-500 rounded-lg text-white absolute left-0 bottom-0 w-36 " type="submit">Alterar</button>
