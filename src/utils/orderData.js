@@ -19,12 +19,17 @@ export default function OrderData(data, sortColumn, sortDirection, setSortColumn
                 return sortDirection === 'asc' ? new Date(toIso(valueA)) - new Date(toIso(valueB)) : new Date(toIso(valueB)) - new Date(toIso(valueA))
             }
 
+            const numA = Number(valueA)
+            const numB = Number(valueB)
+
+            if (!isNaN(numA) && !isNaN(numB)) {
+                return sortDirection === 'asc' ? numA - numB : numB - numA
+            }
+
             if (typeof valueA === 'string') {
                 return sortDirection === 'asc' ? (valueA ?? '').localeCompare(valueB ?? '') : (valueB ?? '').localeCompare(valueA ?? '')
             }
 
-            if(typeof valueA === '')
-            return sortDirection === 'asc' ? valueA - valueB : valueB - valueA
         })
     }, [data, sortColumn, sortDirection])
     

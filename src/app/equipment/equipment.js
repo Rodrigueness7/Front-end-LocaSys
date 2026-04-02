@@ -10,6 +10,7 @@ import orderData from "@/utils/orderData"
 import updateData from "@/utils/updateData"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { list } from "postcss"
 import {useCallback, useEffect, useMemo, useState } from "react"
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
 
@@ -213,11 +214,13 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
 
     const changeListUser = (e) => {
         setListUser(e.target.value)
-       
+         
+        
     }
 
     const changeListSector = (e) => {
         setListSector(e.target.value)
+
         
     }
 
@@ -280,43 +283,60 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
     let sectorOfBranch = listBranch ? optionUpdate.optionBranchOfSector : dataSector.map(item => item.sector)
     let userOfSector = listSector ? optionUpdate.optionSectorOfUSer : dataUser.map(item => item.username)
     let sectorOfUser = listUser ? optionUpdate.optionUserOfSector : null
-  
+
   
 
     const transfer = (e) => {
         e.preventDefault()
+
         if (listIdEquipment.length === 0) {
             return alert('Não há item para transferir');
         }
 
-        const idUser = listUser != "" ? dataUser.find(item => item.username === listUser).idUser : null
-        const idSector = listSector != "" ? dataSector.find(item => item.sector === listSector).idSector : null
-        const idBranch = listBranch != "" ? dataBranch.find(item => item.branch === listBranch).idBranch : null
-        const idTypeEquipment = listType != "" ? dataType.find(item => item.typeEquipment === listType).idTypeEquipment : null
-        let idSituation = listSituation != "" ? dataSituation.find(item => item.situation === listSituation).idSituation : null
+        let idUser = listUser ? dataUser.find(item => item.username === listUser).idUser : null
+        let idSector = listSector ? dataSector.find(item => item.sector === listSector).idSector : null
+        const idBranch = listBranch  ? dataBranch.find(item => item.branch === listBranch).idBranch : null
+        const idTypeEquipment = listType ? dataType.find(item => item.typeEquipment === listType).idTypeEquipment : null
+        let idSituation = listSituation ? dataSituation.find(item => item.situation === listSituation).idSituation : null
 
-       
+        
 
         listIdEquipment.map(async item => {
             let findEquipment = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findEquipmentId/${item}`, token)
 
-            if(listSituation == null && listSector == null && listUser == null) {
-                 idSituation = findEquipment['Situation'].idSituation
-            } else if (listSector && listUser) {
+            if (idSituation == null && listUser == '' && listSector == '') {
+                idSituation = findEquipment['Situation'].idSituation
+            }else if(listUser && listSector ){
                 idSituation = 1
+            } else {
+                idSituation
+            }
+
+            if(idUser == null && findEquipment['User'] == null || idSituation == 4){
+                idUser = null
+            } else if(idUser == null && findEquipment['User'] != null){
+                idUser = findEquipment['User'].idUser
+                
+            }
+             
+            if(idSector == null && findEquipment['Sector'] == null || idSituation == 4){
+                idSector = null
+            } else if(idSector == null && findEquipment['Sector'] != null){
+                idSector = findEquipment['Sector'].idSector   
             }
 
           let data = {
             idBranch : idBranch === null ? findEquipment['Branch'].idBranch : idBranch,
-            idUser : idUser == null || idSector == null ? findEquipment['User'].idUser : idUser,
-            idSector : idUser == null || idSector == null ? findEquipment['Sector'].idSector : idSector,
+            idUser : idUser,
+            idSector :  idSector,
             idTypeEquipment: idTypeEquipment == null ? findEquipment['TypeEquipment'].idTypeEquipment : idTypeEquipment,
             idSituation: idSituation
           }
 
+          console.log(data)
             
-            await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/transferEquipment/${item}`, data, token, setResult)
-            setIsModalOpen(true)
+            // await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/transferEquipment/${item}`, data, token, setResult)
+            // setIsModalOpen(true)
         })
         
     }
@@ -340,8 +360,8 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
                         <div>
                             <form onSubmit={transfer} className="w-full mt-5 flex justify-between relative h-36">
                                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Filial'} name={'branch'} datas={branchesOfUser} value={listBranch} onchange={changeListBranch} required={true} disabled={enable == true}></InputSelect>
-                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Setor'} name={'sector'} datas={sectorOfUser == null ? sectorOfBranch : sectorOfUser} value={listSector} onchange={changeListSector} required={true} disabled={enable == true}></InputSelect>
-                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Usuário'} name={'username'} datas={userOfSector} value={listUser} onchange={changeListUser} required={true} disabled={enable == true}></InputSelect>
+                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Setor'} name={'sector'} datas={listSituation == 'Inativo' || listSituation == 'Reserva' ? [] : sectorOfUser == null ? sectorOfBranch : sectorOfUser} value={listSector} onchange={changeListSector} required={true} disabled={enable == true}></InputSelect>
+                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Usuário'} name={'username'} datas={listSituation == 'Inativo' || listSituation == 'Reserva' ? [] : userOfSector} value={listUser} onchange={changeListUser} required={true} disabled={enable == true}></InputSelect>
                                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Tipo'} name={'typeEquipment'} datas={types} value={listType} onchange={changeListType} required={false} disabled={enable == false}></InputSelect>
                                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Situação'} name={'situation'} datas={situation} value={listSituation} onchange={changeListSituation} required={false} disabled={enable == false}></InputSelect>
                                 <button className="p-2 bg-indigo-500 rounded-lg text-white absolute left-0 bottom-0 w-36 " type="submit">Alterar</button>

@@ -31,6 +31,10 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
         }
     })
 
+    if (equipmentRental.message) {
+        router.push('/login')
+    }
+
 
     const changeInitPeriod = (e) => {
         setInitPeriod(e.target.value)
@@ -48,14 +52,9 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
         setBranchSelected(e.target.value)
     }
 
-    if (equipmentRental.message) {
-        router.push('/login')
-    }
-
     const handleCheckboxChange = (e) => {
         setIsChecked(prev => !prev)
     }
-
 
 
 
@@ -127,9 +126,7 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
             }
 
             let data
-            let entryDateKM = filterEquipment[0].entryDate
-
-
+    
             if (filterEquipment.length > 0 && filterEquipment[0].entryDate <= finishPeriod && (filterEquipment[0].returnDate == null || filterEquipment[0].returnDate >= initPeriod)) {
                 return data = {
                     id: item.idEquipmentRental,
@@ -138,9 +135,9 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
                     valueKm: item.value,
                     value: filterEquipment[0].value,
                     branch: filterEquipment[0]['Branch'].branch,
-                    entryDateKM: item.init == null ? null : item.init,
-                    entryDate: filterEquipment[0].entryDate == null ? "" : new Date(en).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
-                    returnDateKM: item.finish == null ? "" : item.finish,
+                    entryDateKM: item.init == null ? '' : new Date(item.init).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                    entryDate: filterEquipment[0].entryDate == null ? "" : new Date(filterEquipment[0].entryDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                    returnDateKM: item.finish == null ? "" : new Date(item.finish).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
                     returnDate: filterEquipment[0].returnDate == null ? "" : new Date(filterEquipment[0].returnDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
                     user: filterEquipment[0]['User'] == null ? '' : filterEquipment[0]['User'].username,
                     sector: filterEquipment[0]['Sector'] == null ? '' : filterEquipment[0]['Sector'].sector
@@ -155,9 +152,9 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
                     valueKm: item.value,
                     value: '',
                     branch: '',
-                    entryDateKM: item.init == null ? '' : item.init,
+                    entryDateKM: item.init == null ? '' : new Date(item.init).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
                     entryDate: '',
-                    returnDateKM: item.finish == null ? "" : item.finish,
+                    returnDateKM: item.finish == null ? '' : new Date(item.finish).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
                     returnDate: '',
                     user: '',
                     sector: ''
@@ -214,10 +211,10 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
                     valueKm: equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value !== items.value).value,
                     value: items.value,
                     branch: items['Branch'].branch,
-                    entryDateKM: equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value !== items.value).init == null ? null : equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value != items.value).init,
+                    entryDateKM: equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value !== items.value).init == null ? null : new Date(equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value !== items.value).init).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
                     entryDate: items.entryDate == null ? '' : new Date(items.entryDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
-                    returnDateKM: equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value != items.value).finish == null ? null : new Date(equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value != items.value).finish).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
-                    returnDate: items.returnDate == null ? "" : items.returnDate,
+                    returnDateKM: equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value != items.value).finish == null ? null : new Date(equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value != items.value).finish).toLocaleDateString('pt-BR', { timeZone: 'UTC'}),
+                    returnDate: items.returnDate == null ? "" : new Date(items.returnDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
                     user: items['User'] == null ? '' : items['User'].username,
                     sector: items['Sector'] == null ? '' : items['Sector'].sector
 
@@ -296,7 +293,7 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
             ['Código']: item.codProd,
             ['Equipamento']: item.equipment,
             ['Valor K&M']: item.valueKm,
-            ['Entrada K&M']: new Date(item.entryDateKM).toLocaleDateString('pt-BR', {timeZone: 'UTC'}),
+            ['Entrada K&M']: item.entryDateKM,
             ['Retorno K&M']: item.returnDateKM,
             ['Usuário']: item.user,
             ['Retorno']: item.returnDate,
@@ -308,8 +305,11 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
 
     })
 
+    
+
     const { sortedData, handleSort, sortColumn, sortDirection } = orderData(formatedData, sortColumnState, sortDirectionState, setSortColumnState, setSortDirectionState)
 
+    
 
     return (
         <div className=" bg-gray-100 py-8 overflow-x-auto h-screen px-12 w-full">
