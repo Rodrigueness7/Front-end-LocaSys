@@ -8,7 +8,7 @@ import { useState } from "react";
 
 export default function Report({ equipmentHistory, equipmentRental, branch }) {
 
-    const options = [{ id: 0, option: 'Comparativo Equipamentos' }, { id: 1, option: 'Valores iguais' }, { id: 2, option: 'Divergênia de valores' }, { id: 3, option: 'Equipamentos Divergentes' }]
+    const options = [{ id: 0, option: 'Comparativo Equipamentos' }, { id: 1, option: 'Valores iguais' }, { id: 2, option: 'Divergênia de valores' }, { id: 3, option: 'Divergentes Equipamentos ' }]
     const listOption = options.map(item => item.option)
     const listBranch = branch.map(item => item.branch)
     const router = useRouter()

@@ -220,7 +220,7 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
 
     const changeListSector = (e) => {
         setListSector(e.target.value)
-
+      
         
     }
 
@@ -235,6 +235,11 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
 
     const changeListSituation = (e) => {
         setListSituation(e.target.value)
+        if(e.target.value === 'Inativo' || e.target.value === 'Reserva'){
+            setListSector('')
+            setListUser('')
+            setListBranch('')
+        }
     }
 
 
@@ -264,6 +269,11 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
     }
 
     const handleEneble = (e) => {
+        if(e.target.checked == false){
+            setListType('')
+            setListSituation('')
+        }
+
         setEnable(prev => !prev)
     }
 
@@ -332,14 +342,26 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
             idTypeEquipment: idTypeEquipment == null ? findEquipment['TypeEquipment'].idTypeEquipment : idTypeEquipment,
             idSituation: idSituation
           }
-
-          console.log(data)
             
-            // await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/transferEquipment/${item}`, data, token, setResult)
-            // setIsModalOpen(true)
+            await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/transferEquipment/${item}`, data, token, setResult)
+            setIsModalOpen(true)
         })
         
     }
+
+    let changedisabled = () => {
+
+        if(enable == false){
+            return false
+        }
+
+        if(listSituation !== 'Ativo'){
+            return true
+        } else {           
+             return false
+        }
+    }
+
 
 
     return (
@@ -359,9 +381,9 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
                         </div>
                         <div>
                             <form onSubmit={transfer} className="w-full mt-5 flex justify-between relative h-36">
-                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Filial'} name={'branch'} datas={branchesOfUser} value={listBranch} onchange={changeListBranch} required={true} disabled={enable == true}></InputSelect>
-                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Setor'} name={'sector'} datas={listSituation == 'Inativo' || listSituation == 'Reserva' ? [] : sectorOfUser == null ? sectorOfBranch : sectorOfUser} value={listSector} onchange={changeListSector} required={true} disabled={enable == true}></InputSelect>
-                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Usuário'} name={'username'} datas={listSituation == 'Inativo' || listSituation == 'Reserva' ? [] : userOfSector} value={listUser} onchange={changeListUser} required={true} disabled={enable == true}></InputSelect>
+                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Filial'} name={'branch'} datas={branchesOfUser} value={listBranch} onchange={changeListBranch} required={true} disabled={changedisabled()}></InputSelect>
+                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Setor'} name={'sector'} datas={sectorOfUser == null ? sectorOfBranch : sectorOfUser} value={listSector} onchange={changeListSector} required={true} disabled={changedisabled()}></InputSelect>
+                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Usuário'} name={'username'} datas={userOfSector} value={listUser} onchange={changeListUser} required={true} disabled={changedisabled()}></InputSelect>
                                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Tipo'} name={'typeEquipment'} datas={types} value={listType} onchange={changeListType} required={false} disabled={enable == false}></InputSelect>
                                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Situação'} name={'situation'} datas={situation} value={listSituation} onchange={changeListSituation} required={false} disabled={enable == false}></InputSelect>
                                 <button className="p-2 bg-indigo-500 rounded-lg text-white absolute left-0 bottom-0 w-36 " type="submit">Alterar</button>
@@ -406,7 +428,7 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
                 </div>
             </form>
             <div className='ml-8 flex-1 h-[67%] overflow-x-auto'>
-                <Table filterCheckbox={true} Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white text-nowrap rounded-lg'} Th={'py-3 px-4 text-left '} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={attribute} data={sortedData} attributos={attribute} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./equipment/updateEquipment'} bt={'...'} permission={permission.find(number => number == '3')} handleSort={handleSort} sortColumn={sortColumn} sortDirection={sortDirection}></Table>
+                <Table filterCheckbox={true} Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white text-nowrap rounded-lg'} Th={'py-3 px-4 text-left '} TrTbody={'border-b'} Td={'py-2 px-4 h-10 text-black text-nowrap'} headers={attribute} data={sortedData} attributos={attribute} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./equipment/updateEquipment'} bt={'...'} permission={permission.find(number => number == '3')} handleSort={handleSort} sortColumn={sortColumn} sortDirection={sortDirection}></Table>
             </div>
             <div className="ml-8 mt-3">{`Total de Equipamentos: ${totalize}`}</div>
         </div>

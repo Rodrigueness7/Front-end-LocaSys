@@ -99,10 +99,10 @@ export default function Table({
 
                 <tbody>
                     {currentData.map((row) => (
-                        <tr key={row[id]} className='border-b hover:bg-blue-100' >
+                        <tr key={row[id]} className='border-b hover:bg-blue-100 ' >
                             {filterCheckbox == true ? (<td ><input className="ml-5" type="checkbox" checked={checkedRows.includes(row[id])} onChange={() => handleChecked(row[id])}></input></td>) : null}
                             {attributos.map(item => (
-                                <td key={item} className={Td}>{row[item]}</td>
+                                <td key={item} className={Td + ' text-sm'}>{row[item]}</td>
                             ))}
                             {permission && (<td className={positionTd}><Link href={href + `/${row[id]}`}><button className={classButton}>{bt}</button></Link></td>)}
                         </tr>
