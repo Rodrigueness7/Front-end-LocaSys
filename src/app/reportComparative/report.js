@@ -62,10 +62,10 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
         e.preventDefault()
 
         if (equipmentRental[0]['Branch'].branch != branchSelected) {
-            return(
+            return (
                 alert('Não existe relátorio para essa Filial')
             )
-           
+
         }
 
         if (branchSelected == '' && isCheked) {
@@ -79,37 +79,35 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
 
 
         let filterEquipmentHistory = branchSelected != '' ? equipmentHistory.filter(items => equipmentRental.some(itens => itens.value == items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate >= initPeriod) && items['Branch'].branch == branchSelected)) : equipmentHistory.filter(items => equipmentRental.some(itens => itens.value == items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate >= initPeriod)))
-
+        let filterEquimentHistoryDiverget = branchSelected != '' ? equipmentHistory.filter(items =>items.entryDate <= finishPeriod &&(items.returnDate == null || items.returnDate >= initPeriod) && items['Branch'].branch == branchSelected) : equipmentHistory.filter(items =>items.entryDate <= finishPeriod &&(items.returnDate == null || items.returnDate >= initPeriod))
+    
         if (isCheked && branchSelected != '') {
-            filterEquipmentHistory = branchSelected != '' ? equipmentHistory.filter(items => equipmentRental.some(itens => itens.value == items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate >= initPeriod ) && items['Branch'].headquarter === headquarter)) : equipmentHistory.filter(items => equipmentRental.some(itens => itens.value == items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate >= initPeriod)))
+            filterEquipmentHistory = branchSelected != '' ? equipmentHistory.filter(items => equipmentRental.some(itens => itens.value == items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate >= initPeriod) && items['Branch'].headquarter === headquarter)) : equipmentHistory.filter(items => equipmentRental.some(itens => itens.value == items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate >= initPeriod)))
 
         }
 
+        const equipmentDiverget = filterEquimentHistoryDiverget.map(items => {
+                const maxId = Math.max(...equipmentHistory.filter(itens => itens['Equipment'].codProd == items['Equipment'].codProd).map(i => i.idEquipmentHistory))
+                let data
 
-        const equipmentDiverget = filterEquipmentHistory.map(items => {
-            const maxIdEquip = Math.max(...equipmentHistory.filter(itens => itens['Equipment'].codProd == items['Equipment'].codProd && items['Equipment'].codProd != null).map(i => i.idEquipmentHistory))
-            let data
-
-            if (items.idEquipmentHistory === maxIdEquip) {
-
-                return data = {
-                    id: items.idEquipmentHistory,
-                    codProd: items['Equipment'].codProd,
-                    equipment: items['Equipment'].equipment,
-                    valueKm: '',
-                    value: items.value,
-                    branch: items['Branch'].branch,
-                    entryDateKM: '',
-                    entryDate: items.entryDate == null ? '' : new Date(items.entryDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
-                    returnDateKM: '',
-                    returnDate: items.returnDate == null ? '' : new Date(items.returnDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
-                    user: items['User'] == null ? '' : items['User'].username,
-                    sector: items['Sector'] == null ? '' : items['Sector'].sector
+                if (items.idEquipmentHistory === maxId && !equipmentRental.some(iten => iten.codProd === items['Equipment'].codProd)) {
+                    return data = {
+                        id: items.idEquipmentHistory,
+                        codProd: items['Equipment'].codProd,
+                        equipment: items['Equipment'].equipment,
+                        valueKm: '',
+                        value: items.value,
+                        branch: items['Branch'].branch,
+                        entryDateKM: '',
+                        entryDate: items.entryDate == null ? '' : new Date(items.entryDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                        returnDateKM: '',
+                        returnDate: items.returnDate == null ? '' : new Date(items.returnDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                        user: items['User'] == null ? '' : items['User'].username,
+                        sector: items['Sector'] == null ? '' : items['Sector'].sector
+                    }
                 }
+            })
 
-
-            }
-        })
         const equipmentDivergetFiltered = equipmentDiverget.filter(item => item != undefined)
 
 
@@ -126,7 +124,7 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
             }
 
             let data
-    
+
             if (filterEquipment.length > 0 && filterEquipment[0].entryDate <= finishPeriod && (filterEquipment[0].returnDate == null || filterEquipment[0].returnDate >= initPeriod)) {
                 return data = {
                     id: item.idEquipmentRental,
@@ -213,7 +211,7 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
                     branch: items['Branch'].branch,
                     entryDateKM: equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value !== items.value).init == null ? null : new Date(equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value !== items.value).init).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
                     entryDate: items.entryDate == null ? '' : new Date(items.entryDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
-                    returnDateKM: equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value != items.value).finish == null ? null : new Date(equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value != items.value).finish).toLocaleDateString('pt-BR', { timeZone: 'UTC'}),
+                    returnDateKM: equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value != items.value).finish == null ? null : new Date(equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value != items.value).finish).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
                     returnDate: items.returnDate == null ? "" : new Date(items.returnDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
                     user: items['User'] == null ? '' : items['User'].username,
                     sector: items['Sector'] == null ? '' : items['Sector'].sector
@@ -305,11 +303,11 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
 
     })
 
-    
+
 
     const { sortedData, handleSort, sortColumn, sortDirection } = orderData(formatedData, sortColumnState, sortDirectionState, setSortColumnState, setSortDirectionState)
 
-    
+
 
     return (
         <div className=" bg-gray-100 py-8 overflow-x-auto h-screen px-12 w-full">
