@@ -8,7 +8,7 @@ import { useState } from "react";
 
 export default function Report({ equipmentHistory, equipmentRental, branch }) {
 
-    const options = [{ id: 0, option: 'Comparativo Equipamentos' }, { id: 1, option: 'Valores iguais' }, { id: 2, option: 'Divergênia de valores' }, { id: 3, option: 'Divergentes Equipamentos ' }]
+    const options = [{ id: 0, option: 'Comparativo Equipamentos' }, { id: 1, option: 'Valores iguais' }, { id: 2, option: 'Divergênia de valores' }, { id: 3, option: 'Divergentes Equipamentos Local '}, { id: 4, option: 'Divergentes Equipamentos Alugado'}]
     const listOption = options.map(item => item.option)
     const listBranch = branch.map(item => item.branch)
     const router = useRouter()
@@ -61,7 +61,8 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
     const search = (e) => {
         e.preventDefault()
 
-        if (equipmentRental[0]['Branch'].branch != branchSelected) {
+
+        if (!equipmentRental.find(item => item['Branch'].branch === branchSelected)) {
             return (
                 alert('Não existe relátorio para essa Filial')
             )
@@ -77,19 +78,48 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
 
         const headquarter = branchSelected != '' ? branch.find(item => item.branch == branchSelected).headquarter : ''
 
+        equipmentRental.map(items => {
+            if(items['Branch'].branch === branchSelected && items.initPeriod.slice(0, 10) <= finishPeriod && items.finishPeriod.slice(0, 10) >= initPeriod && (items.returnDate == null || items.returnDate >= initPeriod)){
+                console.log(items)
+            }  
+        })
 
-        let filterEquipmentHistory = branchSelected != '' ? equipmentHistory.filter(items => equipmentRental.some(itens => itens.value == items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate >= initPeriod) && items['Branch'].branch == branchSelected)) : equipmentHistory.filter(items => equipmentRental.some(itens => itens.value == items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate >= initPeriod)))
+        let filterEquipmentHistory = branchSelected != '' ? equipmentHistory.filter(items => equipmentRental.some(itens => itens.value == items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate >= initPeriod) && items['Branch'].branch === branchSelected)) : equipmentHistory.filter(items => equipmentRental.some(itens => itens.value == items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate >= initPeriod)))
         let filterEquimentHistoryDiverget = branchSelected != '' ? equipmentHistory.filter(items =>items.entryDate <= finishPeriod &&(items.returnDate == null || items.returnDate >= initPeriod) && items['Branch'].branch == branchSelected) : equipmentHistory.filter(items =>items.entryDate <= finishPeriod &&(items.returnDate == null || items.returnDate >= initPeriod))
     
         if (isCheked && branchSelected != '') {
             filterEquipmentHistory = branchSelected != '' ? equipmentHistory.filter(items => equipmentRental.some(itens => itens.value == items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate >= initPeriod) && items['Branch'].headquarter === headquarter)) : equipmentHistory.filter(items => equipmentRental.some(itens => itens.value == items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate >= initPeriod)))
-
+            filterEquimentHistoryDiverget = branchSelected != '' ? equipmentHistory.filter(items =>items.entryDate <= finishPeriod &&(items.returnDate == null || items.returnDate >= initPeriod) && items['Branch'].headquarter === headquarter) : equipmentHistory.filter(items =>items.entryDate <= finishPeriod &&(items.returnDate == null || items.returnDate >= initPeriod))
         }
 
-        const equipmentDiverget = filterEquimentHistoryDiverget.map(items => {
+        const equipmentRentalDiverget = [
+            ...equipmentRental.filter(items => !equipmentHistory.some(itens => itens['Equipment'].codProd == items.codProd) && items.initPeriod.slice(0, 10) <= finishPeriod && items.finishPeriod.slice(0, 10) >= initPeriod && items['Branch'].branch == branchSelected)
+        ].map(item => {
+            return {
+                id: item.idEquipmentRental,
+                codProd: item.codProd,
+                equipment: item.description,
+                valueKm: item.value,
+                value: '',
+                branch: '',
+                entryDateKM: item.init == null ? '' : new Date(item.init).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                entryDate: '',
+                returnDateKM: item.finish == null ? '' : new Date(item.finish).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                returnDate: '',
+                user: '',
+                sector: ''
+            }
+           
+        })
+
+        
+        
+        
+        const divergentLocalEquipment = filterEquimentHistoryDiverget.map(items => {
                 const maxId = Math.max(...equipmentHistory.filter(itens => itens['Equipment'].codProd == items['Equipment'].codProd).map(i => i.idEquipmentHistory))
                 let data
 
+               
                 if (items.idEquipmentHistory === maxId && !equipmentRental.some(iten => iten.codProd === items['Equipment'].codProd)) {
                     return data = {
                         id: items.idEquipmentHistory,
@@ -108,11 +138,11 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
                 }
             })
 
-        const equipmentDivergetFiltered = equipmentDiverget.filter(item => item != undefined)
+        const filterDivergentLocalEquipment = divergentLocalEquipment.filter(item => item != undefined)
 
 
 
-        const comparativeEquipment = equipmentRental.filter(item => item.initPeriod.slice(0, 10) == initPeriod && item.finishPeriod.slice(0, 10) == finishPeriod).map(item => {
+        const comparativeEquipment = equipmentRental.filter(item => { return item.initPeriod.slice(0, 10) <= finishPeriod && item.finishPeriod.slice(0, 10) >= initPeriod && (item.returnDate == null || item.returnDate >= initPeriod) && item['Branch'].branch == branchSelected}).map(item => {
             const maxId = Math.max(...equipmentHistory.filter(items => items['Equipment'].codProd == item.codProd).map(itens => itens.idEquipmentHistory))
             let filterEquipment = []
             if (branchSelected == '') {
@@ -124,8 +154,8 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
             }
 
             let data
-
-            if (filterEquipment.length > 0 && filterEquipment[0].entryDate <= finishPeriod && (filterEquipment[0].returnDate == null || filterEquipment[0].returnDate >= initPeriod)) {
+    
+            if (filterEquipment.length > 0 ) {
                 return data = {
                     id: item.idEquipmentRental,
                     codProd: item.codProd,
@@ -250,9 +280,14 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
         }
 
         if (report == listOption[3]) {
-            setDataReport(equipmentDivergetFiltered)
+            setDataReport(filterDivergentLocalEquipment)
             setShowTable(true)
         }
+
+            if (report == listOption[4]) {  
+            setDataReport(equipmentRentalDiverget)
+            setShowTable(true)
+            }
     }
 
 
@@ -277,12 +312,19 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
             }
             window.open('/reportComparative/divergentValue')
         } else if (report == listOption[3]) {
-            sessionStorage.setItem('divergentEquipment', JSON.stringify(equipmentDivergetFiltered))
-            if (equipmentDivergetFiltered.length <= 0) {
+            sessionStorage.setItem('divergentEquipment', JSON.stringify(filterDivergentLocalEquipment))
+            if (filterDivergentLocalEquipment.length <= 0) {
                 return alert('Não existe equipamentos divergentes para gerar relatório')
             }
             window.open('/reportComparative/divergentEquipment')
+        }else if(report == listOption[4]){
+            sessionStorage.setItem('equipmentRentalDivergent', JSON.stringify(equipmentRentalDiverget))
+            if (equipmentRentalDiverget.length <= 0) {
+                return alert('Não existe equipamentos divergentes para gerar relatório')
+            }
+            window.open('/reportComparative/equipmentRentalDivergent')
         }
+
     }
 
     const formatedData = dataReport.map(item => {
