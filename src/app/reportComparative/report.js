@@ -78,11 +78,6 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
 
         const headquarter = branchSelected != '' ? branch.find(item => item.branch == branchSelected).headquarter : ''
 
-        equipmentRental.map(items => {
-            if(items['Branch'].branch === branchSelected && items.initPeriod.slice(0, 10) <= finishPeriod && items.finishPeriod.slice(0, 10) >= initPeriod && (items.returnDate == null || items.returnDate >= initPeriod)){
-                console.log(items)
-            }  
-        })
 
         let filterEquipmentHistory = branchSelected != '' ? equipmentHistory.filter(items => equipmentRental.some(itens => itens.value == items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate >= initPeriod) && items['Branch'].branch === branchSelected)) : equipmentHistory.filter(items => equipmentRental.some(itens => itens.value == items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate >= initPeriod)))
         let filterEquimentHistoryDiverget = branchSelected != '' ? equipmentHistory.filter(items =>items.entryDate <= finishPeriod &&(items.returnDate == null || items.returnDate >= initPeriod) && items['Branch'].branch == branchSelected) : equipmentHistory.filter(items =>items.entryDate <= finishPeriod &&(items.returnDate == null || items.returnDate >= initPeriod))
@@ -112,8 +107,6 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
            
         })
 
-        
-        
         
         const divergentLocalEquipment = filterEquimentHistoryDiverget.map(items => {
                 const maxId = Math.max(...equipmentHistory.filter(itens => itens['Equipment'].codProd == items['Equipment'].codProd).map(i => i.idEquipmentHistory))
