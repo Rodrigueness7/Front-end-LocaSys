@@ -197,7 +197,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             returnDate: null,
 
         }
-       
+        
         await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addEquipmentHistory`, dataEquipmentHistory, token, setResult)
         setIsModalOpen(true)
         }

@@ -2,6 +2,7 @@
 
 import InputForm from "@/components/InputForm"
 import Table from "@/components/table"
+import orderData from "@/utils/orderData"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -11,8 +12,11 @@ export default function Supplier({ tableSupplier }) {
     const [dataSupplier, setDataSupplier] = useState(tableSupplier)
     const [supplier, setSupplier] = useState('')
     const [permission, setPermission] = useState([])
-    
-    
+    const [sortColumnState, setSortColumnState] = useState('')
+    const [sortDirectionState, setSortDirectionState] = useState('asc')
+    const {sortedData, handleSort, sortColumn, sortDirection} = orderData(dataSupplier, sortColumnState, sortDirectionState, setSortColumnState, setSortDirectionState)
+    const [totalize, setTotalize] = useState(dataSupplier.length)
+
         useEffect(() => {
             let data = localStorage.getItem('permission')
             if (!data) {
@@ -22,28 +26,11 @@ export default function Supplier({ tableSupplier }) {
             setPermission(number)
         }, [router])
 
-    const data = dataSupplier.map((item) => {
-        let dataTable = {
-            ['id'] : item.idSupplier,
-            ['Fornecedor'] : item.supplier,
-            ['Email'] : item.email,
-            ['Contato'] : item.contact,
-            ['Telefone'] : item.telephone,
-            ['CNPJ'] : item.CNPJ,
-            ['Endereço'] : item.address,
-            ['Cep'] : item.zipCode,
-            ['Estado'] : item.state,
-            ['Cidade'] : item.city
-        }
-        return dataTable
-    })
-
-
 
     const filter = () => {
         return tableSupplier.filter((item) => {
             return (
-                (supplier ? item.supplier.toLowerCase() == supplier.toLowerCase().trim() : true)
+                (supplier ? item['Fornecedor'].toLowerCase() == supplier.toLowerCase().trim() : true)
             )
         })
     }
@@ -55,11 +42,14 @@ export default function Supplier({ tableSupplier }) {
     const searchSupplier = (e) => {
         e.preventDefault()
         setDataSupplier(filter())
+        setTotalize(filter().length)
     }
 
     const generation = async () => {
-        sessionStorage.setItem('dataSupplier', JSON.stringify(data))
-        if(data.length <= 0) {
+        sessionStorage.setItem('dataSupplier', JSON.stringify(tableSupplier))
+
+        console.log(sessionStorage.getItem('dataSupplier'))
+        if(tableSupplier.length <= 0) {
             return alert('Não há dados para gerar relatório')
         }
        window.open(`/supplier/report`, '_blank') 
@@ -80,8 +70,9 @@ export default function Supplier({ tableSupplier }) {
                 </div>
             </form>
             <div className="ml-8 flex-1 h-[67%] overflow-x-auto">
-                <Table Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white sticky top-0 z-10 text-nowrap rounded-lg'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={['id', 'Fornecedor', 'Email', 'Contato', 'Telefone', 'CNPJ', 'Endereço', 'Cep', 'Estado', 'Cidade']} data={dataSupplier} attributos={['idSupplier', 'supplier', 'email', 'contact', 'telephone', 'CNPJ', 'address', 'zipCode', 'state', 'city']} id={'idSupplier'} href={'./supplier/updateSupplier'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} bt={'...'} permission={permission.find(number => number == '46')}></Table>
+                <Table Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white sticky top-0 z-10 text-nowrap rounded-lg'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={['id', 'Fornecedor', 'Email', 'Contato', 'Telefone', 'CNPJ', 'Endereço', 'Cep', 'Estado', 'Cidade']} data={sortedData} attributos={['id', 'Fornecedor', 'Email', 'Contato', 'Telefone', 'CNPJ', 'Endereço', 'Cep', 'Estado', 'Cidade']} id={'id'} href={'./supplier/updateSupplier'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} bt={'...'} permission={permission.find(number => number == '46')} handleSort={handleSort} sortColumn={sortColumn} sortDirection={sortDirection}></Table>
             </div>
+            <div className="ml-8">{`Total de Fornecedor: ${totalize}`}</div>
         </div>
     )
 }

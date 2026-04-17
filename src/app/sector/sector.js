@@ -3,6 +3,7 @@
 import InputForm from "@/components/InputForm"
 import InputSelect from "@/components/InputSelect"
 import Table from "@/components/table"
+import orderData from "@/utils/orderData"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useCallback, useEffect, useMemo, useState } from "react"
@@ -15,7 +16,10 @@ export default function Sector({ tableSector }) {
     const [sector, setSector] = useState('')
     const [branch, setBranch] = useState('')
     const [permission, setPermission] = useState([])
-    
+    const [sortColumnState, setSortColumnState] = useState('')
+    const [sortDirectionState, setSortDirectionState] = useState('asc')
+    const {sortedData, handleSort, sortColumn, sortDirection}  = orderData(dataSector, sortColumnState, sortDirectionState, setSortColumnState, setSortDirectionState)
+    const [totalize, setTotalize] = useState(dataSector.length)
     
         useEffect(() => {
             let data = localStorage.getItem('permission')
@@ -27,38 +31,29 @@ export default function Sector({ tableSector }) {
             
         }, [router])
 
-    let data = dataSector.map((item) => {
-        let dataTable = {
-            ['id'] : item.idSector,
-            ['Setor'] : item.sector,
-            ['Filial'] : item.branch
-        }
-        return dataTable
-    })
-
-   
+       
 
     const filter = () => {
         return tableSector.filter((item) => {
             return (
-                (id ? item.idSector == id : true) &&
-                (sector ? item.sector === sector : true) &&
-                (branch ? item.branch === branch : true)
+                (id ? item.id == id : true) &&
+                (sector ? item['Setor'] === sector : true) &&
+                (branch ? item['Filial'] === branch : true)
             )
         })
     }
 
     const getOptions = useCallback((field, ignore) => {
         const dataFilter = tableSector.filter((item) =>
-            (sector && ignore != 'sector' ? item.sector === sector : true) &&
-            (branch && ignore != 'branch' ? item.branch === branch : true)
+            (sector && ignore != 'Setor' ? item['Setor'] === sector : true) &&
+            (branch && ignore != 'Filial' ? item['Filial'] === branch : true)
         )
 
         const options = dataFilter.map(item => item[field])
         return [... new Set(options)]
     }, [branch, sector, tableSector]);
 
-    const optionsSector = useMemo(() => getOptions('sector', 'sector'), [getOptions]).sort((a, b) => {
+    const optionsSector = useMemo(() => getOptions('Setor', 'Setor'), [getOptions]).sort((a, b) => {
         const nameA = a.toUpperCase();
         const nameB = b.toUpperCase();  
         if (nameA < nameB) {
@@ -69,7 +64,7 @@ export default function Sector({ tableSector }) {
         }
     });
 
-    const optionsBranch = useMemo(() => getOptions('branch', 'branch'), [getOptions]).sort((a, b) => {
+    const optionsBranch = useMemo(() => getOptions('Filial', 'Filial'), [getOptions]).sort((a, b) => {
         const nameA = a.toUpperCase();
         const nameB = b.toUpperCase();
         if (nameA < nameB) {
@@ -89,6 +84,7 @@ export default function Sector({ tableSector }) {
     const searchSector = (e) => {
         e.preventDefault()
         setDataSector(filter())
+        setTotalize(filter().length)
     }
 
     const generation = async () => {
@@ -113,8 +109,9 @@ export default function Sector({ tableSector }) {
                 </div>
             </form>
             <div className='ml-8 flex-1 h-[65%] overflow-x-auto w-1/3'>
-                <Table Table={'table-auto bg-white shadow-md rounded-lg w-full '} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black'} headers={['id', 'Setor', 'Filial']} data={dataSector} attributos={['idSector', 'sector', 'branch']} id={'idSector'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./sector/updateSector'} bt={'...'} permission={permission.find(number => number == '21')}></Table>
+                <Table Table={'table-auto bg-white shadow-md rounded-lg w-full '} TrThead={'bg-gray-800 text-white'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black'} headers={['id', 'Setor', 'Filial']} data={sortedData} attributos={['id', 'Setor', 'Filial']} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./sector/updateSector'} bt={'...'} permission={permission.find(number => number == '21')} handleSort={handleSort} sortColumn={sortColumn} sortDirection={sortDirection}></Table>
             </div>
+            <div className="ml-8">{`Total de Setor: ${totalize}`}</div>
         </div>
     )
 }

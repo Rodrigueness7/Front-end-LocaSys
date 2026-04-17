@@ -19,6 +19,13 @@ export default async function PageProfile() {
 
    
     const dataProfile = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllProfile`, token)
+
+    const formattedDataProfile = dataProfile.map(item => {
+        return {
+            ['id'] : item.idProfile,
+            ['Perfil'] : item.profile
+        }
+    })
     
     if(dataProfile.message) {
        redirect('/login')
@@ -29,7 +36,7 @@ export default async function PageProfile() {
     }
 
     return (
-      <Profile tableProfile={dataProfile}></Profile>
+      <Profile tableProfile={formattedDataProfile}></Profile>
         
     )
 }

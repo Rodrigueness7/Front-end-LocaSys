@@ -18,6 +18,13 @@ export default async function PageTypeEquipment() {
     const number = permissionUser.find(number => number == 48)
 
     const dataTypeEquipmet = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllTypeEquipment`, token)
+
+    let formatDataTyeEquipmet = dataTypeEquipmet.map(item => {
+       return {
+        ['id'] : item.idTypeEquipment,
+        ['Tipo'] : item.typeEquipment
+       }
+    })
     
     if(dataTypeEquipmet.message) {
        redirect('/login')
@@ -30,7 +37,7 @@ export default async function PageTypeEquipment() {
 
 
     return (
-      <TypeEquipmet tableTypeEquipment ={dataTypeEquipmet}></TypeEquipmet>
+      <TypeEquipmet tableTypeEquipment ={formatDataTyeEquipmet}></TypeEquipmet>
    
         
     )

@@ -15,6 +15,7 @@ export default async function PageUpdateEquipment({ params }) {
         redirect('/login')
     }
 
+
      let permission = jwtDecode(token).permission
      const number = permission.find(number => number == 3)
      const numberValue = permission.find(number => number == 5)
