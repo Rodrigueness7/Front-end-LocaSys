@@ -279,19 +279,91 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
 
      const optionUpdate = useMemo(() => {
 
-        let optionBranchOfSector = dataSector.filter(item => item['Branch'].branch === listBranch).map(item => item.sector)
-        let optionSectorOfUSer = dataUser.filter(item => item['Sector'].sector === listSector).map(item => item.username)
-        let optionUserOfSector = dataUser.filter(item => item.username === listUser).map(item => item['Sector'].sector)
-        let optionSectorOfBranch = dataSector.filter(item => item.sector === listSector).map(item => item['Branch'].branch)
+        let optionBranchOfSector = dataSector.filter(item => item['Branch'].branch === listBranch).map(item => item.sector).sort((a, b) => {
+            const nameA = a.toUpperCase();
+            const nameB = b.toUpperCase();  
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+            return 0;
+        })
+        let optionSectorOfUSer = dataUser.filter(item => item['Sector'].sector === listSector).map(item => item.username).sort((a, b) => {
+            const nameA = a.toUpperCase();
+            const nameB = b.toUpperCase();
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+            return 0;
+        })
+        let optionUserOfSector = dataUser.filter(item => item.username === listUser).map(item => item['Sector'].sector).sort((a, b) => {
+            const nameA = a.toUpperCase();
+            const nameB = b.toUpperCase();  
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }   
+            return 0;
+        })
+
+        let optionSectorOfBranch = dataSector.filter(item => item.sector === listSector).map(item => item['Branch'].branch).sort((a, b) => {
+            const nameA = a.toUpperCase();
+            const nameB = b.toUpperCase();
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+            return 0;
+        })
 
         return{optionBranchOfSector, optionSectorOfUSer, optionUserOfSector, optionSectorOfBranch}
        
 }, [listBranch, listSector, listUser, dataSector, dataUser]);
 
 
-    let branchesOfUser = listSector ? optionUpdate.optionSectorOfBranch : dataBranch.map(item => item.branch)
-    let sectorOfBranch = listBranch ? optionUpdate.optionBranchOfSector : dataSector.map(item => item.sector)
-    let userOfSector = listSector ? optionUpdate.optionSectorOfUSer : dataUser.map(item => item.username)
+    let branchesOfUser = listSector ? optionUpdate.optionSectorOfBranch : dataBranch.map(item => item.branch).sort((a, b) => {
+        const nameA = a.toUpperCase();
+        const nameB = b.toUpperCase();  
+        if (nameA < nameB) {
+            return -1;
+        }
+        if (nameA > nameB) {
+            return 1;
+        }
+        return 0;
+    })
+    
+    let sectorOfBranch = listBranch ? optionUpdate.optionBranchOfSector : dataSector.map(item => item.sector).sort((a, b) => {
+        const nameA = a.toUpperCase();
+        const nameB = b.toUpperCase();
+        if (nameA < nameB) {
+            return -1;
+        }
+        if (nameA > nameB) {
+            return 1;
+        }
+        return 0;
+    })
+    let userOfSector = listSector ? optionUpdate.optionSectorOfUSer : dataUser.map(item => item.username).sort((a, b) => {
+        const nameA = a.toUpperCase();
+        const nameB = b.toUpperCase();
+        if (nameA < nameB) {
+            return -1;
+        }
+        if (nameA > nameB) {
+            return 1;
+        }
+        return 0;
+    })
     let sectorOfUser = listUser ? optionUpdate.optionUserOfSector : null
 
   
