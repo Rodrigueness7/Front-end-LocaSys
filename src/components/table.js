@@ -1,21 +1,21 @@
 'use client'
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import {useEffect, useState } from "react";
 
-export default function Table({ 
-    Table, 
-    TrThead, 
-    Th, 
-    Td, 
-    headers, 
-    data, 
-    attributos, 
-    id, 
-    href, 
-    classButton, 
-    bt, 
-    positionTd, 
-    permission, 
+export default function Table({
+    Table,
+    TrThead,
+    Th,
+    Td,
+    headers,
+    data,
+    attributos,
+    id,
+    href,
+    classButton,
+    bt,
+    positionTd,
+    permission,
     filterCheckbox = false,
     handleSort,
     sortColumn,
@@ -32,11 +32,16 @@ export default function Table({
 
     const totalPages = Math.ceil(data.length / itemsPerPage)
 
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [data]);
+
 
     const changePage = (page) => {
         if (page > 0 && page <= totalPages) {
             setCurrentPage(page)
         }
+
     }
 
     const handleChecked = (rowId) => {
@@ -81,7 +86,7 @@ export default function Table({
                         {filterCheckbox == true ? (<th className='rounded-tl-lg'></th>) : null}
                         {headers.map((header, index) => (
                             <th
-                                onClick={() => {handleSort(header)}} 
+                                onClick={() => { handleSort(header) }}
                                 key={index}
                                 className={`${Th} py-3 px-4 text-left cursor-pointer
                                 ${index === 0 && filterCheckbox == false ? "rounded-tl-lg" : ""} 
@@ -119,7 +124,7 @@ export default function Table({
                         <button
                             key={index}
                             onClick={() => page !== '...' && changePage(page)}
-                            className={`px-4 py-2 border-md rounded-md ${currentPage === page ? 'bg-blue-500 text-white' : 'bg-gray-500 hover:bg-gray-400'}`}
+                            className={`px-4 py-2 border-md rounded-md ${currentPage == page ? 'bg-blue-500 text-white' : 'bg-gray-500 hover:bg-gray-400'}`}
                             disabled={page === '...'}
                         >
                             {page}
