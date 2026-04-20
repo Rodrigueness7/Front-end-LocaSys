@@ -10,7 +10,6 @@ import orderData from "@/utils/orderData"
 import updateData from "@/utils/updateData"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { list } from "postcss"
 import {useCallback, useEffect, useMemo, useState } from "react"
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
 
@@ -123,7 +122,6 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
 };
 
 
-
     const getOptions = useCallback((field, ignore = '') => {
         const dataFilter = tableEquipment.filter((item) =>
             (codProd && ignore != 'Código' ? item['Código'] == codProd.toString() : true) &&
@@ -170,6 +168,7 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
             return 1;
         }
     });
+
 
     const optionsUsername = useMemo(() => getOptions('Usuario', 'Usuario'), [getOptions]).sort((a, b) => {
         const nameA = a.toUpperCase();
