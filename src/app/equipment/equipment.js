@@ -74,6 +74,7 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
             window.removeEventListener('local-storage-change', updateValue);
         };
     }, []);
+    
 
     const handleCheckboxChange = (e) => {
         const { value, checked } = e.target;
