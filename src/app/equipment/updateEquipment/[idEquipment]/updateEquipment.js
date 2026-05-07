@@ -12,7 +12,7 @@ import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
 import SortItem from "@/utils/sortItem"
 
 
-export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, dataSector, dataSupplier, token, idEquipment, dataTypeEquipment, dataAllEquipment, numberValue }) {
+export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, dataSector, dataSupplier, token, idEquipment, dataTypeEquipment, dataAllEquipment, numberValue, dataSituation }) {
 
     const router = useRouter()
     const listBranch = SortItem(dataBranch, 'branch').map(item => item.branch)
@@ -20,7 +20,9 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     const listSector = SortItem(dataSector, 'sector').map(item => item.sector)
     const listSupplier = SortItem(dataSupplier, 'supplier').map(item => item.supplier)
     const listTypeEquipment = SortItem(dataTypeEquipment, 'typeEquipment').map(item => item.typeEquipment)
+    const listSituation = SortItem(dataSituation, 'situation').filter(item => item.idSituation === 1 || item.idSituation === 4 ).map(item => item.situation)
 
+  
     
     const [codProd, setCodProd] = useState(dataEquipment.codProd == null ? '' : dataEquipment.codProd)
     const [equipment, setEquipment] = useState(dataEquipment.equipment)
@@ -33,6 +35,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     const [entryDate, setEntryDate] = useState(new Date(dataEquipment.entryDate).toISOString().split('T')[0])
     const [returnDate, setReturnDate] = useState('')
     const [reason, setReason] = useState('')
+    const [situation, setSituation] = useState(dataEquipment['Situation'].situation)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [result, setResult] = useState('')
     const [checked, setChecked] = useState(dataEquipment['Situation'].idSituation == 2 ? true : false)
@@ -132,6 +135,15 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         }
     }
 
+    const handleChangeSituation = (e) => {
+        setSituation(e.target.value)
+
+        if(e.target.value !== "Reserva") {
+            setUsername('')
+            setSector('')
+        }
+    }
+
     const controlRequired = () => {
         if(username !== '' || sector !== '') {
             return true
@@ -152,15 +164,12 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         const idBranch = dataBranch.find(item => item.branch === branch).idBranch
         const idSupplier = dataSupplier.find(item => item.supplier === supplier).idSupplier
         const idTypeEquipment = dataTypeEquipment.find(item => item.typeEquipment === type).idTypeEquipment
-
-       const idSituation = () => {
+        const idSituation = dataSituation.find(item => item.situation === situation).idSituation
+       
+        const idSituationFunctionInative = () => {
             if(checked) {
                 return 2
-            } else if(username !== '' && sector !== '') {
-                return 1
-            } else if(username == '' && sector == '') {
-                return 4
-            }
+            } 
        }
 
         const data = {
@@ -175,9 +184,10 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
             idSupplier: idSupplier,
             entryDate: entryDate,
             entryDate: entryDate,
-            idSituation: idSituation()
+            idSituation: checked ? idSituationFunctionInative() : idSituation
             
         }
+
 
         await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateEquipment/${idEquipment}`, data, token, setResult)
         setIsModalOpen(true)
@@ -439,10 +449,15 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
                     {numberValue !== undefined ? (
                         <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Valor'} type={'decimal'} name={'value'} value={value} onchange={changeValue} maxLength={'10'} onKeyDown={pointLockValue} required={controlRequired()} disabled={handleEquipmentDisabled()}></InputForm>
                     ) : null}
+                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Situação'} name={'situation'} datas={listSituation} value={situation} onchange={handleChangeSituation} disabled={handleEquipmentDisabled()} required={true}></InputSelect>
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Data Entrada'} type={'date'} name={'entryDate'} value={entryDate} onchange={changeEntryDate} maxLength={'10'} disabled={handleEquipmentDisabled()}></InputForm>
                     <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Filial'} name={'branch'} datas={listBranch} value={branch} onchange={changeBranch} disabled={handleEquipmentDisabled()}></InputSelect>
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Usuário'} name={'username'} datas={listUsername} value={username} onchange={changeUsername} disabled={handleEquipmentDisabled()} required={controlRequired()}></InputSelect>
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Setor'} name={'sector'} datas={listSector} value={sector} onchange={changeSector} disabled={handleEquipmentDisabled()} required={controlRequired()}></InputSelect>
+                    {situation === "Ativo" ? (
+                        <>
+                        <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Usuário'} name={'username'} datas={listUsername} value={username} onchange={changeUsername} disabled={handleEquipmentDisabled()}></InputSelect>
+                        <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Setor'} name={'sector'} datas={listSector} value={sector} onchange={changeSector} disabled={handleEquipmentDisabled()}></InputSelect>
+                        </>
+                    ) : null}
                     <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Fonercedor'} name={'supplier'} datas={listSupplier} value={supplier} onchange={changeSupplier} disabled={handleEquipmentDisabled()}></InputSelect>
                     <div className="mb-6">
                         <button type="submit" className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">Atualizar</button>
