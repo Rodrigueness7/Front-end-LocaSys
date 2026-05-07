@@ -11,7 +11,7 @@ import SortItem from "@/utils/sortItem"
 
 
 
-export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector, dataSupplier, dataTypeEquipment, token }) {
+export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector, dataSupplier, dataTypeEquipment, dataSituation, token }) {
 
     
     const listBranch = SortItem(dataBranch, 'branch').map(item => item.branch)
@@ -19,6 +19,7 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
     const listSector = SortItem(dataSector, 'sector').map(item => item.sector)
     const listSupplier = SortItem(dataSupplier, 'supplier').map(item => item.supplier)
     const listTypeEquipment = SortItem(dataTypeEquipment, 'typeEquipment').map(item => item.typeEquipment)
+    const listSituation = SortItem(dataSituation, 'situation').filter(item => item.idSituation === 1 || item.idSituation === 4).map(item => item.situation)
     
 
     const router = useRouter()
@@ -31,6 +32,7 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
     const [sector, setSector] = useState(listSector[0])
     const [entryDate, setEntryDate] = useState('')
     const [supplier, setSupplier] = useState(listSupplier[0])
+    const [situation, setSituation] = useState(listSituation[0])
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [result, setResult] = useState('')
     const [checked, setChecked] = useState(false)
@@ -106,6 +108,15 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
         }
     }  
 
+    const changeSituation = (e) => {
+        setSituation(e.target.value)
+
+        if(e.target.value !== "Reserva") {
+            setUsername('')
+            setSector('')
+        }
+    }
+
     const handleCloseModal = () => {
         setIsModalOpen(false)
         if (result.success) {
@@ -113,13 +124,13 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
         }
     }
 
-     const controlRequired = () => {
-        if(username !== '' || sector !== '') {
-            return true
-        } 
-        return false
+    //  const controlRequired = () => {
+    //     if(username !== '' || sector !== '') {
+    //         return true
+    //     } 
+    //     return false
         
-    }
+    // }
 
     const addEquipment = async (e) => {
         e.preventDefault()
@@ -128,6 +139,7 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
         const idBranch = dataBranch.find(item => item.branch === branch).idBranch
         const idSupplier = dataSupplier.find(item => item.supplier === supplier).idSupplier
         const idTypeEquipment = dataTypeEquipment.find(item => item.typeEquipment === type).idTypeEquipment
+        const idSituation = dataSituation.find(item => item.situation === situation).idSituation
 
         const data = {
             idEquipment: 0,
@@ -140,8 +152,9 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
             idSector: idSector,
             idSupplier: idSupplier,
             entryDate: entryDate,
-            idSituation: username === '' && sector === '' ? 4 : 1,
+            idSituation: idSituation,
         }
+
 
         await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addEquipment`, data, token, setResult)
         setIsModalOpen(true)
@@ -173,6 +186,7 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
 
     }
 
+
     return (
         <section className="bg-gray-100 py-3 w-full">
             <div className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
@@ -185,11 +199,15 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
                     </div>
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Equipamento'} type={'text'} name={'equipment'} value={equipment} onchange={changeEquipment}></InputForm>
                     <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Tipo'} name={'type'} datas={listTypeEquipment} value={type} onchange={changeType}></InputSelect>
+                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Situação'} name={'situation'} datas={listSituation} value={situation} onchange={changeSituation}></InputSelect>
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Valor'} type={'decimal'} name={'value'} value={value} onchange={changeValue} maxLength={'10'} onKeyDown={pointLockValue}></InputForm>
                     <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Data entrada'} type={'date'} name={'entryDate'} value={entryDate} onchange={changeEntryDate}></InputForm>
                     <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Filial'} name={'branch'} datas={listBranch} value={branch} onchange={changeBranch}></InputSelect>
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Usuário'} name={'username'} datas={listUsername} value={username} onchange={changeUsername} required={controlRequired()}></InputSelect>
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Setor'} name={'sector'} datas={listSector} value={sector} onchange={changeSector} required={controlRequired()}></InputSelect>
+                    {situation === "Ativo" ? (
+                        <><InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Usuário'} name={'username'} datas={listUsername} value={username} onchange={changeUsername}></InputSelect>
+                        <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Setor'} name={'sector'} datas={listSector} value={sector} onchange={changeSector}></InputSelect>
+                        </>     
+                    ) : null}
                     <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Fonercedor'} name={'supplier'} datas={listSupplier} value={supplier} onchange={changeSupplier}></InputSelect>
                      <div className="mb-6">
                         <button type="submit" className="w-full mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 roundedw-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 ">Adicionar</button>
