@@ -5,6 +5,32 @@ Permite visualizar equipamentos que se encontra no local, com quem está esse eq
 permite cadastro de filial, setor, usuário e fornecedor.
 Sistema contém dashbord de equipamento, usuário, setor, fornecedor etc.. e cada um tem seu relátorio. 
 
+## Back-end da aplicação
+
+Api utilizada neste projeto está disponível no repositório abaixo:
+
+- Back-end Locasys API: https://github.com/Rodrigueness7/LocaSys
+
+## Funcionalidade
+
+- Autenticidade de usuários
+- Dashboard administrativo
+- Cadastro de equipamento
+- Atualização de equipamento
+- Gerenciamento de usuários
+- Gerenciamento de fornecedores
+- Consumo de API REST
+  
+
+## Telas Principais
+
+- Login
+- Dashboard
+- Usuários
+- Equipamento
+- Fornecedores
+  
+
 ## Tecnologias
 - Next.js
 - TailwindCSS
