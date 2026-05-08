@@ -9,15 +9,6 @@ Sistema contém dashbord de equipamento, usuário, setor, fornecedor etc.. e cad
 - Next.js
 - TailwindCSS
 
-## Configuração
-
-Crie variável de ambiente na raiz do projeto:
-
-#### .env.local
-
-```bash
-NEXT_PUBLIC_LOCALHOST = 127.0.0.1
-```
 
 ## Instalação
 
@@ -27,6 +18,16 @@ git clone https://github.com/Rodrigueness7/Front-end-LocaSys.git
 cd projeto
 
 npm install
+```
+
+## Configuração
+
+Crie variável de ambiente na raiz do projeto:
+
+#### .env.local
+
+```bash
+NEXT_PUBLIC_LOCALHOST = 127.0.0.1
 ```
 
 ## Como executar
