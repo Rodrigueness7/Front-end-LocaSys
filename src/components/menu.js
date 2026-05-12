@@ -196,68 +196,102 @@ export default function Menu({ token, dataBranch, dataEquipmentRental }) {
         <div className="flex bg-slate-800 min-h-screen ml-64">
             <div className={`text-white w-64 p-8 space-y-4 md:block fixed top-0 left-0 h-full overflow-y-auto bg-slate-800`}>
                 <div>
-                    <h1 className="font-bold text-2xl">Locasys</h1>
+                    <h1 className="text-3xl font-extrabold tracking-wide text-white">Locasys</h1>
                 {permission.find(number => number == '10') && (
-                    <div className="mt-4" >
-                        <Link href={'/users'} className="hover:text-blue-500 transition duration-300">Usuário</Link>
+                    <div >
+                        <Link href={'/users'} className="flex items-center gap-3 px-4 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all duration-300">Usuário</Link>
                     </div>
                 )}
                 {permission.find(number => number == '1') && (
-                    <div className="mt-4">
-                        <Link href={'/equipment'} className="hover:text-blue-500 transition duration-300">Equipamento</Link>
+                    <div >
+                        <Link href={'/equipment'} className="flex items-center gap-3 px-4 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all duration-300">Equipamento</Link>
                     </div>
                 )}
                 {permission.find(number => number == '6') && (
-                    <div className="mt-4">
-                        <Link href={'/branch'} className="hover:text-blue-500 transition duration-300">Filial</Link>
+                    <div >
+                        <Link href={'/branch'} className="flex items-center gap-3 px-4 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all duration-300">Filial</Link>
                     </div>
                 )}
                 {permission.find(number => number == '19') && (
-                    <div className="mt-4">
-                        <Link href={'/sector'} className="hover:text-blue-500 transition duration-300">Setor</Link>
+                    <div >
+                        <Link href={'/sector'} className="flex items-center gap-3 px-4 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all duration-300">Setor</Link>
                     </div>
                 )}
                 {permission.find(number => number == '44') && (
-                    <div className="mt-4">
-                        <Link href={'/supplier'} className="hover:text-blue-500 transition duration-300">Fornecedor</Link>
+                    <div >
+                        <Link href={'/supplier'} className="flex items-center gap-3 px-4 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all duration-300">Fornecedor</Link>
                     </div>
                 )}
                 {permission.find(number => number == '48') && (
-                    <div className="mt-4">
-                        <Link href={'/typeEquipment'} className="hover:text-blue-500 transition duration-300">Tipo de Equipmento</Link>
+                    <div >
+                        <Link href={'/typeEquipment'} className="flex items-center gap-3 px-4 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all duration-300">Tipo de Equipmento</Link>
                     </div>
                 )}
                 {permission.find(number => number == '15') && (
-                    <div className="mt-4">
-                        <Link href={'/profile'} className="hover:text-blue-500 transition duration-300">Perfil</Link>
+                    <div >
+                        <Link href={'/profile'} className="flex items-center gap-3 px-4 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all duration-300">Perfil</Link>
                     </div>
                 )}
                 {permission.find(item => item == '35') && (
-                    <div className="mt-4">
-                        <Link href={'/logs'} className="hover:text-blue-500 transition duration-300">Log</Link>
+                    <div >
+                        <Link href={'/logs'} className="flex items-center gap-3 px-4 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all duration-300">Log</Link>
                     </div>
                 )}
-                <div className="mt-4">
-                    {permission.find(number => number == 31) && (<button onClick={handleShow} className="hover:text-blue-500 transition duration-300">Arquivo</button>)}
-                    {show == true ? (
-                        <div className="flex flex-col">
-                            <div className="ml-5">
-                                <button onClick={() => setShowImport(true)} className="hover:text-blue-500 transition duration-300">Importar</button>
-                            </div>
-                            <div className="ml-5">
-                                <button onClick={() => setShowDelete(true)} className="hover:text-blue-500 transition duration-300">Excluir</button>
-                            </div>
-                        </div>
-                    ) : null}
-                </div>
-                <div className="mt-4">
-                    {permission.find(number => number == 31) && (<button onClick={handleReport} className="hover:text-blue-500 transition duration-300" >Relatório</button>)}
-                    {showReport == true ? (
-                        <ul className="ml-5">
-                            <Link className="hover:text-blue-500 transition duration-300" href={'/reportComparative'}><li>Comparativo Equipamentos</li></Link>
-                        </ul>
-                    ) : null}
-                </div>
+                {permission.find(number => number == 31) && (
+          <div>
+
+            <button
+              onClick={handleShow}
+              className="w-full flex items-center justify-between px-4 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all duration-300"
+            >
+              <span>Arquivo</span>
+              <span className={` transition-transform duration-300  ${show ? 'rotate-180' : ''}`} >
+                ▼
+              </span>
+            </button>
+
+            {show && (
+              <div className="ml-2">
+
+                <button
+                  onClick={() => setShowImport(true)}
+                  className="block w-full text-left px-4 py-2 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition ">
+                  Importar
+                </button>
+
+                <button
+                  onClick={() => setShowDelete(true)}
+                  className=" block w-full text-left px-4 py-2 rounded-lg text-slate-400 hover:bg-red-500/20 hover:text-red-400 transition">
+                  Excluir
+                </button>
+
+              </div>
+            )}
+
+          </div>
+        )}
+                 {permission.find(number => number == 31) && (
+          <div>
+
+            <button
+              onClick={handleReport}
+              className="w-full flex items-center justify-between px-4 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all duration-300">
+              Relatórios
+              <span
+                className={`transition-transform duration-300 ${showReport ? 'rotate-180' : ''}`}>
+                ▼
+              </span>
+            </button>
+
+            {showReport && (
+              <div className="ml-4 mt-2">
+                <Link href={'/reportComparative'} className="block px-4 py-2 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
+                  Comparativo Equipamentos
+                </Link>
+              </div>
+            )}
+          </div>
+        )}
                 <div className="mt-4">
                     <button onClick={handleExit}>Sair</button>
                 </div>
