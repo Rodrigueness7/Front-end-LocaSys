@@ -5,22 +5,25 @@ import Table from "@/components/table";
 import orderData from "@/utils/orderData";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import optionsReport from "@/utils/optionsReport";
 
 export default function Report({ equipmentHistory, equipmentRental, branch }) {
 
-    const options = [{ id: 0, option: 'Comparativo Equipamentos' }, { id: 1, option: 'Valores iguais' }, { id: 2, option: 'Divergênia de valores' }, { id: 3, option: 'Divergentes Equipamentos Local '}, { id: 4, option: 'Divergentes Equipamentos Alugado'}]
-    const listOption = options.map(item => item.option)
     const listBranch = branch.map(item => item.branch)
     const router = useRouter()
     const [initPeriod, setInitPeriod] = useState('')
     const [finishPeriod, setFinishPeriod] = useState('')
     const [dataReport, setDataReport] = useState([])
     const [showTable, setShowTable] = useState(false)
-    const [report, setReport] = useState(listOption[0])
+    const [report, setReport] = useState(optionsReport[0])
     const [branchSelected, setBranchSelected] = useState('')
     const [isCheked, setIsChecked] = useState(false)
     const [sortColumnState, setSortColumnState] = useState('')
     const [sortDirectionState, setSortDirectionState] = useState('asc')
+    const [dataComparativeValue, setDataComparativeValue] = useState([])
+    const [dataDivergentValue, setDataDivergentValue] = useState([])
+    const [dataDivergentEquipment, setDataDivergentEquipment] = useState([])
+    const [dataDivergentEquipmentRental, setDataDivergentEquipmentRental] = useState([])
 
 
 
@@ -106,6 +109,7 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
             }
            
         })
+        
 
         
         const divergentLocalEquipment = filterEquimentHistoryDiverget.map(items => {
@@ -132,6 +136,7 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
             })
 
         const filterDivergentLocalEquipment = divergentLocalEquipment.filter(item => item != undefined)
+        setDataDivergentEquipment(filterDivergentLocalEquipment)
 
 
 
@@ -216,6 +221,7 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
         })
 
         const comparativeValueFiltered = comparativeValue.filter(item => item != undefined)
+        setDataComparativeValue(comparativeValueFiltered)
 
 
         const filterDivergetValue = branchSelected != '' ? equipmentHistory.filter(items => equipmentRental.some(itens => itens.value != items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate >= initPeriod) && items['Branch'].branch == branchSelected)) : equipmentHistory.filter(items => equipmentRental.some(itens => itens.value != items.value && itens.codProd == items['Equipment'].codProd && items.entryDate <= finishPeriod && (items.returnDate == null || items.returnDate >= initPeriod)))
@@ -243,6 +249,9 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
             }
         })
         const divergetValueFiltered = divergetValue.filter(item => item != undefined)
+        setDataDivergentValue(divergetValueFiltered)
+
+       
 
 
         let findInitPeriod = equipmentRental.filter(item => item.initPeriod.slice(0, 10) === initPeriod)
@@ -257,28 +266,28 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
         }
 
 
-        if (report == listOption[0]) {
+        if (report == optionsReport[0]) {
             setDataReport(comparativeEquipment)
             setShowTable(true)
         }
 
-        if (report == listOption[1]) {
+        if (report == optionsReport[1]) {
             setDataReport(comparativeValueFiltered)
             setShowTable(true)
         }
 
-        if (report == listOption[2]) {
-            setDataReport(divergetValueFiltered)
+        if (report == optionsReport[2]) {
+            setDataReport(dataDivergentValue)
             setShowTable(true)
         }
 
-        if (report == listOption[3]) {
-            setDataReport(filterDivergentLocalEquipment)
+        if (report == optionsReport[3]) {
+            setDataReport(dataDivergentEquipment)
             setShowTable(true)
         }
 
-            if (report == listOption[4]) {  
-            setDataReport(equipmentRentalDiverget)
+            if (report == optionsReport[4]) {  
+            setDataReport(dataDivergentEquipmentRental)
             setShowTable(true)
             }
     }
@@ -287,32 +296,32 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
     const generation = async (e) => {
         e.preventDefault()
         sessionStorage.setItem('equipments', JSON.stringify(dataReport))
-        if (report == listOption[0]) {
+        if (report == optionsReport[0]) {
             if (dataReport.length <= 0) {
                 return alert('Não existe dados para gerar relatório')
             }
             window.open('/reportComparative/comparativeEquipment')
-        } else if (report == listOption[1]) {
-            sessionStorage.setItem('comparativeValue', JSON.stringify(comparativeValueFiltered))
-            if (comparativeValueFiltered.length <= 0) {
+        } else if (report == optionsReport[1]) {
+            sessionStorage.setItem('comparativeValue', JSON.stringify(dataComparativeValue))
+            if (dataComparativeValue.length <= 0) {
                 return alert('Não existe valores iguais para gerar relatório')
             }
             window.open('/reportComparative/comparativeValue')
-        } else if (report == listOption[2]) {
-            sessionStorage.setItem('divergetValue', JSON.stringify(divergetValueFiltered))
-            if (divergetValueFiltered.length <= 0) {
+        } else if (report == optionsReport[2]) {
+            sessionStorage.setItem('divergetValue', JSON.stringify(dataDivergentValue))
+            if (dataDivergentValue.length <= 0) {
                 return alert('Não existe valores divergente para gerar relatório')
             }
             window.open('/reportComparative/divergentValue')
-        } else if (report == listOption[3]) {
-            sessionStorage.setItem('divergentEquipment', JSON.stringify(filterDivergentLocalEquipment))
-            if (filterDivergentLocalEquipment.length <= 0) {
+        } else if (report == optionsReport[3]) {
+            sessionStorage.setItem('divergentEquipment', JSON.stringify(dataDivergentEquipment))
+            if (dataDivergentEquipment.length <= 0) {
                 return alert('Não existe equipamentos divergentes para gerar relatório')
             }
             window.open('/reportComparative/divergentEquipment')
-        }else if(report == listOption[4]){
-            sessionStorage.setItem('equipmentRentalDivergent', JSON.stringify(equipmentRentalDiverget))
-            if (equipmentRentalDiverget.length <= 0) {
+        }else if(report == optionsReport[4]){
+            sessionStorage.setItem('equipmentRentalDivergent', JSON.stringify(dataDivergentEquipmentRental))
+            if (dataDivergentEquipmentRental.length <= 0) {
                 return alert('Não existe equipamentos divergentes para gerar relatório')
             }
             window.open('/reportComparative/equipmentRentalDivergent')
@@ -359,7 +368,7 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
                 )}
             </div>
             <form className="ml-8 flex relative" onSubmit={search}>
-                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Relatório'} name={'report'} datas={listOption} value={report} onchange={changeReport}></InputSelect>
+                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Relatório'} name={'report'} datas={optionsReport} value={report} onchange={changeReport}></InputSelect>
                 <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Data inicial'} type={'date'} name={'initPeriod'} value={initPeriod} onchange={changeInitPeriod}></InputForm>
                 <InputForm classNameLabe={'block text-sm font-medium text-gray-700'} classNameInput={"mt-2 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Data final'} type={'date'} name={'finshPeriod'} value={finishPeriod} onchange={changeFinishPeriod}></InputForm>
                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Filial'} name={'branch'} datas={listBranch} value={branchSelected} onchange={changeBranch} required={true}></InputSelect>
