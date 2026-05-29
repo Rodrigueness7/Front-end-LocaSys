@@ -138,7 +138,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     const handleChangeSituation = (e) => {
         setSituation(e.target.value)
 
-        if(e.target.value !== "Reserva") {
+        if(e.target.value == "Reserva") {
             setUsername('')
             setSector('')
         }

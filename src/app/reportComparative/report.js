@@ -26,13 +26,17 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
     const [dataDivergentEquipmentRental, setDataDivergentEquipmentRental] = useState([])
 
 
+    const period = Object.values(equipmentRental.reduce((acc, item) => {
+        const branch = item['Branch'].branch
 
-    const period = equipmentRental.filter(item => {
-        const idMax = Math.max(...equipmentRental.filter(itens => itens['Branch'].branch === item['Branch'].branch).map(i => i.idEquipmentRental))
-        if (item.idEquipmentRental === idMax) {
-            return item
+        if(!acc[branch] || item.idEquipmentRental > acc[branch].idEquipment) {
+            acc[branch] = item
         }
-    })
+        return acc;
+    }, {})
+)
+
+    
 
     if (equipmentRental.message) {
         router.push('/login')
@@ -64,8 +68,13 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
     const search = (e) => {
         e.preventDefault()
 
+        const formatDate = (date) => {
+            return new Date(date).toLocaleDateString('pt-BR', { timeZone: 'UTC' })
+        }
 
-        if (!equipmentRental.find(item => item['Branch'].branch === branchSelected)) {
+        const hasBranchSelect = equipmentRental.some(item => item['Branch'].branch === branchSelected)
+
+        if (!hasBranchSelect) {
             return (
                 alert('Não existe relátorio para essa Filial')
             )
@@ -77,7 +86,6 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
                 alert('Selecione uma filial para buscar pela matriz')
             )
         }
-
 
         const headquarter = branchSelected != '' ? branch.find(item => item.branch == branchSelected).headquarter : ''
 
@@ -100,9 +108,9 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
                 valueKm: item.value,
                 value: '',
                 branch: '',
-                entryDateKM: item.init == null ? '' : new Date(item.init).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                entryDateKM: item.init == null ? '' : formatDate(item.init),
                 entryDate: '',
-                returnDateKM: item.finish == null ? '' : new Date(item.finish).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                returnDateKM: item.finish == null ? '' : formatDate(item.finish),
                 returnDate: '',
                 user: '',
                 sector: ''
@@ -126,9 +134,9 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
                         value: items.value,
                         branch: items['Branch'].branch,
                         entryDateKM: '',
-                        entryDate: items.entryDate == null ? '' : new Date(items.entryDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                        entryDate: items.entryDate == null ? '' : formatDate(items.entryDate),
                         returnDateKM: '',
-                        returnDate: items.returnDate == null ? '' : new Date(items.returnDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                        returnDate: items.returnDate == null ? '' : formatDate(items.returnDate),
                         user: items['User'] == null ? '' : items['User'].username,
                         sector: items['Sector'] == null ? '' : items['Sector'].sector
                     }
@@ -161,10 +169,10 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
                     valueKm: item.value,
                     value: filterEquipment[0].value,
                     branch: filterEquipment[0]['Branch'].branch,
-                    entryDateKM: item.init == null ? '' : new Date(item.init).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
-                    entryDate: filterEquipment[0].entryDate == null ? "" : new Date(filterEquipment[0].entryDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
-                    returnDateKM: item.finish == null ? "" : new Date(item.finish).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
-                    returnDate: filterEquipment[0].returnDate == null ? "" : new Date(filterEquipment[0].returnDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                    entryDateKM: item.init == null ? '' : formatDate(item.init),
+                    entryDate: filterEquipment[0].entryDate == null ? "" : formatDate(filterEquipment[0].entryDate),
+                    returnDateKM: item.finish == null ? "" : formatDate(item.finish),
+                    returnDate: filterEquipment[0].returnDate == null ? "" : formatDate(filterEquipment[0].returnDate),
                     user: filterEquipment[0]['User'] == null ? '' : filterEquipment[0]['User'].username,
                     sector: filterEquipment[0]['Sector'] == null ? '' : filterEquipment[0]['Sector'].sector
 
@@ -178,9 +186,9 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
                     valueKm: item.value,
                     value: '',
                     branch: '',
-                    entryDateKM: item.init == null ? '' : new Date(item.init).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                    entryDateKM: item.init == null ? '' : formatDate(item.init),
                     entryDate: '',
-                    returnDateKM: item.finish == null ? '' : new Date(item.finish).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                    returnDateKM: item.finish == null ? '' : formatDate(item.finish),
                     returnDate: '',
                     user: '',
                     sector: ''
@@ -212,8 +220,8 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
                     branch: items['Branch'].branch,
                     entryDateKM: equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value == items.value).init == null ? '' : new Date(equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value == items.value).init).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
                     entryDate: items.entryDate == null ? '' : new Date(items.entryDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
-                    returnDateKM: equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value == items.value).finish == null ? "" : new Date(equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value == items.value).finish).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
-                    returnDate: items.returnDate == null ? "" : new Date(items.returnDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                    returnDateKM: equipmentRental.some(iten => iten.codProd == items['Equipment'].codProd && iten.value == items.value).finish == false ? "" : new Date(equipmentRental.find(iten => iten.codProd == items['Equipment'].codProd && iten.value == items.value).finish).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                    returnDate: items.returnDate == null ? "" : formatDate(items.returnDate),
                     user: items['User'] == null ? '' : items['User'].username,
                     sector: items['Sector'] == null ? '' : items['Sector'].sector
                 }
