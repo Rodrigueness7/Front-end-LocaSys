@@ -129,7 +129,7 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
     const addEquipment = async (e) => {
         e.preventDefault()
         const idUser = username === '' ? null : dataUser.find(item => item.username === username).idUser
-        const idSector = sector === '' ? '' : dataSector.find(item => item.sector === sector).idSector
+        const idSector = sector === '' ? null : dataSector.find(item => item.sector === sector).idSector
         const idBranch = dataBranch.find(item => item.branch === branch).idBranch
         const idSupplier = dataSupplier.find(item => item.supplier === supplier).idSupplier
         const idTypeEquipment = dataTypeEquipment.find(item => item.typeEquipment === type).idTypeEquipment
@@ -149,10 +149,9 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
             idSituation: idSituation,
         }
 
-        console.log(idUser)
 
-        // await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addEquipment`, data, token, setResult)
-        // setIsModalOpen(true)
+        await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addEquipment`, data, token, setResult)
+        setIsModalOpen(true)
        
 
         setTimeout(async () => {
