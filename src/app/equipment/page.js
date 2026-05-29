@@ -51,9 +51,10 @@ export default async function PageEquipment() {
        
     })
 
- 
+    const lastItem = data[data.length - 1]
     let defaultAtrribute = ['Código', 'Equipamento', 'Tipo', 'Data Entrada', 'Data Retorno', 'Usuario', 'Situação', 'Filial', 'Setor', 'Fornecedor', 'Valor']
-    let attribute = data.length === 0 ? defaultAtrribute : Object.keys(data[data.length - 1]);
+    let attribute = lastItem ?  Object.keys(data[data.length - 1]) : defaultAtrribute;
+
    
     let dataUser = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllUser`, token)
     let dataSector = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllSector`, token)
