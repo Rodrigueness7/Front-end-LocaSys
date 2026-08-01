@@ -115,9 +115,9 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
         const filterEquipmentHistory = equipmentHistory.filter(item => rentalByCodProdValue.has(`${item['Equipment'].codProd}-${item.value}`) && isPeriodValid(item) && locationMatch(item))
         const filterEquimentHistoryDiverget = equipmentHistory.filter(item => !rentalCodProds.has(item.Equipment.codProd) && isPeriodValid(item) && locationMatch(item));
 
-        const equipmentRentalDiverget = [
-            ...equipmentRental.filter(items => !equipmentHistory.some(itens => itens['Equipment'].codProd === items.codProd) && items.initPeriod.slice(0, 10) <= finishPeriod && items.finishPeriod.slice(0, 10) >= initPeriod && items['Branch'].branch === branchSelected)
-        ].map(item => {
+ 
+       
+        const equipmentRentalDiverget = equipmentRental.filter(items => !equipmentHistory.some(itens => itens['Equipment'].codProd === items.codProd) && items.initPeriod.slice(0, 10) === initPeriod && items.finishPeriod.slice(0, 10) === finishPeriod && locationMatch(items)).map(item => {
             return {
                 id: item.idEquipmentRental,
                 codProd: item.codProd,
@@ -134,7 +134,7 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
             }
 
         })
-
+        
 
         const divergentLocalEquipment = filterEquimentHistoryDiverget.map(items => {
             let data
