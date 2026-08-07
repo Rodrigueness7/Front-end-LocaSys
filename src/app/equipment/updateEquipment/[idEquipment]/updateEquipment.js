@@ -1,5 +1,5 @@
 'use client'
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import InputForm from "../../../../components/InputForm"
 import InputSelect from "../../../../components/InputSelect"
 import Modal from "../../../../components/modal"
@@ -16,7 +16,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
 
     const router = useRouter()
     const listBranch = SortItem(dataBranch, 'branch').map(item => item.branch)
-    const listUsername = SortItem(dataUser, 'username').map(item => item.username)
+    const listUser = SortItem(dataUser, 'username').map(item => item.username)
     const listSector = SortItem(dataSector, 'sector').map(item => item.sector)
     const listSupplier = SortItem(dataSupplier, 'supplier').map(item => item.supplier)
     const listTypeEquipment = SortItem(dataTypeEquipment, 'typeEquipment').map(item => item.typeEquipment)
@@ -156,6 +156,30 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
         setReplaceEquipment(e.target.value)
     }
 
+    let sortOptions = (a, b) => {
+            const nameA = a.toUpperCase();
+            const nameB = b.toUpperCase();
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+            return 0;
+        }
+    
+           const options = useMemo(() => {
+    
+            let branchesInSector = sector ? dataSector.filter(item => item.sector === sector).map(item => item['Branch'].branch).sort(sortOptions) : dataBranch.map(item => item.branch).sort(sortOptions)
+            let sectorInBranch = branch ?  dataSector.filter(item => item['Branch'].branch === branch).map(item => item.sector).sort(sortOptions) : dataSector.map(item => item.sector).sort(sortOptions)
+            let userInSector = sector ? dataUser.filter(item => item['Sector'].sector === sector).map(item => item.username).sort(sortOptions) : dataUser.map(item => item.username).sort(sortOptions)
+            let sectorInUser = username ? dataUser.filter(item => item.username === username).map(item => item['Sector'].sector).sort(sortOptions) : null
+    
+            return{branchesInSector, userInSector, sectorInBranch, sectorInUser}
+           
+        }, [listBranch, listSector, listUser, dataSector, dataUser]);
+
+       
 
     const updateEquipment = async (e) => {
         e.preventDefault()
@@ -454,8 +478,9 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
                     <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Filial'} name={'branch'} datas={listBranch} value={branch} onchange={changeBranch} disabled={handleEquipmentDisabled()}></InputSelect>
                     {situation === "Ativo" ? (
                         <>
-                        <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Usuário'} name={'username'} datas={listUsername} value={username} onchange={changeUsername} disabled={handleEquipmentDisabled()}></InputSelect>
-                        <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Setor'} name={'sector'} datas={listSector} value={sector} onchange={changeSector} disabled={handleEquipmentDisabled()}></InputSelect>
+                         <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Setor'} name={'sector'} datas={branch == null ? options.sectorInUser : options.sectorInBranch} value={sector} onchange={changeSector} disabled={handleEquipmentDisabled()}></InputSelect>
+                        <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Usuário'} name={'username'} datas={options.userInSector} value={username} onchange={changeUsername} disabled={handleEquipmentDisabled()}></InputSelect>
+
                         </>
                     ) : null}
                     <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Fonercedor'} name={'supplier'} datas={listSupplier} value={supplier} onchange={changeSupplier} disabled={handleEquipmentDisabled()}></InputSelect>
