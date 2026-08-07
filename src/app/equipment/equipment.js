@@ -277,97 +277,31 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
         setEnable(prev => !prev)
     }
 
-     const optionUpdate = useMemo(() => {
+    let sortOptions = (a, b) => {
+        const nameA = a.toUpperCase();
+        const nameB = b.toUpperCase();
+        if (nameA < nameB) {
+            return -1;
+        }
+        if (nameA > nameB) {
+            return 1;
+        }
+        return 0;
+    }
 
-        let optionBranchOfSector = dataSector.filter(item => item['Branch'].branch === listBranch).map(item => item.sector).sort((a, b) => {
-            const nameA = a.toUpperCase();
-            const nameB = b.toUpperCase();  
-            if (nameA < nameB) {
-                return -1;
-            }
-            if (nameA > nameB) {
-                return 1;
-            }
-            return 0;
-        })
-        let optionSectorOfUSer = dataUser.filter(item => item['Sector'].sector === listSector).map(item => item.username).sort((a, b) => {
-            const nameA = a.toUpperCase();
-            const nameB = b.toUpperCase();
-            if (nameA < nameB) {
-                return -1;
-            }
-            if (nameA > nameB) {
-                return 1;
-            }
-            return 0;
-        })
-        let optionUserOfSector = dataUser.filter(item => item.username === listUser).map(item => item['Sector'].sector).sort((a, b) => {
-            const nameA = a.toUpperCase();
-            const nameB = b.toUpperCase();  
-            if (nameA < nameB) {
-                return -1;
-            }
-            if (nameA > nameB) {
-                return 1;
-            }   
-            return 0;
-        })
+      const options = useMemo(() => {
 
-        let optionSectorOfBranch = dataSector.filter(item => item.sector === listSector).map(item => item['Branch'].branch).sort((a, b) => {
-            const nameA = a.toUpperCase();
-            const nameB = b.toUpperCase();
-            if (nameA < nameB) {
-                return -1;
-            }
-            if (nameA > nameB) {
-                return 1;
-            }
-            return 0;
-        })
+        let branchesOfUser = listSector ? dataSector.filter(item => item.sector === listSector).map(item => item['Branch'].branch).sort(sortOptions) : dataBranch.map(item => item.branch).sort(sortOptions)
+        let sectorOfBranch = listBranch ?  dataSector.filter(item => item['Branch'].branch === listBranch).map(item => item.sector).sort(sortOptions) : dataSector.map(item => item.sector).sort(sortOptions)
+        let userOfSector = listSector ? dataUser.filter(item => item['Sector'].sector === listSector).map(item => item.username).sort(sortOptions) : dataUser.map(item => item.username).sort(sortOptions)
+        let sectorOfUser = listUser ? dataUser.filter(item => item.username === listUser).map(item => item['Sector'].sector).sort(sortOptions) : null
 
-        return{optionBranchOfSector, optionSectorOfUSer, optionUserOfSector, optionSectorOfBranch}
+        return{branchesOfUser, userOfSector, sectorOfBranch, sectorOfUser}
        
-}, [listBranch, listSector, listUser, dataSector, dataUser]);
+    }, [listBranch, listSector, listUser, dataSector, dataUser]);
 
-
-    let branchesOfUser = listSector ? optionUpdate.optionSectorOfBranch : dataBranch.map(item => item.branch).sort((a, b) => {
-        const nameA = a.toUpperCase();
-        const nameB = b.toUpperCase();  
-        if (nameA < nameB) {
-            return -1;
-        }
-        if (nameA > nameB) {
-            return 1;
-        }
-        return 0;
-    })
-    
-    let sectorOfBranch = listBranch ? optionUpdate.optionBranchOfSector : dataSector.map(item => item.sector).sort((a, b) => {
-        const nameA = a.toUpperCase();
-        const nameB = b.toUpperCase();
-        if (nameA < nameB) {
-            return -1;
-        }
-        if (nameA > nameB) {
-            return 1;
-        }
-        return 0;
-    })
-    let userOfSector = listSector ? optionUpdate.optionSectorOfUSer : dataUser.map(item => item.username).sort((a, b) => {
-        const nameA = a.toUpperCase();
-        const nameB = b.toUpperCase();
-        if (nameA < nameB) {
-            return -1;
-        }
-        if (nameA > nameB) {
-            return 1;
-        }
-        return 0;
-    })
-    let sectorOfUser = listUser ? optionUpdate.optionUserOfSector : null
 
   
-
     const transfer = (e) => {
         e.preventDefault()
 
@@ -453,9 +387,9 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
                         </div>
                         <div>
                             <form onSubmit={transfer} className="w-full mt-5 flex justify-between relative h-36">
-                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Filial'} name={'branch'} datas={branchesOfUser} value={listBranch} onchange={changeListBranch} required={true} disabled={changedisabled()}></InputSelect>
-                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Setor'} name={'sector'} datas={sectorOfUser == null ? sectorOfBranch : sectorOfUser} value={listSector} onchange={changeListSector} required={true} disabled={changedisabled()}></InputSelect>
-                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Usuário'} name={'username'} datas={userOfSector} value={listUser} onchange={changeListUser} required={true} disabled={changedisabled()}></InputSelect>
+                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Filial'} name={'branch'} datas={options.branchesOfUser} value={listBranch} onchange={changeListBranch} required={true} disabled={changedisabled()}></InputSelect>
+                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Setor'} name={'sector'} datas={options.sectorOfUser == null ? options.sectorOfBranch : options.sectorOfUser} value={listSector} onchange={changeListSector} required={true} disabled={changedisabled()}></InputSelect>
+                                <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Usuário'} name={'username'} datas={options.userOfSector} value={listUser} onchange={changeListUser} required={true} disabled={changedisabled()}></InputSelect>
                                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Tipo'} name={'typeEquipment'} datas={types} value={listType} onchange={changeListType} required={false} disabled={enable == false}></InputSelect>
                                 <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block min-w-[160px] max-w-[160px] px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4 mr-4'} label={'Situação'} name={'situation'} datas={situation} value={listSituation} onchange={changeListSituation} required={false} disabled={enable == false}></InputSelect>
                                 <button className="p-2 bg-indigo-500 rounded-lg text-white absolute left-0 bottom-0 w-36 " type="submit">Alterar</button>
