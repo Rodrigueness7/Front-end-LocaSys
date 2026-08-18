@@ -115,8 +115,8 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
         const filterEquipmentHistory = equipmentHistory.filter(item => rentalByCodProdValue.has(`${item['Equipment'].codProd}-${item.value}`) && isPeriodValid(item) && locationMatch(item))
         const filterEquimentHistoryDiverget = equipmentHistory.filter(item => !rentalCodProds.has(item.Equipment.codProd) && isPeriodValid(item) && locationMatch(item));
 
- 
-       
+
+
         const equipmentRentalDiverget = equipmentRental.filter(items => !equipmentHistory.some(itens => itens['Equipment'].codProd === items.codProd) && items.initPeriod.slice(0, 10) === initPeriod && items.finishPeriod.slice(0, 10) === finishPeriod && locationMatch(items)).map(item => {
             return {
                 id: item.idEquipmentRental,
@@ -134,7 +134,7 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
             }
 
         })
-        
+
 
         const divergentLocalEquipment = filterEquimentHistoryDiverget.map(items => {
             let data
@@ -342,7 +342,7 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
 
     const { sortedData, handleSort, sortColumn, sortDirection } = orderData(formatedData, sortColumnState, sortDirectionState, setSortColumnState, setSortDirectionState)
 
-
+    console.log('sortedData', sortedData.length)
 
     return (
         <div className=" bg-gray-100 py-8 overflow-x-auto h-screen px-12 w-full">
@@ -372,9 +372,12 @@ export default function Report({ equipmentHistory, equipmentRental, branch }) {
                 </div>
             </form>
             {showTable && (
-                <div className="ml-8 flex-1 h-[65%] overflow-x-auto">
-                    <Table Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white sticky top-0 z-10 text-nowrap rounded-lg'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={['Código', 'Equipamento', 'Valor K&M', 'Valor', 'Filial', 'Entrada K&M', 'Entrada', 'Retorno K&M', 'Retorno', 'Usuário', 'Setor']} data={sortedData} attributos={['Código', 'Equipamento', 'Valor K&M', 'Valor', 'Filial', 'Entrada K&M', 'Entrada', 'Retorno K&M', 'Retorno', 'Usuário', 'Setor']} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'#'} bt={'...'} sortColumn={sortColumn} sortDirection={sortDirection} handleSort={handleSort}></Table>
-                </div>
+                <>
+                    <div className="ml-8 flex-1 h-[65%] overflow-x-auto">
+                        <Table Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white sticky top-0 z-10 text-nowrap rounded-lg'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={['Código', 'Equipamento', 'Valor K&M', 'Valor', 'Filial', 'Entrada K&M', 'Entrada', 'Retorno K&M', 'Retorno', 'Usuário', 'Setor']} data={sortedData} attributos={['Código', 'Equipamento', 'Valor K&M', 'Valor', 'Filial', 'Entrada K&M', 'Entrada', 'Retorno K&M', 'Retorno', 'Usuário', 'Setor']} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'#'} bt={'...'} sortColumn={sortColumn} sortDirection={sortDirection} handleSort={handleSort}></Table>
+                    </div>
+                    <div className="ml-8 mt-3">{`Total de Equipamentos: ${dataReport.length}`}</div>
+                </>
             )}
         </div>
 
