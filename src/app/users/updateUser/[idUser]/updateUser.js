@@ -9,11 +9,13 @@ import { useRouter } from "next/navigation"
 import MessageModal from "@/components/messageModal"
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
 import SortItem from "@/utils/sortItem"
+import addData from "@/utils/addData"
+import deleteData from "@/utils/deleteData"
 
 
-export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser, token }) {
+export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser, token, user_sector }) {
 
-   const listSector = SortItem(dataSector, 'sector').map(item => item.sector); 
+   const listSector = user_sector.filter(item => item.idUser == idUser).map(item => item['Sector'].sector)
    const listProfile = SortItem(dataProfile, 'profile').map(item => item.profile);
 
     const [firstName, setFirstName] = useState(dataUserId.firstName)
@@ -29,9 +31,25 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
     const [result, setResult] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)
     const router = useRouter()
+    const [isOpen, setIsOpen] = useState(false)
     const [permission, setPermission] = useState([])
+    const [selectedOptions, setSelectedOptions] = useState(listSector)
+     
+    
+    
+    const handleCheckboxChange = (e) => {
+        const { value, checked } = e.target;
 
+        if (checked) {
+            setSelectedOptions((prev) => [...prev, value]);
+        } else {
+            setSelectedOptions((prev) =>
+                prev.filter((option) => option !== value)
+            );
+        }
+    };
 
+   
     useEffect(() => {
         let data = localStorage.getItem('permission')
         if(!data) {
@@ -43,6 +61,7 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
     }, [router])
 
 
+  
 
     const changeFirstName = (e) => {
         let newFirstName = e.target.value
@@ -75,8 +94,7 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
 
          if(!/^\d$/.test(e.key)) {
             e.preventDefault();
-        }
-        
+        } 
     }
 
 
@@ -85,7 +103,6 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
         if (newUsername === '' || newUsername.length <= 20) {
             setUsername(newUsername)
         }
-
     }
 
     const changePassword = (e) => {
@@ -93,8 +110,6 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
         if (newPassword === '' || newPassword.length <= 22) {
             setPassword(e.target.value)
         }
-
-
     }
 
     const changeConfirmationPassword = (e) => {
@@ -109,7 +124,6 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
         if (newEmail === '' || newEmail.length <= 50) {
             setEmail(e.target.value)
         }
-
     }
 
     const changeConfirmationEmail = (e) => {
@@ -117,11 +131,6 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
         if (newConfirmationEmail === '' || newConfirmationEmail.length <= 50) {
             setConfirmationEmail(e.target.value)
         }
-    }
-
-    const changeSector = (e) => {
-        setSector(e.target.value)
-
     }
 
     const changeProfile = (e) => {
@@ -153,6 +162,31 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
         }
 
         await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateUser/${idUser}`, data, token, setResult)
+
+        for (const sector of selectedOptions) {
+            
+            if (!listSector.includes(sector)) {
+                const data = {
+                    idUser: JSON.parse(idUser) ,
+                    idSector: dataSector.find(item => item.sector === sector).idSector
+                }
+                
+                await addData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/addUser_sector`, data, token, setResult)
+
+                 if(listSector.filter(item => !selectedOptions.includes(item)).length > 0) {
+                    listSector.filter(item => !selectedOptions.includes(item)).map( async itens => {
+                        
+                        let idUserSector = user_sector.find(item => item.idUser == idUser && item['Sector'].sector == itens).idUserSector
+
+                        await deleteData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/deleteUser_sector/${idUserSector}`,token, setResult)
+                      
+                    })
+                 } 
+            }
+
+        }
+
+       
         setIsModalOpen(true)
     }
 
@@ -187,7 +221,30 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
                             <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Confirmação da Senha"} name={"password"} type={'password'} value={confirmationPassword} onchange={changeConfirmationPassword}></InputForm>
                         </>
                     )}
-                    <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Setor'} name={'sector'} datas={listSector} value={sector} onchange={changeSector}></InputSelect>
+                   <div>
+                        <span className="block text-sm font-medium text-gray-700">Setor</span>
+                        <div
+                            onClick={() => setIsOpen(!isOpen)}
+                            className="mt-2 cursor-pointer flex items-center px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm text-black w-full "
+                        >
+                            <span>
+                                {selectedOptions.length > 0 ? selectedOptions.join(', ') : 'Selecione Setores'}
+                            </span>
+                            <span className={`transition-transform ${isOpen ? "rotate-180" : ""}`}>
+                                ▼
+                            </span>
+                        </div>
+                        {isOpen && (
+                            <div className="absolute mt-1 w- bg-white border border-gray-300 rounded-md shadow-lg z-50 max-h-60 overflow-y-auto">
+                                {dataSector.map((item, index) => (
+                                    <label key={index} className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                                        <input type="checkbox" value={item.sector} checked={selectedOptions.includes(item.sector)} onChange={handleCheckboxChange} className="mr-2" />
+                                        {item.sector}
+                                    </label>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                     <InputSelect classNameLabel={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={'Perfil'} name={'profile'} datas={listProfile} value={profile} onchange={changeProfile}></InputSelect>
                 </form>
                 <div className="mb-6">

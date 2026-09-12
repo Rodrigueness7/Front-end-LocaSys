@@ -3,7 +3,6 @@
 import InputSelect from "@/components/InputSelect"
 import Table from "@/components/table"
 import orderData from "@/utils/orderData"
-import SortItem from "@/utils/sortItem"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useCallback, useEffect, useMemo, useState } from "react"
@@ -32,7 +31,7 @@ export default function Users({ tableUsers, attribute }) {
             let number = data.split(',').map(number => number)
             setPermission(number)
         }, [router])
-
+  
    
     const filter = () => {
         return tableUsers.filter((item) => {
@@ -44,6 +43,7 @@ export default function Users({ tableUsers, attribute }) {
             )
         })
     }
+
 
     const getOptions = useCallback((field, ignore = '') => {
         const dataFilter = tableUsers.filter((item) =>

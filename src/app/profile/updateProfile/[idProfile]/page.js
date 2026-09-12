@@ -32,6 +32,5 @@ export default async function PageUpdateProfile({ params }) {
 
     return (
         <UpdateProfile data={profile} idProfile={idProfile} dataPermission={permission} token={token}></UpdateProfile>
-
     )
 }

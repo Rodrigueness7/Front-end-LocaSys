@@ -21,30 +21,37 @@ export default async function PageUsers() {
         redirect('/')
     }
 
-    const DataUsers = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllUser`, token)
+    const dataUsers = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllUser`, token)
+    const dataUser_sectors = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllUser_sector`, token)
     
-    if(DataUsers.message) {
+    
+    if(dataUsers.message) {
         redirect('/login')
     }
 
-    let data = DataUsers.map(itens => (
-        {
-            id: itens.idUser,
-            Nome: itens.firstName,
-            Sobrenome: itens.lastName,
-            CPF: itens.cpf,
-            Usuario: itens.username,
-            Email: itens.email,
-            Setor: itens['Sector'].sector,
-            Perfil: itens['Profile'].profile,
-        }
-    )
-    )
 
+    const data = dataUsers.flatMap(user => {
+    const userSectors = dataUser_sectors.filter(
+        sector => sector.idUser === user.idUser
+    );
+   
+    return userSectors.map(userSector => ({
+        id: user.idUser + ' - ' + userSector.idSector,
+        Nome: user.firstName,
+        Sobrenome: user.lastName,
+        CPF: user.cpf,
+        Usuario: user.username,
+        Email: user.email,
+        Setor: userSector.Sector?.sector ?? '',
+        Perfil: user.Profile?.profile ?? '',
+    }));
+});
+
+  
     let attribute = Object.keys(data[0])
 
 
     return (
-        <Users tableUsers={data} attribute={attribute} ></Users>
+        <Users tableUsers={data}  attribute={attribute} ></Users>
     )
 }
