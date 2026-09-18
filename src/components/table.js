@@ -2,25 +2,7 @@
 import Link from "next/link";
 import {useEffect, useState } from "react";
 
-export default function Table({
-    Table,
-    TrThead,
-    Th,
-    Td,
-    headers,
-    data,
-    attributos,
-    id,
-    href,
-    classButton,
-    bt,
-    positionTd,
-    permission,
-    filterCheckbox = false,
-    handleSort,
-    sortColumn,
-    sortDirection
-}) {
+export default function Table({Table, TrThead, Th, Td, headers, data, attributos, id, index, href, classButton, bt, positionTd, permission, filterCheckbox = false, handleSort, sortColumn, sortDirection}) {
 
     const [currentPage, setCurrentPage] = useState(1)
     const [checkedRows, setCheckedRows] = useState([]);
@@ -104,14 +86,13 @@ export default function Table({
 
                 <tbody>
                     {currentData.map((row) => (
-                        <tr key={row[id]} className='border-b hover:bg-blue-100 ' >
+                        <tr key={`${row[id]} - ${row.index}`} className='border-b hover:bg-blue-100 ' >
                             {filterCheckbox == true ? (<td ><input className="ml-5" type="checkbox" checked={checkedRows.includes(row[id])} onChange={() => handleChecked(row[id])}></input></td>) : null}
                             {attributos.map(item => (
                                 <td key={item} className={Td + ' text-sm'}>{row[item]}</td>
                             ))}
-                            {permission && (<td className={positionTd}><Link href={href + `/${row[id]}`}><button className={classButton}>{bt}</button></Link></td>)}
+                            {permission && (<td className={positionTd}><Link href={index === true ? href + `/${row[id].slice(0, row[id].indexOf("-"))}` : href + `/${row[id]}`}><button className={classButton}>{bt}</button></Link></td>)}
                         </tr>
-
                     ))}
                 </tbody>
             </table>

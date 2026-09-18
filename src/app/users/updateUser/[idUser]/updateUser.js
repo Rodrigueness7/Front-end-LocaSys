@@ -26,7 +26,6 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
     const [confirmationPassword, setConfirmationPassword] = useState("")
     const [email, setEmail] = useState((dataUserId.email == null) ? "" : dataUserId.email)
     const [confirmationEmail, setConfirmationEmail] = useState((dataUserId.email == null) ? "" : dataUserId.email)
-    const [sector, setSector] = useState(dataUserId['Sector'].sector)
     const [profile, setProfile] = useState(dataUserId['Profile'].profile)
     const [result, setResult] = useState('')
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -48,6 +47,7 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
             );
         }
     };
+
 
    
     useEffect(() => {
@@ -144,10 +144,10 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
         }
     }
 
+    console.log(idUser)
     const updateUser = async () => {
         const idProfile = dataProfile.find(item => item.profile === profile).idProfile
-        const idSector = dataSector.find(item => item.sector === sector).idSector
-
+       
         let data = {
             firstName: firstName,
             lastName: lastName,
@@ -157,11 +157,11 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
             confirmationPassword: confirmationPassword == '' ? null : confirmationPassword,
             email: email,
             confirmationEmail: confirmationEmail,
-            idSector: idSector,
             idProfile: idProfile
         }
 
         await updateData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/updateUser/${idUser}`, data, token, setResult)
+
 
         for (const sector of selectedOptions) {
             

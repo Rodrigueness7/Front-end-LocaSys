@@ -29,6 +29,7 @@ export default async function PageUpdateUser({ params }) {
     const dataUserId = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findIdUser/${idUser}`, token)
     const user_sector = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllUser_sector`, token)
 
+    
 
     return (
         <UpdateUser dataUserId={dataUserId} dataSector={sector} dataProfile={profile} idUser={idUser} token={token} user_sector={user_sector}></UpdateUser>

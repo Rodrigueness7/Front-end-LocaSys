@@ -35,8 +35,9 @@ export default async function PageUsers() {
         sector => sector.idUser === user.idUser
     );
    
-    return userSectors.map(userSector => ({
-        id: user.idUser + ' - ' + userSector.idSector,
+    return userSectors.map((userSector, index) => ({
+        index: index,
+        id: user.idUser + '-' + index,
         Nome: user.firstName,
         Sobrenome: user.lastName,
         CPF: user.cpf,
@@ -47,11 +48,13 @@ export default async function PageUsers() {
     }));
 });
 
+
   
     let attribute = Object.keys(data[0])
 
 
+
     return (
-        <Users tableUsers={data}  attribute={attribute} ></Users>
+        <Users tableUsers={data} attribute={attribute} ></Users>
     )
 }

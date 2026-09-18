@@ -12,17 +12,14 @@ import { FaCheckCircle, FaTimesCircle } from "react-icons/fa"
 import SortItem from "@/utils/sortItem"
 
 
-export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, dataSector, dataSupplier, token, idEquipment, dataTypeEquipment, dataAllEquipment, numberValue, dataSituation }) {
+export default function UpdateEquipment({ dataEquipment, dataUser, dataUser_sector, dataBranch, dataSector, dataSupplier, token, idEquipment, dataTypeEquipment, dataAllEquipment, numberValue, dataSituation }) {
 
     const router = useRouter()
     const listBranch = SortItem(dataBranch, 'branch').map(item => item.branch)
-    const listUser = SortItem(dataUser, 'username').map(item => item.username)
-    const listSector = SortItem(dataSector, 'sector').map(item => item.sector)
     const listSupplier = SortItem(dataSupplier, 'supplier').map(item => item.supplier)
     const listTypeEquipment = SortItem(dataTypeEquipment, 'typeEquipment').map(item => item.typeEquipment)
     const listSituation = SortItem(dataSituation, 'situation').filter(item => item.idSituation === 1 || item.idSituation === 4 ).map(item => item.situation)
 
-  
     
     const [codProd, setCodProd] = useState(dataEquipment.codProd == null ? '' : dataEquipment.codProd)
     const [equipment, setEquipment] = useState(dataEquipment.equipment)
@@ -172,14 +169,14 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataBranch, d
     
             let branchesInSector = sector ? dataSector.filter(item => item.sector === sector).map(item => item['Branch'].branch).sort(sortOptions) : dataBranch.map(item => item.branch).sort(sortOptions)
             let sectorInBranch = branch ?  dataSector.filter(item => item['Branch'].branch === branch).map(item => item.sector).sort(sortOptions) : dataSector.map(item => item.sector).sort(sortOptions)
-            let userInSector = sector ? dataUser.filter(item => item['Sector'].sector === sector).map(item => item.username).sort(sortOptions) : dataUser.map(item => item.username).sort(sortOptions)
-            let sectorInUser = username ? dataUser.filter(item => item.username === username).map(item => item['Sector'].sector).sort(sortOptions) : null
+            let userInSector = sector ? dataUser_sector.filter(item => item['Sector'].sector === sector).map(item => item['User'].username).sort(sortOptions) : dataUser.map(item => item.username).sort(sortOptions)
+            let sectorInUser = username ? dataUser_sector.filter(item => item['User'].username === username).map(item => item['Sector'].sector).sort(sortOptions) : null
     
             return{branchesInSector, userInSector, sectorInBranch, sectorInUser}
            
-        }, [listBranch, listSector, listUser, dataSector, dataUser]);
+        }, [dataSector, dataUser_sector]);
 
-       
+   
 
     const updateEquipment = async (e) => {
         e.preventDefault()

@@ -22,6 +22,9 @@ export default function Users({ tableUsers, attribute }) {
     const [sortDirectionState, setSortDirectionState] = useState('asc')
     const {sortedData, handleSort, sortColumn, sortDirection} = orderData(dataUsers, sortColumnState, sortDirectionState, setSortColumnState, setSortDirectionState)
     const [totalize, setTotalize] = useState(dataUsers.length)
+    
+
+    
 
     useEffect(() => {
             let data = localStorage.getItem('permission')
@@ -131,6 +134,8 @@ export default function Users({ tableUsers, attribute }) {
            window.open('/users/report', '_blank') 
     }
 
+    console.log(tableUsers[2].id.slice(0, tableUsers[0].id.indexOf("-")))
+
     return (
         <div className='bg-gray-100 py-8 overflow-x-auto h-screen px-12 w-full'>
             <div className="flex justify-between mb-8 lg:px-8 sm:px-8 xl:w-1/2">
@@ -149,7 +154,7 @@ export default function Users({ tableUsers, attribute }) {
                 </div>
             </form>
             <div className='ml-8 flex-1 h-[65%] overflow-x-auto'>
-                <Table Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white sticky top-0 z-10 text-nowrap'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={attribute} data={sortedData} attributos={attribute} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./users/updateUser'} bt={'...'} permission={permission.find(number => number == '12')} sortColumn={sortColumn} handleSort={handleSort} sortDirection={sortDirection}></Table>
+                <Table Table={'table-auto bg-white shadow-md rounded-lg w-full'} TrThead={'bg-gray-800 text-white sticky top-0 z-10 text-nowrap'} Th={'py-2 px-4 text-left'} TrTbody={'border-b'} Td={'py-2 px-4 text-black text-nowrap'} headers={attribute.slice(1, attribute.length)} data={sortedData} attributos={attribute.slice(1, attribute.length)} id={'id'} classButton={'p-2 bg-gray-900 rounded-lg text-white'} href={'./users/updateUser'} index={true} bt={'...'} permission={permission.find(number => number == '12')} sortColumn={sortColumn} handleSort={handleSort} sortDirection={sortDirection}></Table>
             </div>
             <div className="ml-8 mt-3">{`Total de Usuários: ${totalize}`}</div>
         </div>

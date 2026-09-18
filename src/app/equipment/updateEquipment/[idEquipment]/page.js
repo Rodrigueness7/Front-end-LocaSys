@@ -32,14 +32,17 @@ export default async function PageUpdateEquipment({ params }) {
     let typeEquipment = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllTypeEquipment`, token)
     let allEquipment = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllEquipment`, token)
     let situation = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllSituation`, token)
+    let user_sector = await fetchData(`http://${process.env.NEXT_PUBLIC_LOCALHOST}:3001/findAllUser_sector`, token)
 
     
+    console.log(equipment['User'].username)
+
     if(branch.message) {
         redirect('/login')
     }
 
     return (
-        <UpdateEquipment dataEquipment={equipment} dataUser={user} dataBranch={branch} dataSector={sector} dataSupplier={supplier} token={token} idEquipment={idEquipment} dataTypeEquipment={typeEquipment} dataAllEquipment={allEquipment} numberValue={numberValue} dataSituation={situation} ></UpdateEquipment>
+        <UpdateEquipment dataEquipment={equipment} dataUser={user} dataUser_sector={user_sector} dataBranch={branch} dataSector={sector} dataSupplier={supplier} token={token} idEquipment={idEquipment} dataTypeEquipment={typeEquipment} dataAllEquipment={allEquipment} numberValue={numberValue} dataSituation={situation} ></UpdateEquipment>
 
     )
 }
