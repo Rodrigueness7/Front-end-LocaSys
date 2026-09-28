@@ -298,7 +298,7 @@ export default function Equipment({ tableEquipment, attribute, token, dataUser, 
 
         return{branchesOfUser, userOfSector, sectorOfBranch, sectorOfUser}
        
-    }, [listBranch, listSector, listUser, dataSector, dataUser]);
+    }, [listBranch, listSector, listUser, dataSector, dataUser, dataBranch]);
 
 
   

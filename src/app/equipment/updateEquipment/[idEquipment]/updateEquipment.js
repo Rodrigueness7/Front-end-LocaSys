@@ -174,7 +174,7 @@ export default function UpdateEquipment({ dataEquipment, dataUser, dataUser_sect
     
             return{branchesInSector, userInSector, sectorInBranch, sectorInUser}
            
-        }, [dataSector, dataUser_sector]);
+        }, [dataSector, dataUser_sector, dataUser, dataBranch, branch, sector, username]);
 
    
 

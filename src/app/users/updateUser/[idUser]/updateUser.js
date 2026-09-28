@@ -221,13 +221,13 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
                             <InputForm classNameLabe={"block text-sm font-medium text-gray-700"} classNameInput={"mt-2 block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"} div={'mb-4'} label={"Confirmação da Senha"} name={"password"} type={'password'} value={confirmationPassword} onchange={changeConfirmationPassword}></InputForm>
                         </>
                     )}
-                   <div>
+                    <div className="mb-4 relative">
                         <span className="block text-sm font-medium text-gray-700">Setor</span>
                         <div
                             onClick={() => setIsOpen(!isOpen)}
                             className="mt-2 cursor-pointer flex items-center px-4 py-3 bg-gray-50 border border-gray-300 rounded-md shadow-sm text-black w-full "
                         >
-                            <span>
+                            <span className="w-full">
                                 {selectedOptions.length > 0 ? selectedOptions.join(', ') : 'Selecione Setores'}
                             </span>
                             <span className={`transition-transform ${isOpen ? "rotate-180" : ""}`}>
@@ -235,7 +235,7 @@ export default function UpdateUser({ dataUserId, dataSector, dataProfile, idUser
                             </span>
                         </div>
                         {isOpen && (
-                            <div className="absolute mt-1 w- bg-white border border-gray-300 rounded-md shadow-lg z-50 max-h-60 overflow-y-auto">
+                            <div className="absolute mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg z-50 max-h-60 overflow-y-auto">
                                 {dataSector.map((item, index) => (
                                     <label key={index} className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer">
                                         <input type="checkbox" value={item.sector} checked={selectedOptions.includes(item.sector)} onChange={handleCheckboxChange} className="mr-2" />

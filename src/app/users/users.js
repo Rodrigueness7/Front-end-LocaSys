@@ -134,7 +134,6 @@ export default function Users({ tableUsers, attribute }) {
            window.open('/users/report', '_blank') 
     }
 
-    console.log(tableUsers[2].id.slice(0, tableUsers[0].id.indexOf("-")))
 
     return (
         <div className='bg-gray-100 py-8 overflow-x-auto h-screen px-12 w-full'>

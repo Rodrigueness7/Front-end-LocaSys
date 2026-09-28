@@ -145,7 +145,7 @@ export default function PageRegisterEquipment({ dataUser, dataBranch, dataSector
 
         return{branchesInSector, userInSector, sectorInBranch, sectorInUser}
        
-    }, [listBranch, listSector, listUser, dataSector, dataUser]);
+    }, [dataSector, dataUser, dataBranch, branch, sector, username]);
 
 
 
